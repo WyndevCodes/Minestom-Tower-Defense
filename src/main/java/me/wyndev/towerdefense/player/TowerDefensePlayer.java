@@ -15,6 +15,9 @@ import java.util.UUID;
  */
 public class TowerDefensePlayer extends Player {
     private final byte profileNumber;
+    /**
+     * This object stores every stat about a player
+     * */
     public stats stats;
 
     @Data

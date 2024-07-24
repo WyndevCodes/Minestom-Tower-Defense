@@ -19,9 +19,11 @@ public class Main {
         // Register Events
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
 
+        //Generate a new minestom instance
         InstanceContainer container = MinecraftServer.getInstanceManager().createInstanceContainer();
         container.setBlock(0, -5, 0, Block.STONE);
 
+        //Handle player login in
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, e -> {
             e.setSpawningInstance(container);
             TowerDefensePlayer player = (TowerDefensePlayer) e.getPlayer();
