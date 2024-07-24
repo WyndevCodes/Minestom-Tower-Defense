@@ -50,6 +50,7 @@ public class TowerDefensePlayer extends Player {
     public TowerDefensePlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection, byte profileNumber) {
         super(uuid, username, playerConnection);
         this.profileNumber = profileNumber;
+        //Create a new stats class
         this.stats = new stats();
     }
 

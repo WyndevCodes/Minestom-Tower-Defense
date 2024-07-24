@@ -26,7 +26,6 @@ public class Main {
         //Handle player login in
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, e -> {
             e.setSpawningInstance(container);
-            TowerDefensePlayer player = (TowerDefensePlayer) e.getPlayer();
         });
 
         // Skin handling for players that join (using Mojang auth for now)
