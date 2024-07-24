@@ -65,24 +65,27 @@ public class Main {
 
         //Player spawn event
         globalEventHandler.addListener(PlayerSpawnEvent.class, event -> {
-            event.getPlayer().setItemInMainHand(ItemStack.of(Material.ENDER_EYE));
+            event.getPlayer().setItemInMainHand(ItemStack.of(Material.ENDER_EYE)
+                    .withCustomName(Component.text("Buy turret").color(TextColor.color(0, 145, 73)))
+            );
         });
 
         //Player move event
         globalEventHandler.addListener(PlayerMoveEvent.class, event -> {
             Point block = event.getPlayer().getTargetBlockPosition(10);
-            if (block != null && container.getBlock(block).name().equals("minecraft:grass_block") && event.getPlayer().getItemInMainHand().isSimilar(ItemStack.of(Material.ENDER_EYE).withAmount(1))) {
+            if (block != null && container.getBlock(block).name().equals("minecraft:grass_block") && event.getPlayer().getItemInMainHand().material().equals(Material.ENDER_EYE)) {
                 if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
                     Cursor entity = Cursor.cursorHashMap.get(event.getPlayer());
                     entity.teleport(new Pos(block.x(), block.y(), block.blockZ()));
                     Cursor.cursorHashMap.get(event.getPlayer()).getEntityMeta().setHasGlowingEffect(true);
                 } else {
                     Cursor entity = new Cursor(event.getPlayer());
-                    entity.setInstance(container, new Pos(block.x() , block.y(), block.blockZ()));
+                    entity.setInstance(container, new Pos(block.x() -0.05, block.y() -0.05, block.blockZ() -0.05));
                 }
             } else {
                 if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
-                    Cursor.cursorHashMap.get(event.getPlayer()).getEntityMeta().setHasGlowingEffect(false);
+                    Cursor.cursorHashMap.get(event.getPlayer()).remove();
+                    Cursor.cursorHashMap.remove(event.getPlayer());
                 }
             }
         });
@@ -92,7 +95,7 @@ public class Main {
             Point block = event.getPlayer().getTargetBlockPosition(10);
             if (block == null) return;
             System.out.println(container.getBlock(block).name());
-            if (event.getItemStack().isSimilar(ItemStack.of(Material.ENDER_EYE).withAmount(1)) && container.getBlock(block).name().equals("minecraft:grass_block")) {
+            if (event.getItemStack().material().equals(Material.ENDER_EYE) && container.getBlock(block).name().equals("minecraft:grass_block")) {
                 event.getPlayer().sendMessage("Open a menu to buy tower");
                 event.getPlayer().openInventory(new Inventory(
                         InventoryType.CHEST_6_ROW,

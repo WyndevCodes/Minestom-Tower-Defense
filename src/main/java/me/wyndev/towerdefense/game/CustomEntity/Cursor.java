@@ -22,16 +22,18 @@ public class Cursor extends Entity {
         super(EntityType.BLOCK_DISPLAY);
         this.player = player;
         BlockDisplayMeta meta = (BlockDisplayMeta) getEntityMeta();
-        meta.setBlockState(Block.GRASS_BLOCK);
-        meta.setScale(new Vec(0.98, 0.98, 0.98));
+        meta.setBlockState(Block.LODESTONE);
+        meta.setScale(new Vec(1.1, 1.1, 1.1));
         meta.setHasNoGravity(true);
         meta.setHasGlowingEffect(true);
+        meta.setPosRotInterpolationDuration(2);
+        meta.setInvisible(true);
         cursorHashMap.put(player, this);
     }
 
     @Override
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
-        position = position.add(new Pos(0.01, 0.01, 0.01));
+        position = position.add(new Pos(-0.05, -0.05, -0.05));
         return super.teleport(position);
     }
 }
