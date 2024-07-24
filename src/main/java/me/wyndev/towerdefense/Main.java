@@ -41,12 +41,12 @@ public class Main {
         });
 
         globalEventHandler.addListener(PlayerChatEvent.class, e -> {
-           if (e.getMessage().equals("start")) {
-               ArrayList<Player> players = new ArrayList<>();
-               players.addAll(mainLobby.getPlayers());
-               GameInstance gameInstance = new GameInstance(players);
-               gameInstance.start();
-           }
+            //TODO: change this to a command or an NPC that uses the GameManager class (supports queueing)
+            if (e.getMessage().equals("start")) {
+                ArrayList<Player> players = new ArrayList<>(mainLobby.getPlayers());
+                GameInstance gameInstance = new GameInstance(players);
+                gameInstance.setup();
+            }
         });
 
         MojangAuth.init();

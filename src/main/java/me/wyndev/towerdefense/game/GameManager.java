@@ -15,8 +15,8 @@ import java.util.UUID;
  */
 public class GameManager {
 
-    private final HashMap<UUID, Game> playersWithGames = new HashMap<>();
-    private final List<Game> activeGames = new ArrayList<>();
+    private final HashMap<UUID, GameInstance> playersWithGames = new HashMap<>();
+    private final List<GameInstance> activeGames = new ArrayList<>();
 
     /**
      * Adds a player to the next available Tower Defense game, or
@@ -33,8 +33,8 @@ public class GameManager {
         // Find first game that player can join
         if (!activeGames.isEmpty()) {
             // Is there a better way to do this? It's not a large performance hit (I assume no more than 10 games will ever be active at once)
-            for (Game game : activeGames) {
-                if (game.getGameState() == GameState.RUNNING || game.getGameState() == GameState.ENDED) continue; //skip if game is not joinable
+            for (GameInstance game : activeGames) {
+                if (!game.getGameState().isJoinable()) continue; //skip if game is not joinable
                 if (!game.addPlayer(playerToAdd)) continue; //skip if game is full
 
                 // Associate game with player
@@ -43,7 +43,7 @@ public class GameManager {
             }
         }
         // Create a new game
-        Game newGame = new Game();
+        GameInstance newGame = new GameInstance();
         activeGames.add(newGame);
 
         // Add player to the new game
@@ -60,7 +60,7 @@ public class GameManager {
     public boolean removePlayerFromGame(TowerDefensePlayer playerToRemove) {
         if (!playersWithGames.containsKey(playerToRemove.getUuid())) return false;
 
-        Game game = playersWithGames.get(playerToRemove.getUuid());
+        GameInstance game = playersWithGames.get(playerToRemove.getUuid());
         game.removePlayer(playerToRemove);
         //TODO: remove game from activeGames list when completed, empty, or after the ended state resolves
         playersWithGames.remove(playerToRemove.getUuid());

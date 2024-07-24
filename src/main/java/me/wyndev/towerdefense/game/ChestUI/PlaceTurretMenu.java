@@ -29,19 +29,18 @@ public class PlaceTurretMenu {
         EventNode child = EventNode.all("BuyMenuEventNode");
         instance.eventNode().addChild(child);
 
-        EventListener clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
+        EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
             //TODO: Replace this with a for loop of every TowerType to find which match
-            InventoryPreClickEvent event = (InventoryPreClickEvent) e;
-            if (event.getSlot() == 10) {
+            if (e.getSlot() == 10) {
                 Entity entity = new Entity(TowerType.SKELETON.getEntityType());
-                entity.setInstance(event.getInstance(), pos.add(new Pos(0.5, 1, 0.5)));
-                event.setCancelled(true);
-                event.getPlayer().closeInventory();
+                entity.setInstance(e.getInstance(), pos.add(new Pos(0.5, 1, 0.5)));
+                e.setCancelled(true);
+                e.getPlayer().closeInventory();
                 deleteChild(child);
             }
         });
 
-        EventListener closeMenuListener = EventListener.of(InventoryCloseEvent.class, e -> {
+        EventListener<InventoryCloseEvent> closeMenuListener = EventListener.of(InventoryCloseEvent.class, e -> {
             deleteChild(child);
         });
 
@@ -59,7 +58,7 @@ public class PlaceTurretMenu {
     }
 
     public Inventory getInventory() {
-        //TODO: Generate that from
+        //TODO: Generate tower items from TowerType.java values
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.text("Tower shop").color(TextColor.color(0, 181, 5)));
         inventory.setItemStack(10, ItemStack.of(Material.STONE).withCustomName(Component.text("Skeleton tower").color(TextColor.color(123, 123, 123))));
         return inventory;
