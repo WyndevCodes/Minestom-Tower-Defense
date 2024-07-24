@@ -12,10 +12,10 @@ import java.util.UUID;
  * Manager class that handles game instances
  * and the players associated with them.
  */
-public class TowerDefenseGameManager {
+public class GameManager {
 
-    private final HashMap<UUID, TowerDefenseGame> playersWithGames = new HashMap<>();
-    private final List<TowerDefenseGame> activeGames = new ArrayList<>();
+    private final HashMap<UUID, Game> playersWithGames = new HashMap<>();
+    private final List<Game> activeGames = new ArrayList<>();
 
     /**
      * Adds a player to the next available Tower Defense game, or
@@ -33,7 +33,7 @@ public class TowerDefenseGameManager {
         // Find first game that player can join
         if (!activeGames.isEmpty()) {
             // Is there a better way to do this? It's not a large performance hit (I assume no more than 10 games will ever be active at once)
-            for (TowerDefenseGame game : activeGames) {
+            for (Game game : activeGames) {
                 if (game.getGameState() == GameState.RUNNING || game.getGameState() == GameState.ENDED) continue; //skip if game is not joinable
                 if (!game.addPlayer(playerToAdd)) continue; //skip if game is full
 
@@ -43,7 +43,7 @@ public class TowerDefenseGameManager {
             }
         }
         // Create a new game
-        TowerDefenseGame newGame = new TowerDefenseGame();
+        Game newGame = new Game();
         activeGames.add(newGame);
 
         // Add player to the new game
@@ -60,7 +60,7 @@ public class TowerDefenseGameManager {
     public boolean removePlayerFromGame(TowerDefensePlayer playerToRemove) {
         if (!playersWithGames.containsKey(playerToRemove.getUuid())) return false;
 
-        TowerDefenseGame game = playersWithGames.get(playerToRemove.getUuid());
+        Game game = playersWithGames.get(playerToRemove.getUuid());
         game.removePlayer(playerToRemove);
         //TODO: remove game from activeGames list when completed, empty, or after the ended state resolves
         playersWithGames.remove(playerToRemove.getUuid());

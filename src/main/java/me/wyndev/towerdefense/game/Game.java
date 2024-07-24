@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Class that represents an active tower defense game.
  */
-public class TowerDefenseGame {
+public class Game {
 
     private final int MAX_PLAYERS = 6; //TODO: support for per-map based player counts?
 
@@ -21,7 +21,7 @@ public class TowerDefenseGame {
     // Player information
     private List<TowerDefensePlayer> players; //TODO: teams later?
 
-    public TowerDefenseGame() {
+    public Game() {
         this.gameState = GameState.WAITING_FOR_PLAYERS;
     }
 

@@ -2,6 +2,7 @@ package me.wyndev.towerdefense.game;
 
 import lombok.Data;
 import me.wyndev.towerdefense.Main;
+import me.wyndev.towerdefense.game.ChestUI.PlaceTurretMenu;
 import me.wyndev.towerdefense.game.CustomEntity.Cursor;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
@@ -16,26 +17,13 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 
 @Data
@@ -44,6 +32,11 @@ public class GameInstance {
     private Instance instance;
     public final List<Player> players;
 
+    /**
+     * This will start a new instance of GameInstance,
+     * then it will set up the environment for a game
+     * and teleport every player
+     * */
     public void start() {
         instance = MinecraftServer.getInstanceManager().createInstanceContainer();
 
@@ -106,6 +99,9 @@ public class GameInstance {
         });
     }
 
+    /**
+     * This will delete the GameInstance and send every player to the hub
+     * */
     public void end() {
         players.forEach(p -> {
             p.setInstance(Main.mainLobby);

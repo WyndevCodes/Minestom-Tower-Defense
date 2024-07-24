@@ -1,16 +1,13 @@
-package me.wyndev.towerdefense.game;
+package me.wyndev.towerdefense.game.ChestUI;
 
 import me.wyndev.towerdefense.tower.TowerType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.inventory.*;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.inventory.Inventory;
