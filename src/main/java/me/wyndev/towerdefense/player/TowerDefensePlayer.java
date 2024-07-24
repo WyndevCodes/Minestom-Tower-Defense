@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
@@ -14,14 +16,24 @@ import java.util.UUID;
  * A player that has logged into the tower defense server.
  */
 public class TowerDefensePlayer extends Player {
+    /**
+     * -- GETTER --
+     *
+     * @return A byte representing the profile number of this player.
+     * A profile number is just an extra piece of data that specifies
+     * how the player data is saved. For example, a player with a profile
+     * number of 1 will have different data as the same player with a
+     * profile number of 2.
+     */
+    @Getter
     private final byte profileNumber;
     /**
      * This object stores every stat about a player
      * */
-    public stats stats;
+    public Stats stats;
 
     @Data
-    public static class stats {
+    public static class Stats {
         // ---------- Player stats (on this profile) ----------
         // Game Stats
         private int wins = 0;
@@ -51,18 +63,19 @@ public class TowerDefensePlayer extends Player {
         super(uuid, username, playerConnection);
         this.profileNumber = profileNumber;
         //Create a new stats class
-        this.stats = new stats();
+        this.stats = new Stats();
     }
 
-    /**
-     * @return A byte representing the profile number of this player.
-     * A profile number is just an extra piece of data that specifies
-     * how the player data is saved. For example, a player with a profile
-     * number of 1 will have different data as the same player with a
-     * profile number of 2.
-     */
-    public byte getProfileNumber() {
-        return profileNumber;
+    public void playPlayerSound(Key soundKey) {
+        playPlayerSound(soundKey, 1f, 1f);
+    }
+
+    public void playPlayerSound(Key soundKey, float volume) {
+        playPlayerSound(soundKey, volume, 1f);
+    }
+
+    public void playPlayerSound(Key soundKey, float volume, float pitch) {
+        playSound(Sound.sound().type(soundKey).source(Sound.Source.PLAYER).volume(volume).pitch(pitch).build(), Sound.Emitter.self());
     }
 
     /**

@@ -1,0 +1,29 @@
+package me.wyndev.towerdefense.tower.base;
+
+import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.tower.Tower;
+import me.wyndev.towerdefense.tower.TowerType;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * A skeleton tower.
+ */
+public class SkeletonTower extends Tower {
+
+    public SkeletonTower(@NotNull IngameTowerDefensePlayer playerWhoSpawned) {
+        super(TowerType.SKELETON, playerWhoSpawned);
+    }
+
+    @Override
+    public void initializeEntity(int towerLevel) {
+        switch (towerLevel) {
+            //TODO: levels 2 and 3
+            default -> {
+                setHelmet(ItemStack.builder(Material.LEATHER_HELMET).build());
+                setItemInMainHand(ItemStack.builder(Material.BOW).build());
+            }
+        }
+    }
+}
