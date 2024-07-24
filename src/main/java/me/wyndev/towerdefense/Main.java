@@ -94,7 +94,6 @@ public class Main {
         globalEventHandler.addListener(PlayerUseItemEvent.class, event -> {
             Point block = event.getPlayer().getTargetBlockPosition(10);
             if (block == null) return;
-            System.out.println(container.getBlock(block).name());
             if (event.getItemStack().material().equals(Material.ENDER_EYE) && container.getBlock(block).name().equals("minecraft:grass_block")) {
                 event.getPlayer().sendMessage("Open a menu to buy tower");
                 event.getPlayer().openInventory(new Inventory(
