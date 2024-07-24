@@ -39,9 +39,14 @@ public class TowerDefenseGame {
      * false otherwise (such as if the game is full)
      */
     public boolean addPlayer(TowerDefensePlayer player) {
-        if (players.size() >= MAX_PLAYERS) return false;
+        if (players.size() >= MAX_PLAYERS) {
+            player.sendMessage(Component.text("The game is full!")); //TODO: color red
+            return false;
+        }
 
         players.add(player);
+
+        //TODO: teleport player to map spawn
 
         // Send join message
         for (TowerDefensePlayer playerInGame : players) {
@@ -65,6 +70,9 @@ public class TowerDefenseGame {
      */
     public void removePlayer(TowerDefensePlayer player) {
         boolean wasRemoved = players.remove(player);
+
+        //TODO: game logic determining auto-shutdown, cancel countdown, etc.
+
         if (wasRemoved && gameState == GameState.RUNNING) {
             for (TowerDefensePlayer playerInGame : players) {
                 //send quit message
@@ -74,4 +82,17 @@ public class TowerDefenseGame {
         }
     }
 
+    /**
+     * @return The current {@link GameState} of this game
+     */
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    /**
+     * @return A list of all {@link TowerDefensePlayer}s currently in this game.
+     */
+    public List<TowerDefensePlayer> getPlayers() {
+        return players;
+    }
 }
