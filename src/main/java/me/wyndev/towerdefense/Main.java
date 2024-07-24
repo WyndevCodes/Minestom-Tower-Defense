@@ -1,6 +1,7 @@
 package me.wyndev.towerdefense;
 
 import me.wyndev.towerdefense.game.CustomEntity.Cursor;
+import me.wyndev.towerdefense.game.PlaceTurretMenu;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
@@ -90,10 +91,7 @@ public class Main {
             if (block == null) return;
             if (event.getItemStack().material().equals(Material.ENDER_EYE) && container.getBlock(block).name().equals("minecraft:grass_block")) {
                 event.getPlayer().sendMessage("Open a menu to buy tower");
-                event.getPlayer().openInventory(new Inventory(
-                        InventoryType.CHEST_6_ROW,
-                        Component.text("Replace this with proper text").color(TextColor.color(255, 0, 0))
-                ));
+                new PlaceTurretMenu().open(event.getPlayer(), new Pos(block.x(), block.y(), block.z()), event.getInstance());
             }
         });
 

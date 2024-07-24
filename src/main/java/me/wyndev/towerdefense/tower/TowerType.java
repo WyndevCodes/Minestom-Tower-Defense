@@ -9,6 +9,11 @@ import net.minestom.server.entity.EntityType;
 @Getter
 public enum TowerType {
 
+    //TODO: give them a slot attribute for the gui (short 0-53)
+    //TODO: give them an items stack icon
+    //TODO: Give them a name and a description
+    //TODO: Store all towerType in a list (List<TowerType>) -> see PlaceTurretMenu.java:36
+
     SKELETON(EntityType.SKELETON, 3, 5, 25)
     ;
 

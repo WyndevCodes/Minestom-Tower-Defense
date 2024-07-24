@@ -29,7 +29,7 @@ dependencies {
     implementation("commons-io:commons-io:2.16.1")
 
     //Minecraft
-    implementation("net.minestom:minestom-snapshots:1f34e60ea6") //Minestom
+    implementation("net.minestom:minestom-snapshots:99ca16e263") //Minestom
     implementation("dev.hollowcube:schem:1.2.0") //Schematic loader
     implementation("net.kyori:adventure-text-minimessage:4.17.0") //Minecraft component generation: see https://docs.advntr.dev/minimessage/index.html
 
