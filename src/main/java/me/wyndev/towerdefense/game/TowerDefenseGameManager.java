@@ -1,6 +1,6 @@
-package me.wyndev.game;
+package me.wyndev.towerdefense.game;
 
-import me.wyndev.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;

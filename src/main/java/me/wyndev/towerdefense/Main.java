@@ -1,6 +1,6 @@
-package me.wyndev;
+package me.wyndev.towerdefense;
 
-import me.wyndev.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.GlobalEventHandler;

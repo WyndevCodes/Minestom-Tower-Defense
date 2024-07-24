@@ -1,6 +1,6 @@
-package me.wyndev.enemy;
+package me.wyndev.towerdefense.enemy;
 
-import me.wyndev.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.attribute.Attribute;
 import org.jetbrains.annotations.NotNull;

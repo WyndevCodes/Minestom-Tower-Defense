@@ -1,4 +1,4 @@
-package me.wyndev.game;
+package me.wyndev.towerdefense.game;
 
 /**
  * The state of a {@link TowerDefenseGame}.

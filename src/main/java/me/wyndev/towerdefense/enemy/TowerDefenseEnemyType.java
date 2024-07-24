@@ -1,4 +1,4 @@
-package me.wyndev.enemy;
+package me.wyndev.towerdefense.enemy;
 
 import net.minestom.server.entity.EntityType;
 
