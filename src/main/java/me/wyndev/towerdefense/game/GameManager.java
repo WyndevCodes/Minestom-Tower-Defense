@@ -2,6 +2,7 @@ package me.wyndev.towerdefense.game;
 
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +26,7 @@ public class GameManager {
     public void addPlayerToGame(TowerDefensePlayer playerToAdd) {
         // Check if player is already in a game first
         if (playersWithGames.containsKey(playerToAdd.getUuid())) {
-            //TODO: color red
-            playerToAdd.sendMessage(Component.text("You are already in a game! You must leave your current game to join a new one!"));
+            playerToAdd.sendMessage(Component.text("You are already in a game! You must leave your current game to join a new one!").color(TextColor.color(255, 0, 0)));
             return;
         }
 

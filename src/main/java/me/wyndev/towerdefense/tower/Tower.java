@@ -4,6 +4,7 @@ import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.attribute.MultiEntityTower;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +41,7 @@ public abstract class Tower extends EntityCreature {
 
         // Check if player has enough money to upgrade
         if (playerWhoSpawned.getGold() < upgradeCost) {
-            //TODO: red text
-            playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("You do not have enough gold to upgrade this tower!"));
+            playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("You do not have enough gold to upgrade this tower!").color(TextColor.color(255, 0, 0)));
             return;
         }
 

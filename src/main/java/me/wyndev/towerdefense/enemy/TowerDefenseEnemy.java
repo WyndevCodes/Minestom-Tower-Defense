@@ -25,6 +25,8 @@ public abstract class TowerDefenseEnemy extends EntityCreature {
         this.setHealth(towerDefenseEnemyType.getHealth());
 
         //TODO: Setup entity pathfinding
+        //For that, look at the arrow on the schematic, the mob could follow them.
+        //This will make pathfinding a lot easier
     }
 
 }
