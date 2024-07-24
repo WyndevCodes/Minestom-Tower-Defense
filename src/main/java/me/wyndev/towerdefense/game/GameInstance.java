@@ -75,7 +75,6 @@ public class GameInstance {
                 if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
                     Cursor entity = Cursor.cursorHashMap.get(event.getPlayer());
                     entity.teleport(new Pos(block.x(), block.y(), block.blockZ()));
-                    Cursor.cursorHashMap.get(event.getPlayer()).getEntityMeta().setHasGlowingEffect(true);
                 } else {
                     Cursor entity = new Cursor(event.getPlayer());
                     entity.setInstance(instance, new Pos(block.x() -0.05, block.y() -0.05, block.blockZ() -0.05));

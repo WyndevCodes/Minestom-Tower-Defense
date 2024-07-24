@@ -22,9 +22,7 @@ public class Cursor extends Entity {
         meta.setBlockState(Block.LODESTONE);
         meta.setScale(new Vec(1.1, 1.1, 1.1));
         meta.setHasNoGravity(true);
-        meta.setHasGlowingEffect(true);
         meta.setPosRotInterpolationDuration(2);
-        meta.setInvisible(true);
         cursorHashMap.put(player, this);
     }
 
