@@ -1,5 +1,6 @@
 package me.wyndev.towerdefense.tower;
 
+import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.attribute.MultiEntityTower;
 import net.kyori.adventure.key.Key;
@@ -8,6 +9,8 @@ import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Abstract framework for towers that are placed to defend
@@ -18,6 +21,9 @@ public abstract class Tower extends EntityCreature {
     protected final TowerType type;
     protected final IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
     protected int towerLevel = 1;
+    protected List<TowerDefenseEnemy> targets;
+
+    private long lastAttackTime = System.currentTimeMillis();
 
     public Tower(@NotNull TowerType type, @NotNull IngameTowerDefensePlayer playerWhoSpawned) {
         super(type.getEntityType());
@@ -27,11 +33,43 @@ public abstract class Tower extends EntityCreature {
     }
 
     /**
+     * Ticks this tower.
+     */
+    public void tick() {
+        if (System.currentTimeMillis() - lastAttackTime > getAttackSpeed(towerLevel)) {
+            targets.clear();
+            //target search and then attack
+            //TODO: find all enemies in x radius function
+            // then setup list accordingly if the type does splash damage or not
+        }
+
+        if (!targets.isEmpty()) {
+            lookAt(targets.getFirst());
+        }
+    }
+
+    /**
      * Initializes this tower entity based on a level.
      * @param towerLevel The level of the tower to use
      *                   during initialization
      */
     public abstract void initializeEntity(int towerLevel);
+
+    /**
+     * Gets the attack speed of this tower based on its level.
+     * @param towerLevel The current level of the tower
+     * @return The attack speed of the tower based on its
+     * level, in the time unit of milliseconds between attacks
+     */
+    public abstract long getAttackSpeed(int towerLevel);
+
+    /**
+     * Gets the attack range of this tower based on its level.
+     * @param towerLevel The current level of the tower
+     * @return The attack range of the tower based on its
+     * level, in blocks
+     */
+    public abstract int getAttackRange(int towerLevel);
 
     /**
      * Attempts to upgrade this tower.

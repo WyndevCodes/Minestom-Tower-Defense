@@ -26,4 +26,14 @@ public class SkeletonTower extends Tower {
             }
         }
     }
+
+    @Override
+    public long getAttackSpeed(int towerLevel) {
+        return 2000; //2 seconds
+    }
+
+    @Override
+    public int getAttackRange(int towerLevel) {
+        return 10; //10 blocks
+    }
 }

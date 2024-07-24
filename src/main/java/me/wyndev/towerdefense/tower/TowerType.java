@@ -14,19 +14,21 @@ public enum TowerType {
     //TODO: Give them a name and a description
     //TODO: Store all towerType in a list (List<TowerType>) -> see PlaceTurretMenu.java:36
 
-    SKELETON(EntityType.SKELETON, 3, 5, 25)
+    SKELETON(EntityType.SKELETON, 3, 5, 25, false)
     ;
 
     private final EntityType entityType;
     private final int maxLevel;
     private final int baseDamage;
     private final int goldCost;
+    private final boolean doesSplashDamage;
 
-    TowerType(EntityType entityType, int maxLevel, int baseDamage, int goldCost) {
+    TowerType(EntityType entityType, int maxLevel, int baseDamage, int goldCost, boolean doesSplashDamage) {
         this.entityType = entityType;
         this.maxLevel = maxLevel;
         this.baseDamage = baseDamage;
         this.goldCost = goldCost;
+        this.doesSplashDamage = doesSplashDamage;
     }
 
 }

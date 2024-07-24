@@ -1,8 +1,13 @@
 package me.wyndev.towerdefense.enemy;
 
+import me.wyndev.towerdefense.ChatColor;
+import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.tower.Tower;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.damage.Damage;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,9 +29,31 @@ public abstract class TowerDefenseEnemy extends EntityCreature {
         this.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(towerDefenseEnemyType.getHealth());
         this.setHealth(towerDefenseEnemyType.getHealth());
 
+        this.setCustomNameVisible(true);
+        this.setCustomName(getCustomNameText());
+
         //TODO: Setup entity pathfinding
-        //For that, look at the arrow on the schematic, the mob could follow them.
-        //This will make pathfinding a lot easier
+
+        // I had planned to do a set of points as well. We'd have to do some sort of algorithm, or we could just save the turns in a config file
+    }
+
+    /**
+     * Damages this TowerDefenseEnemy.
+     * @param source The source of the damage
+     * @param damage The damage amount
+     */
+    public void damage(Tower source, float damage) {
+        this.damage(Damage.fromEntity(source, damage));
+        this.setCustomName(getCustomNameText());
+    }
+
+    // I feel like this can be optimized or condensed. Any ideas?
+    private Component getCustomNameText() {
+        Component nameText = Component.text(towerDefenseEnemyType.getNameComponentText() + " ", towerDefenseEnemyType.getNameColor());
+        nameText = nameText.append(Component.text(Utils.formatWithCommas(getHealth()), ChatColor.RED.toColor()));
+        nameText = nameText.append(Component.text("/", ChatColor.GRAY.toColor()));
+        nameText = nameText.append(Component.text(Utils.formatWithCommas(towerDefenseEnemyType.getHealth()), ChatColor.RED.toColor()));
+        return nameText;
     }
 
 }
