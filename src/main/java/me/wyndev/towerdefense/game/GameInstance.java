@@ -21,6 +21,7 @@ import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -81,6 +82,8 @@ public class GameInstance {
 
         // Create instance here to keep it as a final, non-changing variable (because it is)
         instance = MinecraftServer.getInstanceManager().createInstanceContainer();
+        //TODO: fix cursor shadow when on certain blocks
+        instance.setChunkSupplier(LightingChunk::new); //this adds light to the chunks, but also makes the cursor appear shadowed in certain places
 
         for (Player player : initialPlayers) {
             addPlayer((TowerDefensePlayer) player);
