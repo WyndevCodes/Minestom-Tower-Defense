@@ -1,5 +1,6 @@
 package me.wyndev.towerdefense.game.CustomEntity;
 
+import lombok.Getter;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
@@ -14,12 +15,14 @@ public class Cursor extends Entity {
     public static final HashMap<Player, Cursor> cursorHashMap = new HashMap<>();
 
     Player player;
+    private final @Getter BlockDisplayMeta meta;
+    private final @Getter Block defaultBlockTexture = Block.LODESTONE;
 
     public Cursor(Player player) {
         super(EntityType.BLOCK_DISPLAY);
         this.player = player;
-        BlockDisplayMeta meta = (BlockDisplayMeta) getEntityMeta();
-        meta.setBlockState(Block.LODESTONE);
+        meta = (BlockDisplayMeta) getEntityMeta();
+        meta.setBlockState(defaultBlockTexture);
         meta.setScale(new Vec(1.1, 1.1, 1.1));
         meta.setHasNoGravity(true);
         meta.setPosRotInterpolationDuration(2);

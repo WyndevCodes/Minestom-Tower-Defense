@@ -1,6 +1,7 @@
 package me.wyndev.towerdefense.game;
 
 import lombok.Getter;
+import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.game.ChestUI.PlaceTurretMenu;
 import me.wyndev.towerdefense.game.CustomEntity.Cursor;
@@ -20,6 +21,7 @@ import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.slf4j.Logger;
@@ -108,39 +110,9 @@ public class GameInstance {
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
             event.getPlayer().setAllowFlying(true);
 
-            //TODO: Replace this item with a "Tower manager" item that also allow for deleting and upgrading turret
-            event.getPlayer().setItemInMainHand(ItemStack.of(Material.ENDER_EYE)
-                    .withCustomName(Component.text("Buy turret").color(TextColor.color(0, 145, 73)))
-            );
-        });
-
-        //Player move event
-        instance.eventNode().addListener(PlayerMoveEvent.class, event -> {
-            Point block = event.getPlayer().getTargetBlockPosition(10);
-            if (block != null && instance.getBlock(block).name().equals("minecraft:grass_block") && event.getPlayer().getItemInMainHand().material().equals(Material.ENDER_EYE)) {
-                if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
-                    Cursor entity = Cursor.cursorHashMap.get(event.getPlayer());
-                    entity.teleport(new Pos(block.x(), block.y(), block.blockZ()));
-                } else {
-                    Cursor entity = new Cursor(event.getPlayer());
-                    entity.setInstance(instance, new Pos(block.x() -0.05, block.y() -0.05, block.blockZ() -0.05));
-                }
-            } else {
-                if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
-                    Cursor.cursorHashMap.get(event.getPlayer()).remove();
-                    Cursor.cursorHashMap.remove(event.getPlayer());
-                }
-            }
-        });
-
-        //Detect the player's click
-        instance.eventNode().addListener(PlayerUseItemEvent.class, event -> {
-            Point block = event.getPlayer().getTargetBlockPosition(10);
-            if (block == null) return;
-            if (event.getItemStack().material().equals(Material.ENDER_EYE) && instance.getBlock(block).name().equals("minecraft:grass_block")) {
-                event.getPlayer().sendMessage("Open a menu to buy tower");
-                new PlaceTurretMenu().open(event.getPlayer(), new Pos(block.x(), block.y(), block.z()), event.getInstance());
-            }
+            // Clear inventory (just in case)
+            event.getPlayer().getInventory().clear();
+            this.start(); //TODO: move to a better location once game queues work
         });
     }
 
@@ -154,8 +126,69 @@ public class GameInstance {
         for (TowerDefensePlayer player : players) {
             ingamePlayers.put(player.getUuid(), new IngameTowerDefensePlayer(player));
 
+            //TODO: Replace this item with a "Tower manager" item that also allow for deleting and upgrading turret
+            player.setItemInMainHand(ItemStack.of(Material.ENDER_EYE)
+                    .withCustomName(Component.text("Buy turret").color(TextColor.color(0, 145, 73)))
+            );
+
             //TODO: send message, assign plot, etc.
         }
+
+        //---- Add game listeners ----
+        //Player move event
+        instance.eventNode().addListener(PlayerMoveEvent.class, event -> {
+            Point block = event.getPlayer().getTargetBlockPosition(10);
+            if (block != null && instance.getBlock(block).name().equals("minecraft:grass_block") && event.getPlayer().getItemInMainHand().material().equals(Material.ENDER_EYE)) {
+                Cursor entity;
+                if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
+                    entity = Cursor.cursorHashMap.get(event.getPlayer());
+                    entity.teleport(new Pos(block.x(), block.y(), block.blockZ()));
+                } else {
+                    entity = new Cursor(event.getPlayer());
+                    entity.setInstance(instance, new Pos(block.x() -0.05, block.y() -0.05, block.blockZ() -0.05));
+                }
+
+                IngameTowerDefensePlayer towerDefensePlayer = ingamePlayers.get(event.getPlayer().getUuid());
+                if (towerDefensePlayer == null) return;
+
+                // Check if player has a turret placed, and if so, change block type
+                // Is there any way to make this more efficient? I'm not sure if Pos.java has a hashCode, so I'm not using HashMap#containsKey
+                for (Pos check : towerDefensePlayer.getCurrentPlacedTowers().keySet()) {
+                    if (check.samePoint(block.x() + 0.5, block.y() + 1, block.z() + 0.5)) {
+                        entity.getMeta().setBlockState(Block.REDSTONE_BLOCK);
+                        return;
+                    }
+                }
+                entity.getMeta().setBlockState(entity.getDefaultBlockTexture());
+            } else {
+                if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
+                    Cursor.cursorHashMap.get(event.getPlayer()).remove();
+                    Cursor.cursorHashMap.remove(event.getPlayer());
+                }
+            }
+        });
+
+        //Detect the player's click
+        instance.eventNode().addListener(PlayerUseItemEvent.class, event -> {
+            Point block = event.getPlayer().getTargetBlockPosition(10);
+            if (block == null) return;
+            if (event.getItemStack().material().equals(Material.ENDER_EYE) && instance.getBlock(block).name().equals("minecraft:grass_block")) {
+                IngameTowerDefensePlayer towerDefensePlayer = ingamePlayers.get(event.getPlayer().getUuid());
+                if (towerDefensePlayer == null) throw new IllegalStateException("A player in the tower defense game does not have an associated tower defense player wrapper!");
+
+                // Check if player has a turret placed
+                // Is there any way to make this more efficient? I'm not sure if Pos.java has a hashCode, so I'm not using HashMap#containsKey
+                for (Pos check : towerDefensePlayer.getCurrentPlacedTowers().keySet()) {
+                    if (check.samePoint(block.x() + 0.5, block.y() + 1, block.z() + 0.5)) {
+                        towerDefensePlayer.getTowerDefensePlayer().sendMessage(Component.text("There is already a tower here!").color(ChatColor.RED.toColor()));
+                        return;
+                    }
+                }
+
+                event.getPlayer().sendMessage("Open a menu to buy tower");
+                new PlaceTurretMenu(towerDefensePlayer).open(new Pos(block.x(), block.y(), block.z()), event.getInstance());
+            }
+        });
     }
 
     /**
@@ -166,11 +199,12 @@ public class GameInstance {
      */
     public boolean addPlayer(TowerDefensePlayer player) {
         if (players.size() >= MAX_PLAYERS) {
-            player.sendMessage(Component.text("The game is full!")); //TODO: color red
+            player.sendMessage(Component.text("The game is full!").color(ChatColor.RED.toColor()));
             return false;
         }
 
         players.add(player);
+
 
         // Add player to map world
         player.setInstance(instance);
@@ -214,10 +248,14 @@ public class GameInstance {
      * */
     public void end() {
         gameState = GameState.ENDED;
-        players.forEach(p -> {
-            p.setInstance(Main.mainLobby);
-        });
+
+        players.forEach(p -> p.setInstance(Main.mainLobby));
+        ingamePlayers.forEach((uuid, towerPlayer) -> towerPlayer.shutdown());
+
         MinecraftServer.getInstanceManager().unregisterInstance(instance);
+
+        players.clear();
+        ingamePlayers.clear();
     }
 
 }
