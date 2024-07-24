@@ -13,6 +13,21 @@ public class TowerDefensePlayer extends Player {
 
     private final byte profileNumber;
 
+    // ---------- Player stats (on this profile) ----------
+    // Game Stats
+    private int wins = 0;
+    private int losses = 0;
+    private int totalPlayersEliminated = 0;
+    private long totalGoldSpent = 0;
+    private int totalTowersPlaced = 0;
+    private int totalTowersSold = 0;
+    private int totalEnemiesSpawned = 0;
+    private int totalEnemiesDefeated = 0;
+    // Player Info
+    private long playtimeInMillis = 0;
+    private long firstJoinTimeInMillis = -1;
+    //TODO: add more useful metrics
+
     /**
      * Initializes a TowerDefensePlayer. Intended to be called when the player logs in.
      * @param uuid The UUID of the player
@@ -45,5 +60,85 @@ public class TowerDefensePlayer extends Player {
      */
     public String getSaveKey() {
         return getUuid() + "-" + profileNumber;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
+    public int getTotalPlayersEliminated() {
+        return totalPlayersEliminated;
+    }
+
+    public void setTotalPlayersEliminated(int totalPlayersEliminated) {
+        this.totalPlayersEliminated = totalPlayersEliminated;
+    }
+
+    public long getTotalGoldSpent() {
+        return totalGoldSpent;
+    }
+
+    public void setTotalGoldSpent(long totalGoldSpent) {
+        this.totalGoldSpent = totalGoldSpent;
+    }
+
+    public int getTotalTowersPlaced() {
+        return totalTowersPlaced;
+    }
+
+    public void setTotalTowersPlaced(int totalTowersPlaced) {
+        this.totalTowersPlaced = totalTowersPlaced;
+    }
+
+    public int getTotalTowersSold() {
+        return totalTowersSold;
+    }
+
+    public void setTotalTowersSold(int totalTowersSold) {
+        this.totalTowersSold = totalTowersSold;
+    }
+
+    public int getTotalEnemiesSpawned() {
+        return totalEnemiesSpawned;
+    }
+
+    public void setTotalEnemiesSpawned(int totalEnemiesSpawned) {
+        this.totalEnemiesSpawned = totalEnemiesSpawned;
+    }
+
+    public int getTotalEnemiesDefeated() {
+        return totalEnemiesDefeated;
+    }
+
+    public void setTotalEnemiesDefeated(int totalEnemiesDefeated) {
+        this.totalEnemiesDefeated = totalEnemiesDefeated;
+    }
+
+    public long getPlaytimeInMillis() {
+        return playtimeInMillis;
+    }
+
+    public void setPlaytimeInMillis(long playtimeInMillis) {
+        this.playtimeInMillis = playtimeInMillis;
+    }
+
+    public long getFirstJoinTimeInMillis() {
+        return firstJoinTimeInMillis;
+    }
+
+    public void setFirstJoinTimeInMillis(long firstJoinTimeInMillis) {
+        this.firstJoinTimeInMillis = firstJoinTimeInMillis;
     }
 }
