@@ -13,7 +13,6 @@ import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.event.player.PlayerChatEvent;
-import net.minestom.server.listener.ChatMessageListener;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
@@ -22,6 +21,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The main tower defense game loop.
+ */
 public class GameLoop {
 
     private final List<Integer> nonTenCountdownNumbers = List.of(5, 4, 3, 2, 1);
@@ -30,6 +32,10 @@ public class GameLoop {
     private Task mainLoopTask;
     private int currentTick = 0;
 
+    /**
+     * Creates a game loop associated with a game instance.
+     * @param gameInstance The game instance
+     */
     public GameLoop(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
         gameInstance.getInstance().eventNode().addListener(PlayerChatEvent.class, e -> {
@@ -40,10 +46,20 @@ public class GameLoop {
         });
     }
 
+    /**
+     * Starts the countdown phase of this game loop lasting for the default amount of seconds.
+     * This does NOT update the state in this loop's associated game instance.
+     */
     public void startCountdown() {
         startCountdown(Config.configData.getGameStartTime()); //default 30 seconds
     }
 
+    /**
+     * Starts the countdown phase of this game loop, lasting a specified
+     * amount of seconds. This does NOT update the state in this loop's
+     * associated game instance.
+     * @param seconds Number of seconds that the countdown lasts for
+     */
     public void startCountdown(int seconds) {
         AtomicInteger timeLeft = new AtomicInteger(seconds);
         countdownTask = Main.scheduler.scheduleTask(() -> {
@@ -85,6 +101,10 @@ public class GameLoop {
         }, TaskSchedule.nextTick(), TaskSchedule.seconds(1), ExecutionType.TICK_START);
     }
 
+    /**
+     * Cancels the countdown loop. This does not change the game
+     * state of the associated game instance.
+     */
     public void cancelCountdown() {
         if (countdownTask != null && countdownTask.isAlive()) {
             countdownTask.cancel();
@@ -98,6 +118,9 @@ public class GameLoop {
         }
     }
 
+    /**
+     * Starts the main game loop.
+     */
     public void startMainLoop() {
         mainLoopTask = Main.scheduler.scheduleTask(() -> {
 
@@ -130,6 +153,9 @@ public class GameLoop {
         }, TaskSchedule.nextTick(), TaskSchedule.nextTick(), ExecutionType.TICK_START);
     }
 
+    /**
+     * Stops the main game loop.
+     */
     public void stopMainLoop() {
         if (mainLoopTask != null) mainLoopTask.cancel();
     }
