@@ -1,12 +1,15 @@
 package me.wyndev.towerdefense;
 
-import me.wyndev.towerdefense.Config.FIles.ConfigYML;
+import me.wyndev.towerdefense.Files.Config;
 import me.wyndev.towerdefense.Game.GameInstance;
 import me.wyndev.towerdefense.Player.TowerDefensePlayer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.player.*;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerSkinInitEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -21,6 +24,9 @@ public class Main {
     public static Instance mainLobby;
 
     public static void main(String[] args) throws IOException {
+        Config.read();
+        System.out.println(Config.configData.getPort());
+
         MinecraftServer minecraftServer = MinecraftServer.init();
         MinecraftServer.getConnectionManager().setPlayerProvider((arg1, arg2, arg3) -> new TowerDefensePlayer(arg1, arg2, arg3, (byte) 1));
 
