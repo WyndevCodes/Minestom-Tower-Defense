@@ -12,6 +12,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://repo.hypera.dev/snapshots")
 }
 
 dependencies {
@@ -24,6 +25,9 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.34")
     testCompileOnly("org.projectlombok:lombok:1.18.34")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
+
+    //LuckPerms
+    implementation("me.lucko.luckperms:minestom:5.4-SNAPSHOT")
 
     //Test
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

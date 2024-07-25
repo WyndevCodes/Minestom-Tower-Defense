@@ -11,6 +11,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public abstract class Tower extends EntityCreature {
     protected final TowerType type;
     protected final @Getter IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
     protected int towerLevel;
-    protected List<TowerDefenseEnemy> targets;
+    protected List<TowerDefenseEnemy> targets = new ArrayList<>();
 
     private long lastAttackTime = System.currentTimeMillis();
 
@@ -38,6 +39,7 @@ public abstract class Tower extends EntityCreature {
      */
     public void tick() {
         if (System.currentTimeMillis() - lastAttackTime > getAttackSpeed(towerLevel)) {
+            lastAttackTime = System.currentTimeMillis();
             targets.clear();
             //target search and then attack
             //TODO: find all enemies in x radius function
