@@ -25,7 +25,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Config.read();
-        System.out.println(Config.configData.getPort());
 
         MinecraftServer minecraftServer = MinecraftServer.init();
         MinecraftServer.getConnectionManager().setPlayerProvider((arg1, arg2, arg3) -> new TowerDefensePlayer(arg1, arg2, arg3, (byte) 1));
@@ -58,6 +57,6 @@ public class Main {
         });
 
         MojangAuth.init();
-        minecraftServer.start("0.0.0.0", 25565);
+        minecraftServer.start(Config.configData.getHostname(), Config.configData.getPort());
     }
 }
