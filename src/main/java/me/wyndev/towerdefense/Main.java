@@ -1,6 +1,6 @@
 package me.wyndev.towerdefense;
 
-import me.wyndev.towerdefense.files.Config;
+import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.game.GameInstance;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.minestom.server.MinecraftServer;
@@ -53,7 +53,7 @@ public class Main {
             //TODO: change this to a command or an NPC that uses the GameManager class (supports queueing)
             if (e.getMessage().equals("start")) {
                 ArrayList<Player> players = new ArrayList<>(mainLobby.getPlayers());
-                GameInstance gameInstance = new GameInstance(players);
+                me.wyndev.towerdefense.game.GameInstance gameInstance = new GameInstance(players);
                 gameInstance.setup();
             }
         });

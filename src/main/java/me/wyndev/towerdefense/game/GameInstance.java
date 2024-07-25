@@ -2,9 +2,10 @@ package me.wyndev.towerdefense.game;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
+import me.wyndev.towerdefense.Main;
+import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.chestui.PlaceTurretMenu;
 import me.wyndev.towerdefense.game.customentity.Cursor;
-import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.hollowcube.schem.Rotation;
@@ -108,7 +109,7 @@ public class GameInstance {
         }
         SchematicReader reader = new SchematicReader();
         //todo: replace that with IOUtils in the future + load them from a folder outside of the jar
-        Schematic map = reader.read(Main.class.getResourceAsStream("/map.schem"));
+        Schematic map = reader.read(Maps.getRandomMap());
         map.build(Rotation.NONE, UnaryOperator.identity()).apply(instance, () -> {
             log.info("Schematic built");
         });
