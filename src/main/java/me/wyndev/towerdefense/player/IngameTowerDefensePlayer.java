@@ -20,6 +20,10 @@ public class IngameTowerDefensePlayer {
     private @Setter long gold = 0;
     private @Setter int towersPlaced = 0;
     /**
+     * Gold income of the player every 10 seconds.
+     */
+    private @Setter long income = 10;
+    /**
      * A map of all towers placed by this player in a game in respect to the
      * position each tower is placed at
      */
