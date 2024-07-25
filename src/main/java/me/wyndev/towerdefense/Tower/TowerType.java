@@ -1,4 +1,4 @@
-package me.wyndev.towerdefense.tower;
+package me.wyndev.towerdefense.Tower;
 
 import lombok.Getter;
 import net.minestom.server.entity.EntityType;

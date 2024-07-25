@@ -1,6 +1,6 @@
-package me.wyndev.towerdefense.game;
+package me.wyndev.towerdefense.Game;
 
-import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.Player.TowerDefensePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 

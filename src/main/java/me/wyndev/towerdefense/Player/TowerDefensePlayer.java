@@ -1,9 +1,7 @@
-package me.wyndev.towerdefense.player;
+package me.wyndev.towerdefense.Player;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.entity.Player;

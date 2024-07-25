@@ -1,7 +1,7 @@
 package me.wyndev.towerdefense;
 
-import me.wyndev.towerdefense.game.GameInstance;
-import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.Game.GameInstance;
+import me.wyndev.towerdefense.Player.TowerDefensePlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.*;
 import net.minestom.server.event.GlobalEventHandler;

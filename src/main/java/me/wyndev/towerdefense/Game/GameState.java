@@ -1,4 +1,4 @@
-package me.wyndev.towerdefense.game;
+package me.wyndev.towerdefense.Game;
 
 import lombok.Getter;
 

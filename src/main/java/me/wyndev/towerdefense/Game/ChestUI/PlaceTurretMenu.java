@@ -1,8 +1,8 @@
-package me.wyndev.towerdefense.game.ChestUI;
+package me.wyndev.towerdefense.Game.ChestUI;
 
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
-import me.wyndev.towerdefense.tower.Tower;
-import me.wyndev.towerdefense.tower.base.SkeletonTower;
+import me.wyndev.towerdefense.Player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.Tower.Tower;
+import me.wyndev.towerdefense.Tower.base.SkeletonTower;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.coordinate.Pos;

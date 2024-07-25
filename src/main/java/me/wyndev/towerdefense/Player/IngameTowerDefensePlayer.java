@@ -1,8 +1,8 @@
-package me.wyndev.towerdefense.player;
+package me.wyndev.towerdefense.Player;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.wyndev.towerdefense.tower.Tower;
+import me.wyndev.towerdefense.Tower.Tower;
 import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
