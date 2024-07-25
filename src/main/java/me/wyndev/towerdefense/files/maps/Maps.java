@@ -23,14 +23,13 @@ public class Maps {
         for (int i = 0; i < mapsPath.length; i++) {
             String path = mapsPath[i];
             maps.add(new File(mapDir + "/" + path));
-            System.out.println(mapDir + "/" + path);
         }
     }
 
     public static Path getRandomMap() {
         Random random = new Random();
         int i = 0;
-        if (1 > maps.size()) {
+        if (1 <= maps.size()) {
             random.nextInt(0, maps.size() - 1);
         }
         return Path.of(maps.get(i).getPath());
