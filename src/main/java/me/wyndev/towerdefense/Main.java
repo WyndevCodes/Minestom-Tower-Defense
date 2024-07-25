@@ -14,6 +14,7 @@ import net.minestom.server.event.player.PlayerSkinInitEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.timer.SchedulerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     public static Instance mainLobby;
+    public static SchedulerManager scheduler;
 
     public static void main(String[] args) throws IOException {
         Config.read();
@@ -57,6 +59,8 @@ public class Main {
                 gameInstance.setup();
             }
         });
+
+        scheduler = MinecraftServer.getSchedulerManager();
 
         MojangAuth.init();
         minecraftServer.start(Config.configData.getHostname(), Config.configData.getPort());

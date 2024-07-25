@@ -44,6 +44,7 @@ public class GameInstance {
     /**
      * The current {@link GameState} of this game
      */
+    private final GameLoop gameLoop;
     private @Getter GameState gameState = GameState.WAITING_FOR_PLAYERS;
 
     // Map information
@@ -60,12 +61,14 @@ public class GameInstance {
      * A map of all {@link IngameTowerDefensePlayer}s associated with
      * players currently in this game.
      */
-    private final Map<UUID, IngameTowerDefensePlayer> ingamePlayers;
+    private final @Getter Map<UUID, IngameTowerDefensePlayer> ingamePlayers;
 
     /**
      * Creates a new GameInstance with no default players.
      */
     public GameInstance() {
+        gameLoop = new GameLoop(this);
+
         players = new ArrayList<>();
         ingamePlayers = new HashMap<>();
 
@@ -78,6 +81,8 @@ public class GameInstance {
      * @param initialPlayers The initial players to add to this GameInstance
      */
     public GameInstance(List<Player> initialPlayers) {
+        gameLoop = new GameLoop(this);
+
         players = new ArrayList<>();
         ingamePlayers = new HashMap<>();
 
@@ -116,7 +121,10 @@ public class GameInstance {
 
             // Clear inventory (just in case)
             event.getPlayer().getInventory().clear();
-            this.start(); //TODO: move to a better location once game queues work
+
+            //TODO: remove this, this is for testing purposes only
+            this.gameState = GameState.COUNTDOWN;
+            gameLoop.startCountdown(); //default 30 seconds for now
         });
     }
 
@@ -135,7 +143,7 @@ public class GameInstance {
                     .withCustomName(Component.text("Buy turret").color(TextColor.color(0, 145, 73)))
             );
 
-            //TODO: send message, assign plot, etc.
+            //TODO: assign plot, etc. (send message is already in GameLoop.java)
         }
 
         //---- Add game listeners ----
@@ -193,6 +201,9 @@ public class GameInstance {
                 new PlaceTurretMenu(towerDefensePlayer).open(new Pos(block.x(), block.y(), block.z()), event.getInstance());
             }
         });
+
+        // Start main game loop
+        gameLoop.startMainLoop();
     }
 
     /**
@@ -220,9 +231,10 @@ public class GameInstance {
         }
 
         // Check for start threshold
-        if (players.size() > (MAX_PLAYERS * 0.8)) {
+        if (players.size() >= (MAX_PLAYERS * 0.8)) {
             // Start game countdown
             this.gameState = GameState.COUNTDOWN;
+            gameLoop.startCountdown(); //default 30 seconds for now
         }
 
         return true;
@@ -237,6 +249,11 @@ public class GameInstance {
         boolean wasRemoved = players.remove(player);
 
         //TODO: game logic determining auto-shutdown, cancel countdown, etc.
+        if (players.size() < (MAX_PLAYERS * 0.8) && gameState == GameState.COUNTDOWN) {
+            // Cancel countdown
+            gameLoop.cancelCountdown();
+            gameState = GameState.WAITING_FOR_PLAYERS;
+        }
 
         if (wasRemoved && gameState == GameState.RUNNING) {
             for (TowerDefensePlayer playerInGame : players) {
@@ -252,6 +269,8 @@ public class GameInstance {
      * */
     public void end() {
         gameState = GameState.ENDED;
+        gameLoop.stopMainLoop();
+        gameLoop.cancelCountdown(); //just in case
 
         players.forEach(p -> p.setInstance(Main.mainLobby));
         ingamePlayers.forEach((uuid, towerPlayer) -> towerPlayer.shutdown());
