@@ -1,5 +1,6 @@
 package me.wyndev.towerdefense.tower;
 
+import lombok.Getter;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.attribute.MultiEntityTower;
@@ -18,11 +19,10 @@ import java.util.List;
  */
 public abstract class Tower extends EntityCreature {
     protected final TowerType type;
-    protected final IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
+    protected final @Getter IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
     protected int towerLevel;
     protected List<TowerDefenseEnemy> targets;
 
-    private long towerEntity;
     private long lastAttackTime = System.currentTimeMillis();
 
     public Tower(@NotNull TowerType type, @NotNull IngameTowerDefensePlayer playerWhoSpawned, int towerLevel) {

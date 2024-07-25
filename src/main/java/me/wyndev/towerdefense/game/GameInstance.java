@@ -18,14 +18,12 @@ import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -167,10 +165,9 @@ public class GameInstance {
                 IngameTowerDefensePlayer towerDefensePlayer = ingamePlayers.get(event.getPlayer().getUuid());
                 if (towerDefensePlayer == null) return;
 
-                // Check if player has a turret placed, and if so, change block type
-                // Is there any way to make this more efficient? I'm not sure if Pos.java has a hashCode, so I'm not using HashMap#containsKey
-                if (towerAt(towerDefensePlayer, Pos.fromPoint(block)) != null) {
-                    entity.getMeta().setBlockState(Block.EMERALD_BLOCK);
+                // Check if player has a turret placed, and if so, change block type because tower space is not available
+                if (towerAt(Pos.fromPoint(block)) != null) {
+                    entity.getMeta().setBlockState(Block.RED_CONCRETE);
                     return;
                 }
 
@@ -190,13 +187,16 @@ public class GameInstance {
             if (event.getItemStack().material().equals(Material.ENDER_EYE) && instance.getBlock(block).name().equals("minecraft:grass_block")) {
                 IngameTowerDefensePlayer towerDefensePlayer = ingamePlayers.get(event.getPlayer().getUuid());
                 if (towerDefensePlayer == null) throw new IllegalStateException("A player in the tower defense game does not have an associated tower defense player wrapper!");
-                EntityCreature tower = towerAt(towerDefensePlayer, Pos.fromPoint(block));
-                if (tower instanceof Tower) {
-                    new ModifyTurret(towerDefensePlayer, (Tower) tower).open(Pos.fromPoint(block), instance);
-                    return;
+                Tower tower = towerAt(Pos.fromPoint(block));
+                if (tower != null) {
+                    if (tower.getPlayerWhoSpawned().equals(towerDefensePlayer)) {
+                        new ModifyTurret(towerDefensePlayer, tower).open(Pos.fromPoint(block), instance);
+                    } else {
+                        //Player cannot open another player's tower menu
+                    }
+                } else {
+                    new PlaceTurretMenu(towerDefensePlayer).open(new Pos(block.x(), block.y(), block.z()), event.getInstance());
                 }
-
-                new PlaceTurretMenu(towerDefensePlayer).open(new Pos(block.x(), block.y(), block.z()), event.getInstance());
             }
         });
 
@@ -279,10 +279,20 @@ public class GameInstance {
         ingamePlayers.clear();
     }
 
-    public @Nullable EntityCreature towerAt(IngameTowerDefensePlayer player, Pos pos) {
-        // Check if player has a turret placed
+    /**
+     * Gets the tower at a position
+     * @param pos The position to check
+     * @return The tower if found, otherwise null if there is no tower at the position
+     */
+    public @Nullable Tower towerAt(Pos pos) {
+        List<Tower> towers = new ArrayList<>();
+        for (IngameTowerDefensePlayer player1 : ingamePlayers.values()) {
+            towers.addAll(player1.getCurrentPlacedTowers());
+        }
+
+        // Check if there is a turret at the position
         // Is there any way to make this more efficient? I'm not sure if Pos.java has a hashCode, so I'm not using HashMap#containsKey
-        for (EntityCreature check : player.getCurrentPlacedTowers()) {
+        for (Tower check : towers) {
             if (check.getPosition().samePoint(pos.blockX() + 0.5, pos.blockY() + 1, pos.blockZ() + 0.5)) {
                 return check;
             }

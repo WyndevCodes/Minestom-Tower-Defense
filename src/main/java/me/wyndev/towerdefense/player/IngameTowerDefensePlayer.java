@@ -3,13 +3,9 @@ package me.wyndev.towerdefense.player;
 import lombok.Getter;
 import lombok.Setter;
 import me.wyndev.towerdefense.tower.Tower;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,12 +24,9 @@ public class IngameTowerDefensePlayer {
      */
     private @Setter long income = 10;
     /**
-     * A map of all towers placed by this player in a game in respect to the
-     * position each tower is placed at
-     * @deprecated : NEED TO BE MOVED TO GameInstance.java TO PREVENT ANY ISSUES WITH MULTIPLAYER
+     * A list of all towers placed by this player in a game
      */
-    @Deprecated(forRemoval = true)
-    private final List<EntityCreature> currentPlacedTowers = new ArrayList<>();
+    private final List<Tower> currentPlacedTowers = new ArrayList<>();
 
     /**
      * Initializes an IngameTowerDefensePlayer.
