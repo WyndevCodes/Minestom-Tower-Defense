@@ -1,5 +1,6 @@
 package me.wyndev.towerdefense;
 
+import me.wyndev.towerdefense.Config.FIles.ConfigYML;
 import me.wyndev.towerdefense.Game.GameInstance;
 import me.wyndev.towerdefense.Player.TowerDefensePlayer;
 import net.minestom.server.MinecraftServer;
@@ -12,13 +13,14 @@ import net.minestom.server.instance.block.Block;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     public static Instance mainLobby;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         MinecraftServer minecraftServer = MinecraftServer.init();
         MinecraftServer.getConnectionManager().setPlayerProvider((arg1, arg2, arg3) -> new TowerDefensePlayer(arg1, arg2, arg3, (byte) 1));
 
