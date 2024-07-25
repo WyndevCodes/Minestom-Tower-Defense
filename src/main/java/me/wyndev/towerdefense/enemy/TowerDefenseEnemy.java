@@ -17,12 +17,10 @@ import org.jetbrains.annotations.NotNull;
 public abstract class TowerDefenseEnemy extends EntityCreature {
 
     protected final TowerDefenseEnemyType towerDefenseEnemyType;
-    protected final TowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
 
-    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType, @NotNull TowerDefensePlayer playerWhoSpawned) {
+    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType) {
         super(towerDefenseEnemyType.getEntityType());
         this.towerDefenseEnemyType = towerDefenseEnemyType;
-        this.playerWhoSpawned = playerWhoSpawned;
 
         // Initialize entity attributes
         this.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(towerDefenseEnemyType.getMovementSpeed());
