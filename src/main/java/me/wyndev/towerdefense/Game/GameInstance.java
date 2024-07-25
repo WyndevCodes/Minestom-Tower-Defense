@@ -7,6 +7,7 @@ import me.wyndev.towerdefense.Game.CustomEntity.Cursor;
 import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.Player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.Player.TowerDefensePlayer;
+import me.wyndev.towerdefense.files.maps.Maps;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
 import net.hollowcube.schem.SchematicReader;
@@ -103,7 +104,7 @@ public class GameInstance {
         }
         SchematicReader reader = new SchematicReader();
         //todo: replace that with IOUtils in the future + load them from a folder outside of the jar
-        Schematic map = reader.read(Main.class.getResourceAsStream("/map.schem"));
+        Schematic map = reader.read(Maps.getRandomMap());
         map.build(Rotation.NONE, UnaryOperator.identity()).apply(instance, () -> {
             log.info("Schematic built");
         });
