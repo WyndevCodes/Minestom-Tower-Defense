@@ -1,4 +1,4 @@
-package me.wyndev.towerdefense.Files.POJO;
+package me.wyndev.towerdefense.files.pojo;
 
 import lombok.Data;
 

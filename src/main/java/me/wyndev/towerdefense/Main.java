@@ -1,8 +1,8 @@
 package me.wyndev.towerdefense;
 
-import me.wyndev.towerdefense.Files.Config;
-import me.wyndev.towerdefense.Game.GameInstance;
-import me.wyndev.towerdefense.Player.TowerDefensePlayer;
+import me.wyndev.towerdefense.files.Config;
+import me.wyndev.towerdefense.game.GameInstance;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;

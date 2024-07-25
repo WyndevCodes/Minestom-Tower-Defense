@@ -1,4 +1,4 @@
-package me.wyndev.towerdefense.Player;
+package me.wyndev.towerdefense.player;
 
 import lombok.Data;
 import lombok.Getter;

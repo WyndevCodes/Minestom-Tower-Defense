@@ -1,8 +1,8 @@
-package me.wyndev.towerdefense.Enemy;
+package me.wyndev.towerdefense.enemy;
 
 import me.wyndev.towerdefense.ChatColor;
-import me.wyndev.towerdefense.Player.TowerDefensePlayer;
-import me.wyndev.towerdefense.Tower.Tower;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.tower.Tower;
 import me.wyndev.towerdefense.Utils;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EntityCreature;
