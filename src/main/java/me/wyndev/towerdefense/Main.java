@@ -1,9 +1,14 @@
 package me.wyndev.towerdefense;
 
+import me.lucko.luckperms.common.config.generic.adapter.EnvironmentVariableConfigAdapter;
+import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapter;
+import me.lucko.luckperms.minestom.LuckPermsMinestom;
+import me.lucko.luckperms.minestom.context.defaults.GameModeContextProvider;
 import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.GameInstance;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import net.luckperms.api.LuckPerms;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
@@ -19,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Main {
@@ -65,5 +71,17 @@ public class Main {
         MojangAuth.init();
         minecraftServer.start(Config.configData.getHostname(), Config.configData.getPort());
         log.info("Server started on address {} with port {}", Config.configData.getHostname(), Config.configData.getPort());
+    }
+
+    private void setupLuckPerms() {
+        Path directory = Path.of("luckperms");
+        LuckPerms luckPerms = LuckPermsMinestom.builder(directory)
+                .commands(true) // enables registration of LuckPerms commands
+                .contextProvider(new GameModeContextProvider()) // provide additional custom contexts
+                .configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin, // define the configuration
+                        new EnvironmentVariableConfigAdapter(plugin) // use MultiConfigurationAdapter to load from multiple sources, in order
+                )).permissionSuggestions("test.permission", "test.other") // add permission suggestions for commands and the web editor
+                .dependencyManager(true) // automatically download and classload dependencies
+                .enable();
     }
 }
