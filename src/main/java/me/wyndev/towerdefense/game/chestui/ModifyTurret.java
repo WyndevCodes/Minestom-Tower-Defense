@@ -6,6 +6,7 @@ import me.wyndev.towerdefense.tower.base.SkeletonTower;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
@@ -19,33 +20,36 @@ import net.minestom.server.item.Material;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaceTurretMenu {
-
+public class ModifyTurret {
     List<EventListener> listeners = new ArrayList<>(); //I hate doing that, but I have no idea how to do this
 
     private final IngameTowerDefensePlayer player;
+    private final Tower tower;
 
-    public PlaceTurretMenu(IngameTowerDefensePlayer player) {
+    public ModifyTurret(IngameTowerDefensePlayer player, Tower tower) {
         this.player = player;
+        this.tower = tower;
     }
 
     public void open(Pos pos, Instance instance) {
         Inventory inventory = getInventory();
         player.getTowerDefensePlayer().openInventory(inventory);
 
-        EventNode child = EventNode.all("BuyMenuEventNode");
+        EventNode child = EventNode.all("EditMenuEventNode");
         instance.eventNode().addChild(child);
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
             e.setCancelled(true);
 
-            //TODO: Replace this with a for loop of every TowerType to find which match
-            if (e.getSlot() == 10) {
-                Tower tower = new SkeletonTower(player, 1);
-                Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
+            if (e.getSlot() == 0) {
+                tower.sell();
 
-                tower.setInstance(e.getInstance(), spawnPos);
-                player.getCurrentPlacedTowers().add(tower);
+                e.getPlayer().closeInventory();
+                deleteChild(child);
+            }
+
+            if (e.getSlot() == 4) {
+                tower.upgrade();
 
                 e.getPlayer().closeInventory();
                 deleteChild(child);
@@ -71,8 +75,9 @@ public class PlaceTurretMenu {
 
     public Inventory getInventory() {
         //TODO: Generate tower items from TowerType.java values
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.text("Tower shop").color(TextColor.color(0, 181, 5)));
-        inventory.setItemStack(10, ItemStack.of(Material.STONE).withCustomName(Component.text("Skeleton tower").color(TextColor.color(123, 123, 123))));
+        Inventory inventory = new Inventory(InventoryType.HOPPER, Component.text("Tower shop").color(TextColor.color(0, 181, 5)));
+        inventory.setItemStack(0, ItemStack.of(Material.REDSTONE_BLOCK).withCustomName(Component.text("Sell tower").color(TextColor.color(255, 0, 0))));
+        inventory.setItemStack(4, ItemStack.of(Material.EMERALD_BLOCK).withCustomName(Component.text("Upgrade tower").color(TextColor.color(255, 0, 0))));
         return inventory;
     }
 }

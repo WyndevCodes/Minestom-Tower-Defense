@@ -14,9 +14,10 @@ public enum TowerType {
     //TODO: Give them a name and a description
     //TODO: Store all towerType in a list (List<TowerType>) -> see PlaceTurretMenu.java:36
 
-    SKELETON(EntityType.SKELETON, 3, 5, 25, false)
+    SKELETON(EntityType.SKELETON, 4, 5, 25, false)
     ;
 
+    //TODO: add attack speed, splash range, and remove max level, it will always be 4
     private final EntityType entityType;
     private final int maxLevel;
     private final int baseDamage;

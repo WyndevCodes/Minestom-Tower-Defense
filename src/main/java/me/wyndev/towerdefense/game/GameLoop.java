@@ -11,6 +11,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
+import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.listener.ChatMessageListener;
 import net.minestom.server.timer.ExecutionType;
@@ -115,8 +116,10 @@ public class GameLoop {
                 }
 
                 // Tick towers
-                for (Tower tower : player.getCurrentPlacedTowers().values()) {
-                    tower.tick();
+                for (EntityCreature tower : player.getCurrentPlacedTowers()) {
+                    if (tower instanceof Tower) {
+                        ((Tower) tower).tick();
+                    }
                 }
             }
 

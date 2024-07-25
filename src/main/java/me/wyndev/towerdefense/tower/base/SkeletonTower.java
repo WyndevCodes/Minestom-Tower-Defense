@@ -12,17 +12,39 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SkeletonTower extends Tower {
 
-    public SkeletonTower(@NotNull IngameTowerDefensePlayer playerWhoSpawned) {
-        super(TowerType.SKELETON, playerWhoSpawned);
+    public SkeletonTower(@NotNull IngameTowerDefensePlayer playerWhoSpawned, int level) {
+        super(TowerType.SKELETON, playerWhoSpawned, level);
+        initializeEntity(level);
     }
 
     @Override
     public void initializeEntity(int towerLevel) {
+        setItemInMainHand(ItemStack.builder(Material.BOW).build());
         switch (towerLevel) {
             //TODO: levels 2 and 3
-            default -> {
-                setHelmet(ItemStack.builder(Material.LEATHER_HELMET).build());
-                setItemInMainHand(ItemStack.builder(Material.BOW).build());
+            case 1: {
+                setChestplate(ItemStack.builder(Material.LEATHER_CHESTPLATE).build());
+                setLeggings(ItemStack.builder(Material.LEATHER_LEGGINGS).build());
+                setBoots(ItemStack.builder(Material.LEATHER_BOOTS).build());
+                break;
+            }
+            case 2: {
+                setChestplate(ItemStack.builder(Material.IRON_CHESTPLATE).build());
+                setLeggings(ItemStack.builder(Material.IRON_LEGGINGS).build());
+                setBoots(ItemStack.builder(Material.IRON_BOOTS).build());
+                break;
+            }
+            case 3: {
+                setChestplate(ItemStack.builder(Material.GOLDEN_CHESTPLATE).build());
+                setLeggings(ItemStack.builder(Material.GOLDEN_LEGGINGS).build());
+                setBoots(ItemStack.builder(Material.GOLDEN_BOOTS).build());
+                break;
+            }
+            case 4: {
+                setChestplate(ItemStack.builder(Material.DIAMOND_CHESTPLATE).build());
+                setLeggings(ItemStack.builder(Material.DIAMOND_LEGGINGS).build());
+                setBoots(ItemStack.builder(Material.DIAMOND_BOOTS).build());
+                break;
             }
         }
     }

@@ -4,9 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import me.wyndev.towerdefense.tower.Tower;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A wrapper class for {@link TowerDefensePlayer} that represents a player that
@@ -17,7 +21,7 @@ public class IngameTowerDefensePlayer {
 
     private TowerDefensePlayer towerDefensePlayer;
     private @Setter int health = 100;
-    private @Setter long gold = 0;
+    private @Setter long gold = 8000000;
     private @Setter int towersPlaced = 0;
     /**
      * Gold income of the player every 10 seconds.
@@ -26,8 +30,10 @@ public class IngameTowerDefensePlayer {
     /**
      * A map of all towers placed by this player in a game in respect to the
      * position each tower is placed at
+     * @deprecated : NEED TO BE MOVED TO GameInstance.java TO PREVENT ANY ISSUES WITH MULTIPLAYER
      */
-    private final HashMap<Pos, Tower> currentPlacedTowers = new HashMap<>();
+    @Deprecated(forRemoval = true)
+    private final List<EntityCreature> currentPlacedTowers = new ArrayList<>();
 
     /**
      * Initializes an IngameTowerDefensePlayer.

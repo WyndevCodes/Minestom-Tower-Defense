@@ -17,18 +17,19 @@ import java.util.List;
  * a player's base during a tower defense game.
  */
 public abstract class Tower extends EntityCreature {
-
     protected final TowerType type;
     protected final IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
-    protected int towerLevel = 1;
+    protected int towerLevel;
     protected List<TowerDefenseEnemy> targets;
 
+    private long towerEntity;
     private long lastAttackTime = System.currentTimeMillis();
 
-    public Tower(@NotNull TowerType type, @NotNull IngameTowerDefensePlayer playerWhoSpawned) {
+    public Tower(@NotNull TowerType type, @NotNull IngameTowerDefensePlayer playerWhoSpawned, int towerLevel) {
         super(type.getEntityType());
         this.type = type;
         this.playerWhoSpawned = playerWhoSpawned;
+        this.towerLevel = towerLevel;
         initializeEntity(towerLevel);
     }
 
@@ -119,6 +120,7 @@ public abstract class Tower extends EntityCreature {
         playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("Sold tower for " + goldReturn + " gold!"));
         playerWhoSpawned.getTowerDefensePlayer().playPlayerSound(Key.key("entity.silverfish.death"));
         playerWhoSpawned.setGold(playerWhoSpawned.getGold() + goldReturn);
+        playerWhoSpawned.getCurrentPlacedTowers().remove(this);
     }
 
     /**

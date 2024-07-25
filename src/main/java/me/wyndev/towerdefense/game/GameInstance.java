@@ -4,10 +4,12 @@ import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.files.maps.Maps;
+import me.wyndev.towerdefense.game.chestui.ModifyTurret;
 import me.wyndev.towerdefense.game.chestui.PlaceTurretMenu;
 import me.wyndev.towerdefense.game.customentity.Cursor;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.tower.Tower;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
 import net.hollowcube.schem.SchematicReader;
@@ -16,6 +18,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
@@ -28,6 +31,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,12 +169,11 @@ public class GameInstance {
 
                 // Check if player has a turret placed, and if so, change block type
                 // Is there any way to make this more efficient? I'm not sure if Pos.java has a hashCode, so I'm not using HashMap#containsKey
-                for (Pos check : towerDefensePlayer.getCurrentPlacedTowers().keySet()) {
-                    if (check.samePoint(block.x() + 0.5, block.y() + 1, block.z() + 0.5)) {
-                        entity.getMeta().setBlockState(Block.REDSTONE_BLOCK);
-                        return;
-                    }
+                if (towerAt(towerDefensePlayer, Pos.fromPoint(block)) != null) {
+                    entity.getMeta().setBlockState(Block.EMERALD_BLOCK);
+                    return;
                 }
+
                 entity.getMeta().setBlockState(entity.getDefaultBlockTexture());
             } else {
                 if (Cursor.cursorHashMap.containsKey(event.getPlayer())) {
@@ -187,17 +190,12 @@ public class GameInstance {
             if (event.getItemStack().material().equals(Material.ENDER_EYE) && instance.getBlock(block).name().equals("minecraft:grass_block")) {
                 IngameTowerDefensePlayer towerDefensePlayer = ingamePlayers.get(event.getPlayer().getUuid());
                 if (towerDefensePlayer == null) throw new IllegalStateException("A player in the tower defense game does not have an associated tower defense player wrapper!");
-
-                // Check if player has a turret placed
-                // Is there any way to make this more efficient? I'm not sure if Pos.java has a hashCode, so I'm not using HashMap#containsKey
-                for (Pos check : towerDefensePlayer.getCurrentPlacedTowers().keySet()) {
-                    if (check.samePoint(block.x() + 0.5, block.y() + 1, block.z() + 0.5)) {
-                        towerDefensePlayer.getTowerDefensePlayer().sendMessage(Component.text("There is already a tower here!").color(ChatColor.RED.toColor()));
-                        return;
-                    }
+                EntityCreature tower = towerAt(towerDefensePlayer, Pos.fromPoint(block));
+                if (tower instanceof Tower) {
+                    new ModifyTurret(towerDefensePlayer, (Tower) tower).open(Pos.fromPoint(block), instance);
+                    return;
                 }
 
-                event.getPlayer().sendMessage("Open a menu to buy tower");
                 new PlaceTurretMenu(towerDefensePlayer).open(new Pos(block.x(), block.y(), block.z()), event.getInstance());
             }
         });
@@ -279,6 +277,17 @@ public class GameInstance {
 
         players.clear();
         ingamePlayers.clear();
+    }
+
+    public @Nullable EntityCreature towerAt(IngameTowerDefensePlayer player, Pos pos) {
+        // Check if player has a turret placed
+        // Is there any way to make this more efficient? I'm not sure if Pos.java has a hashCode, so I'm not using HashMap#containsKey
+        for (EntityCreature check : player.getCurrentPlacedTowers()) {
+            if (check.getPosition().samePoint(pos.blockX() + 0.5, pos.blockY() + 1, pos.blockZ() + 0.5)) {
+                return check;
+            }
+        }
+        return null;
     }
 
 }
