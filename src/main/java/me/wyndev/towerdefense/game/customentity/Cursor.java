@@ -28,6 +28,7 @@ public class Cursor extends Entity {
         meta.setScale(new Vec(1.1, 1.1, 1.1));
         meta.setHasNoGravity(true);
         meta.setPosRotInterpolationDuration(2);
+        meta.setBrightnessOverride(200);
         cursorHashMap.put(player, this);
     }
 
