@@ -167,7 +167,7 @@ public class GameInstance {
 
                 // Check if player has a turret placed, and if so, change block type because tower space is not available
                 if (towerAt(Pos.fromPoint(block)) != null) {
-                    entity.getMeta().setBlockState(Block.RED_CONCRETE);
+                    entity.getMeta().setBlockState(Block.EMERALD_BLOCK);
                     return;
                 }
 
