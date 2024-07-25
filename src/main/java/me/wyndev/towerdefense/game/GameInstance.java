@@ -143,7 +143,7 @@ public class GameInstance {
                     .withCustomName(Component.text("Buy turret").color(TextColor.color(0, 145, 73)))
             );
 
-            //TODO: send message, assign plot, etc.
+            //TODO: assign plot, etc. (send message is already in GameLoop.java)
         }
 
         //---- Add game listeners ----
