@@ -31,7 +31,7 @@ public class GameLoop {
     }
 
     public void startCountdown() {
-        startCountdown(30); //default 30 seconds
+        startCountdown(1); //default 30 seconds
     }
 
     public void startCountdown(int seconds) {

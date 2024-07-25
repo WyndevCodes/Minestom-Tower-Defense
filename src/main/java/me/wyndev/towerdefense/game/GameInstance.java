@@ -26,6 +26,8 @@ import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +91,7 @@ public class GameInstance {
         // Create instance here to keep it as a final, non-changing variable (because it is)
         instance = MinecraftServer.getInstanceManager().createInstanceContainer();
         //TODO: fix cursor shadow when on certain blocks
-        instance.setChunkSupplier(LightingChunk::new); //this adds light to the chunks, but also makes the cursor appear shadowed in certain places
+        //instance.setChunkSupplier(LightingChunk::new); //this adds light to the chunks, but also makes the cursor appear shadowed in certain places
 
         for (Player player : initialPlayers) {
             addPlayer((TowerDefensePlayer) player);
@@ -108,7 +110,6 @@ public class GameInstance {
             }
         }
         SchematicReader reader = new SchematicReader();
-        //todo: replace that with IOUtils in the future + load them from a folder outside of the jar
         Schematic map = reader.read(Maps.getRandomMap());
         map.build(Rotation.NONE, UnaryOperator.identity()).apply(instance, () -> {
             log.info("Schematic built");
@@ -121,6 +122,7 @@ public class GameInstance {
 
             // Clear inventory (just in case)
             event.getPlayer().getInventory().clear();
+            event.getPlayer().addEffect(new Potion(PotionEffect.NIGHT_VISION, (byte) 1, -1));
 
             //TODO: remove this, this is for testing purposes only
             this.gameState = GameState.COUNTDOWN;
