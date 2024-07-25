@@ -1,8 +1,8 @@
-package me.wyndev.towerdefense.Tower;
+package me.wyndev.towerdefense.tower;
 
-import me.wyndev.towerdefense.Enemy.TowerDefenseEnemy;
-import me.wyndev.towerdefense.Player.IngameTowerDefensePlayer;
-import me.wyndev.towerdefense.Tower.attribute.MultiEntityTower;
+import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
+import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.tower.attribute.MultiEntityTower;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

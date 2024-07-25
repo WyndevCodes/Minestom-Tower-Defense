@@ -1,4 +1,4 @@
-package me.wyndev.towerdefense.Enemy;
+package me.wyndev.towerdefense.enemy;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;

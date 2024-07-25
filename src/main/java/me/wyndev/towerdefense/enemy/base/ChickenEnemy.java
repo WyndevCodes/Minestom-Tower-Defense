@@ -1,8 +1,8 @@
-package me.wyndev.towerdefense.Enemy.base;
+package me.wyndev.towerdefense.enemy.base;
 
-import me.wyndev.towerdefense.Enemy.TowerDefenseEnemy;
-import me.wyndev.towerdefense.Enemy.TowerDefenseEnemyType;
-import me.wyndev.towerdefense.Player.TowerDefensePlayer;
+import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
+import me.wyndev.towerdefense.enemy.TowerDefenseEnemyType;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import org.jetbrains.annotations.NotNull;
 
 /**

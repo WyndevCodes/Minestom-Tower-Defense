@@ -1,8 +1,8 @@
-package me.wyndev.towerdefense.Tower.base;
+package me.wyndev.towerdefense.tower.base;
 
-import me.wyndev.towerdefense.Player.IngameTowerDefensePlayer;
-import me.wyndev.towerdefense.Tower.Tower;
-import me.wyndev.towerdefense.Tower.TowerType;
+import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.tower.Tower;
+import me.wyndev.towerdefense.tower.TowerType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;

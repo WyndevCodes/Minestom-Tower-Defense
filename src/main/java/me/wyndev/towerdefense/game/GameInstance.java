@@ -1,13 +1,13 @@
-package me.wyndev.towerdefense.Game;
+package me.wyndev.towerdefense.game;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
-import me.wyndev.towerdefense.Game.ChestUI.PlaceTurretMenu;
-import me.wyndev.towerdefense.Game.CustomEntity.Cursor;
 import me.wyndev.towerdefense.Main;
-import me.wyndev.towerdefense.Player.IngameTowerDefensePlayer;
-import me.wyndev.towerdefense.Player.TowerDefensePlayer;
 import me.wyndev.towerdefense.files.maps.Maps;
+import me.wyndev.towerdefense.game.chestui.PlaceTurretMenu;
+import me.wyndev.towerdefense.game.customentity.Cursor;
+import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
 import net.hollowcube.schem.SchematicReader;

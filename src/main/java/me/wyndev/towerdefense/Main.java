@@ -1,9 +1,8 @@
 package me.wyndev.towerdefense;
 
-import me.wyndev.towerdefense.Game.GameInstance;
-import me.wyndev.towerdefense.Player.TowerDefensePlayer;
 import me.wyndev.towerdefense.files.config.Config;
-import me.wyndev.towerdefense.files.maps.Maps;
+import me.wyndev.towerdefense.game.GameInstance;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
@@ -26,7 +25,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Config.read();
-        Maps.load();
 
         MinecraftServer minecraftServer = MinecraftServer.init();
         MinecraftServer.getConnectionManager().setPlayerProvider((arg1, arg2, arg3) -> new TowerDefensePlayer(arg1, arg2, arg3, (byte) 1));
@@ -53,7 +51,7 @@ public class Main {
             //TODO: change this to a command or an NPC that uses the GameManager class (supports queueing)
             if (e.getMessage().equals("start")) {
                 ArrayList<Player> players = new ArrayList<>(mainLobby.getPlayers());
-                GameInstance gameInstance = new GameInstance(players);
+                me.wyndev.towerdefense.game.GameInstance gameInstance = new GameInstance(players);
                 gameInstance.setup();
             }
         });

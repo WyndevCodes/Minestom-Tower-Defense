@@ -1,4 +1,4 @@
-package me.wyndev.towerdefense.Game.CustomEntity;
+package me.wyndev.towerdefense.game.customentity;
 
 import lombok.Getter;
 import net.minestom.server.coordinate.Pos;

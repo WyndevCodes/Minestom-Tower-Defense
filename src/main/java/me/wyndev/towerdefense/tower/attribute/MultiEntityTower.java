@@ -1,4 +1,4 @@
-package me.wyndev.towerdefense.Tower.attribute;
+package me.wyndev.towerdefense.tower.attribute;
 
 import net.minestom.server.entity.Entity;
 
