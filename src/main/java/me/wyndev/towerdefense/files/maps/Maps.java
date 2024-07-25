@@ -29,7 +29,7 @@ public class Maps {
     public static Path getRandomMap() {
         Random random = new Random();
         int i = 0;
-        if (1 <= maps.size()) {
+        if (1 < maps.size()) {
             random.nextInt(0, maps.size() - 1);
         }
         return Path.of(maps.get(i).getPath());
