@@ -15,8 +15,6 @@ public class Config {
     }
 
     public static void read() {
-        System.out.println(getPath());
-
         try {
             File file = new File(getPath());
             if (!file.exists()) {

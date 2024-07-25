@@ -58,5 +58,6 @@ public class Main {
 
         MojangAuth.init();
         minecraftServer.start(Config.configData.getHostname(), Config.configData.getPort());
+        log.info("Server started on address {} with port {}", Config.configData.getHostname(), Config.configData.getPort());
     }
 }
