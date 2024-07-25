@@ -51,7 +51,8 @@ public class GameInstance {
 
     // Map information
     //TODO: multiple maps with different schematics and player counts?
-    private final Instance instance;
+
+    @Getter private final Instance instance;
 
     // Player information
     /**
@@ -69,13 +70,12 @@ public class GameInstance {
      * Creates a new GameInstance with no default players.
      */
     public GameInstance() {
-        gameLoop = new GameLoop(this);
-
-        players = new ArrayList<>();
-        ingamePlayers = new HashMap<>();
-
         // Create instance here to keep it as a final, non-changing variable (because it is)
         instance = MinecraftServer.getInstanceManager().createInstanceContainer();
+
+        gameLoop = new GameLoop(this);
+        players = new ArrayList<>();
+        ingamePlayers = new HashMap<>();
     }
 
     /**
@@ -83,15 +83,13 @@ public class GameInstance {
      * @param initialPlayers The initial players to add to this GameInstance
      */
     public GameInstance(List<Player> initialPlayers) {
-        gameLoop = new GameLoop(this);
+        // Create instance here to keep it as a final, non-changing variable (because it is)
+        instance = MinecraftServer.getInstanceManager().createInstanceContainer();
 
+        gameLoop = new GameLoop(this);
         players = new ArrayList<>();
         ingamePlayers = new HashMap<>();
 
-        // Create instance here to keep it as a final, non-changing variable (because it is)
-        instance = MinecraftServer.getInstanceManager().createInstanceContainer();
-        //TODO: fix cursor shadow when on certain blocks
-        //instance.setChunkSupplier(LightingChunk::new); //this adds light to the chunks, but also makes the cursor appear shadowed in certain places
 
         for (Player player : initialPlayers) {
             addPlayer((TowerDefensePlayer) player);

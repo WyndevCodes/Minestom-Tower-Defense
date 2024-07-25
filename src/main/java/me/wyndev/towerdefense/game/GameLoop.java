@@ -3,6 +3,7 @@ package me.wyndev.towerdefense.game;
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.Utils;
+import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
@@ -10,6 +11,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
+import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.listener.ChatMessageListener;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
@@ -28,10 +31,16 @@ public class GameLoop {
 
     public GameLoop(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
+        gameInstance.getInstance().eventNode().addListener(PlayerChatEvent.class, e -> {
+            if (e.getMessage().equals("fs")) {
+                countdownTask.cancel();
+                gameInstance.start();
+            }
+        });
     }
 
     public void startCountdown() {
-        startCountdown(1); //default 30 seconds
+        startCountdown(Config.configData.getGameStartTime()); //default 30 seconds
     }
 
     public void startCountdown(int seconds) {
@@ -59,13 +68,17 @@ public class GameLoop {
             }
 
             // Otherwise, visually display countdown to players, if applicable
-            if (nonTenCountdownNumbers.contains(time) || time % 10 == 0) {
-                for (TowerDefensePlayer player : gameInstance.getPlayers()) {
-                    player.sendTitlePart(TitlePart.TITLE, countdownNumber(time));
-                    player.sendTitlePart(TitlePart.TIMES, Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ofSeconds(1)));
-                    player.playPlayerSound(Key.key("block.dispenser.dispense"));
-                    player.sendMessage(Component.text("The game starts in " + time + " seconds!").color(ChatColor.YELLOW.toColor()));
+            if (time > 0) {
+                if (nonTenCountdownNumbers.contains(time) || time % 10 == 0) {
+                    for (TowerDefensePlayer player : gameInstance.getPlayers()) {
+                        player.sendTitlePart(TitlePart.TITLE, countdownNumber(time));
+                        player.sendTitlePart(TitlePart.TIMES, Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ofSeconds(1)));
+                        player.playPlayerSound(Key.key("block.dispenser.dispense"));
+                        player.sendMessage(Component.text("The game starts in " + time + " seconds!").color(ChatColor.YELLOW.toColor()));
+                    }
                 }
+            } else {
+                countdownTask.cancel();
             }
 
         }, TaskSchedule.nextTick(), TaskSchedule.seconds(1), ExecutionType.TICK_START);
