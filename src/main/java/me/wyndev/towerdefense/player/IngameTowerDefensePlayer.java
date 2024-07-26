@@ -45,9 +45,9 @@ public class IngameTowerDefensePlayer {
      * any references it has to UUIDs or online players.
      */
     public void shutdown() {
+        gameSidebar.removeViewer(towerDefensePlayer);
         towerDefensePlayer = null;
         currentPlacedTowers.clear();
-        gameSidebar.removeViewer(towerDefensePlayer);
     }
 
     public void setGold(long gold) {

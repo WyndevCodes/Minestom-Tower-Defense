@@ -298,11 +298,8 @@ public class GameInstance {
         gameLoop.stopMainLoop();
         gameLoop.cancelCountdown(); //just in case
 
-        players.forEach(p -> {
-            p.setInstance(Main.mainLobby);
-            Main.hubSidebar.addViewer(p);
-        });
         ingamePlayers.forEach((uuid, towerPlayer) -> towerPlayer.shutdown());
+        players.forEach(p -> Main.gameManager.removePlayerFromGame(p));
 
         MinecraftServer.getInstanceManager().unregisterInstance(instance);
 
