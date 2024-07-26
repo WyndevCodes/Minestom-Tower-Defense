@@ -147,7 +147,7 @@ public class GameLoop {
                 synchronized (gameInstance.getEnemies()) {
                     //Run every tick for every enemy
                     for (TowerDefenseEnemy enemy : gameInstance.getEnemies()) {
-                        enemy.incrementTickAlive();
+                        enemy.tick(gameInstance.getPlayers());
 
                         Pos rot = enemy.getPosition();
 
