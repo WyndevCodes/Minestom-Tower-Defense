@@ -8,14 +8,13 @@ import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.GameInstance;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.sidebar.HubSidebar;
 import net.luckperms.api.LuckPerms;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
-import net.minestom.server.event.player.PlayerChatEvent;
-import net.minestom.server.event.player.PlayerSkinInitEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -32,6 +31,8 @@ public class Main {
     public static Instance mainLobby;
     public static SchedulerManager scheduler;
 
+    public static HubSidebar hubSidebar;
+
     public static void main(String[] args) throws IOException {
         Config.read();
         Maps.load();
@@ -46,9 +47,24 @@ public class Main {
         mainLobby = MinecraftServer.getInstanceManager().createInstanceContainer();
         mainLobby.setBlock(0, -5, 0, Block.STONE);
 
-        //Handle player login in
+        //Setup hub sidebar
+        hubSidebar = new HubSidebar();
+
+        //Handle player login
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, e -> {
             e.setSpawningInstance(mainLobby);
+        });
+        globalEventHandler.addListener(PlayerSpawnEvent.class, e -> {
+            if (e.isFirstSpawn()) {
+                //player just joined
+                hubSidebar.addViewer(e.getPlayer());
+            }
+            hubSidebar.updatePlayerCount(mainLobby.getPlayers().size());
+        });
+
+        //Handle player leave
+        globalEventHandler.addListener(PlayerDisconnectEvent.class, e -> {
+            hubSidebar.removeViewer(e.getPlayer());
         });
 
         // Skin handling for players that join (using Mojang auth for now)

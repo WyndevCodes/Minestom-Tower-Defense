@@ -2,6 +2,7 @@ package me.wyndev.towerdefense.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.wyndev.towerdefense.sidebar.GameSidebar;
 import me.wyndev.towerdefense.tower.Tower;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ public class IngameTowerDefensePlayer {
 
     private TowerDefensePlayer towerDefensePlayer;
     private @Setter int health = 100;
-    private @Setter long gold = 8000000;
+    private long gold = 8000000; //TODO: set back to 0 for production
     private @Setter int towersPlaced = 0;
     /**
      * Gold income of the player every 10 seconds.
@@ -27,6 +28,7 @@ public class IngameTowerDefensePlayer {
      * A list of all towers placed by this player in a game
      */
     private final List<Tower> currentPlacedTowers = new ArrayList<>();
+    private final GameSidebar gameSidebar;
 
     /**
      * Initializes an IngameTowerDefensePlayer.
@@ -35,6 +37,7 @@ public class IngameTowerDefensePlayer {
      */
     public IngameTowerDefensePlayer(@NotNull TowerDefensePlayer towerDefensePlayer) {
         this.towerDefensePlayer = towerDefensePlayer;
+        this.gameSidebar = new GameSidebar(this);
     }
 
     /**
@@ -44,5 +47,11 @@ public class IngameTowerDefensePlayer {
     public void shutdown() {
         towerDefensePlayer = null;
         currentPlacedTowers.clear();
+        gameSidebar.removeViewer(towerDefensePlayer);
+    }
+
+    public void setGold(long gold) {
+        this.gold = gold;
+        this.gameSidebar.updateGoldLine(gold);
     }
 }

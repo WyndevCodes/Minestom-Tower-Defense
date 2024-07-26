@@ -15,6 +15,7 @@ public abstract class AbstractSidebar {
      */
     public AbstractSidebar(String sidebarName) {
         sidebar = new Sidebar(Component.text(sidebarName));
+        createLines();
     }
 
     /**
