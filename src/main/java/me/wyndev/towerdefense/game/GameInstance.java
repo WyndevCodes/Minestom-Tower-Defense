@@ -147,7 +147,6 @@ public class GameInstance {
                 for (int z = 0; z < schemSize.blockZ(); z++) {
                     if (instance.getBlock(x, y, z).name().equals("minecraft:red_glazed_terracotta")) {
                         this.schemSpawnTranslation = new Pos(x, y, z);
-                        System.out.println("found");
                         break;
                     }
                     if (this.schemSpawnTranslation != null) break;

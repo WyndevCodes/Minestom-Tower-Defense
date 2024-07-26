@@ -44,7 +44,6 @@ public class WavesManager {
         @Override
         public void run() {
             Utils.sleep(Config.configData.getTimeBetweenWaves() * 1000);
-            log.info("Wave {}", waveID);
             instance.getIngamePlayers().forEach((k, v) -> {
                 v.getTowerDefensePlayer().showTitle(Title.title(Component.empty(), Component.text("Wave " + waveID).color(TextColor.color(255, 0, 0))));
             });
@@ -52,7 +51,6 @@ public class WavesManager {
             WaveObject[] waves = Waves.waveData.getWaves();
             for (WaveObject wave : waves) {
                 if (waveID >= wave.getStartingWave() && (waveID <= wave.getEndingWaves() || wave.getEndingWaves() == -1) && ((float) waveID / wave.getTimeBetweenSpawn()) % 1 == 0) {
-                    System.out.println((float) waveID / wave.getTimeBetweenSpawn());
                     long entityCount = wave.getPerWavesCount();
                     if (waveID - wave.getStartingWave() != 0) {
                         entityCount+= Math.round(((double) (waveID - wave.getStartingWave()) / wave.getTimeBetweenSpawn() * wave.getPerSpawnAddition()));
