@@ -14,6 +14,7 @@ public enum ChatColor {
     GREEN(85, 255, 85),
     RED(255, 85, 85),
     LIGHT_PURPLE(255, 85, 255),
+    WHITE(255, 255, 255),
     YELLOW(255, 255, 85),
     ;
 
