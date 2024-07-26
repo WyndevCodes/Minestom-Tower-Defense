@@ -67,7 +67,6 @@ public class GameInstance {
      * A list of all {@link TowerDefensePlayer}s currently in this game.
      */
     private final @Getter List<TowerDefensePlayer> players;
-
     /**
      * A map of all {@link IngameTowerDefensePlayer}s associated with
      * players currently in this game.
@@ -245,6 +244,7 @@ public class GameInstance {
 
         // Add player to map world
         player.setInstance(instance);
+        Main.hubSidebar.removeViewer(player);
 
         // Send join message
         for (TowerDefensePlayer playerInGame : players) {
@@ -283,6 +283,10 @@ public class GameInstance {
                 //TODO: color + format with rank (if we hook into luckperms)
                 playerInGame.sendMessage(Component.text(player.getUsername() + " left the game."));
             }
+            if (players.size() < 2) {
+                //game cannot run anymore with less than 2 people playing
+                end();
+            }
         }
     }
 
@@ -294,7 +298,10 @@ public class GameInstance {
         gameLoop.stopMainLoop();
         gameLoop.cancelCountdown(); //just in case
 
-        players.forEach(p -> p.setInstance(Main.mainLobby));
+        players.forEach(p -> {
+            p.setInstance(Main.mainLobby);
+            Main.hubSidebar.addViewer(p);
+        });
         ingamePlayers.forEach((uuid, towerPlayer) -> towerPlayer.shutdown());
 
         MinecraftServer.getInstanceManager().unregisterInstance(instance);
