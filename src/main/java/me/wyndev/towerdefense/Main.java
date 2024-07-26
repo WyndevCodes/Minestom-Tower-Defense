@@ -5,6 +5,7 @@ import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapte
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
 import me.lucko.luckperms.minestom.context.defaults.GameModeContextProvider;
 import me.wyndev.towerdefense.files.config.Config;
+import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.GameInstance;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
@@ -34,6 +35,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Config.read();
+        Waves.read();
         Maps.load();
 
         MinecraftServer minecraftServer = MinecraftServer.init();

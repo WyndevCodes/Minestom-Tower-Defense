@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 public class Utils {
     public static void sleep(int time) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(time);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -11,8 +11,8 @@ import net.minestom.server.entity.EntityType;
 @Getter
 public enum TowerDefenseEnemyType {
 
-    CHICKEN(EntityType.CHICKEN, "Chicken", ChatColor.GREEN.toColor(), 20, 0.1f)
-    ;
+    CHICKEN(EntityType.CHICKEN, "Chicken", ChatColor.GREEN.toColor(), 20, 0.1),
+    WOLF(EntityType.WOLF, "Wolfs", ChatColor.GRAY.toColor(), 30, 0.2);
 
     private final EntityType entityType;
     private final String nameComponentText;
@@ -21,9 +21,9 @@ public enum TowerDefenseEnemyType {
     /**
      * How fast this entity moves along the tower defense track
      */
-    private final float movementSpeed;
+    private final double movementSpeed;
 
-    TowerDefenseEnemyType(EntityType entityType, String nameComponentText, TextColor nameColor, int health, float movementSpeed) {
+    TowerDefenseEnemyType(EntityType entityType, String nameComponentText, TextColor nameColor, int health, double movementSpeed) {
         this.entityType = entityType;
         this.nameComponentText = nameComponentText;
         this.nameColor = nameColor;

@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class IngameTowerDefensePlayer {
 
-    private TowerDefensePlayer towerDefensePlayer;
+    private @Getter TowerDefensePlayer towerDefensePlayer;
     private @Setter int health = 100;
     private @Setter long gold = 8000000;
     private @Setter int towersPlaced = 0;
