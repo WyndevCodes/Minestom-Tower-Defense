@@ -3,6 +3,7 @@ package me.wyndev.towerdefense.game;
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.Utils;
+import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
@@ -11,6 +12,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.timer.ExecutionType;
@@ -123,7 +125,6 @@ public class GameLoop {
      */
     public void startMainLoop() {
         mainLoopTask = Main.scheduler.scheduleTask(() -> {
-
             // --- Main game loop ---
             // Exit main loop if the game state is no longer in the RUNNING state
             if (gameInstance.getGameState() != GameState.RUNNING) {
@@ -142,6 +143,22 @@ public class GameLoop {
                 for (EntityCreature tower : player.getCurrentPlacedTowers()) {
                     if (tower instanceof Tower) {
                         ((Tower) tower).tick();
+                    }
+                }
+
+                synchronized (gameInstance.getEnemies()) {
+                    //Move enemies forward
+                    for (TowerDefenseEnemy enemy : gameInstance.getEnemies()) {
+                        Pos rot = enemy.getPosition();
+                        if (rot.yaw() == 0) {
+                            enemy.teleport(rot.add(new Pos(0, 0, enemy.getTowerDefenseEnemyType().getMovementSpeed())));
+                        } else if (rot.yaw() == 90) {
+                            enemy.teleport(rot.add(new Pos(-enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                        } else if (rot.yaw() == -180) {
+                            enemy.teleport(rot.add(new Pos(0, 0, -enemy.getTowerDefenseEnemyType().getMovementSpeed())));
+                        } else if (rot.yaw() == -90) {
+                            enemy.teleport(rot.withCoord(new Pos(enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                        }
                     }
                 }
             }

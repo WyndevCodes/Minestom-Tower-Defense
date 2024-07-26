@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 public class IngameTowerDefensePlayer {
 
-    private TowerDefensePlayer towerDefensePlayer;
+    private @Getter TowerDefensePlayer towerDefensePlayer;
     private @Setter int health = 100;
     private long gold = 8000000; //TODO: set back to 0 for production
     private @Setter int towersPlaced = 0;

@@ -3,6 +3,7 @@ package me.wyndev.towerdefense.game;
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Main;
+import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.chestui.ModifyTurret;
 import me.wyndev.towerdefense.game.chestui.PlaceTurretMenu;
@@ -12,6 +13,7 @@ import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
+import net.hollowcube.schem.SchematicBuilder;
 import net.hollowcube.schem.SchematicReader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -29,6 +31,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +58,9 @@ public class GameInstance {
     //TODO: multiple maps with different schematics and player counts?
 
     @Getter private final Instance instance;
+    @Getter private final List<TowerDefenseEnemy> enemies = Collections.synchronizedList(new ArrayList<>());
+    @Getter private Pos schemSpawnTranslation;
+    @Getter private Point schemSize;
 
     // Player information
     /**
@@ -113,6 +119,7 @@ public class GameInstance {
         map.build(Rotation.NONE, UnaryOperator.identity()).apply(instance, () -> {
             log.info("Schematic built");
         });
+        schemSize = map.size();
 
         //Execute on player join
         instance.eventNode().addListener(PlayerSpawnEvent.class, event -> {
@@ -134,6 +141,24 @@ public class GameInstance {
      * every queued player in the game.
      */
     public void start() {
+        for (int x = 0; x < schemSize.blockX(); x++) {
+            for (int y = 0; y < schemSize.blockX(); y++) {
+                for (int z = 0; z < schemSize.blockZ(); z++) {
+                    if (instance.getBlock(x, y, z).name().equals("minecraft:red_glazed_terracotta")) {
+                        this.schemSpawnTranslation = new Pos(x, y, z);
+                        System.out.println("found");
+                        break;
+                    }
+                    if (this.schemSpawnTranslation != null) break;
+                }
+                if (this.schemSpawnTranslation != null) break;
+            }
+            if (this.schemSpawnTranslation != null) break;
+        }
+
+
+        new WavesManager().startWave(this, schemSpawnTranslation);
+
         this.gameState = GameState.RUNNING;
 
         for (TowerDefensePlayer player : players) {

@@ -1,5 +1,6 @@
 package me.wyndev.towerdefense.enemy;
 
+import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
@@ -14,15 +15,15 @@ import org.jetbrains.annotations.NotNull;
  * Abstract framework for enemies that can be summoned by a player
  * and appear on enemy player tower defense tracks.
  */
-public abstract class TowerDefenseEnemy extends EntityCreature {
+public class TowerDefenseEnemy extends EntityCreature {
 
+    @Getter
     protected final TowerDefenseEnemyType towerDefenseEnemyType;
-    protected final TowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
 
-    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType, @NotNull TowerDefensePlayer playerWhoSpawned) {
+    //TODO: link a mob to a gameInstance / team
+    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType) {
         super(towerDefenseEnemyType.getEntityType());
         this.towerDefenseEnemyType = towerDefenseEnemyType;
-        this.playerWhoSpawned = playerWhoSpawned;
 
         // Initialize entity attributes
         this.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(towerDefenseEnemyType.getMovementSpeed());
