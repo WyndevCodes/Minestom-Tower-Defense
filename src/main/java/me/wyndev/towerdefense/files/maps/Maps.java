@@ -1,5 +1,6 @@
 package me.wyndev.towerdefense.files.maps;
 
+import lombok.Getter;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import java.util.Random;
 
 public class Maps {
     private static final Logger log = LoggerFactory.getLogger(Maps.class);
+    @Getter
     private static List<File> maps = new ArrayList<>();
     private static File mapDir = new File(new File(Maps.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParent() + "/Maps");
     public static void load() {

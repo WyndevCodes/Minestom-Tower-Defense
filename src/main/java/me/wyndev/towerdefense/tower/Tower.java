@@ -7,12 +7,14 @@ import me.wyndev.towerdefense.tower.attribute.MultiEntityTower;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Abstract framework for towers that are placed to defend
@@ -41,6 +43,26 @@ public abstract class Tower extends EntityCreature {
         if (System.currentTimeMillis() - lastAttackTime > getAttackSpeed(towerLevel)) {
             lastAttackTime = System.currentTimeMillis();
             targets.clear();
+            //d=√((x2 – x1)² + (y2 – y1)²) <- distance between two 2d points
+            AtomicReference<TowerDefenseEnemy> target = new AtomicReference<>();
+            getInstance().getEntities().forEach(e -> {
+                if (e instanceof TowerDefenseEnemy) {
+                    Pos tower = getPosition();
+                    Pos enemy = e.getPosition();
+                    double d = Math.sqrt(Math.pow((tower.x() - enemy.x()), 2) + Math.pow((tower.y() - enemy.y()), 2));
+                    if (d <= getAttackRange(towerLevel)) {
+                        if (target.get() == null) {
+                            target.set((TowerDefenseEnemy) e);
+                        } else if (target.get().getTickAlive() * target.get().getTowerDefenseEnemyType().getMovementSpeed() < ((TowerDefenseEnemy) e).getTickAlive() * ((TowerDefenseEnemy) e).getTowerDefenseEnemyType().getMovementSpeed()) {
+                            target.set((TowerDefenseEnemy) e);
+                        }
+                    }
+                }
+            });
+            if (target.get() != null) {
+                lookAt(target.get());
+                target.get().damage(this, 0.5f);
+            }
             //target search and then attack
             //TODO: find all enemies in x radius function
             // then setup list accordingly if the type does splash damage or not

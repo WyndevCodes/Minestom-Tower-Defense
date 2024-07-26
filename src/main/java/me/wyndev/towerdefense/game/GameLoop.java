@@ -153,23 +153,28 @@ public class GameLoop {
                 }
 
                 synchronized (gameInstance.getEnemies()) {
-                    //Move enemies forward
+                    //Run every tick for every enemy
                     for (TowerDefenseEnemy enemy : gameInstance.getEnemies()) {
+                        enemy.incrementTickAlive();
+
                         Pos rot = enemy.getPosition();
-                        if (rot.yaw() == 0) {
-                            enemy.teleport(rot.add(new Pos(0, 0, enemy.getTowerDefenseEnemyType().getMovementSpeed())));
-                        } else if (rot.yaw() == 90) {
-                            enemy.teleport(rot.add(new Pos(-enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
-                        } else if (rot.yaw() == -180) {
-                            enemy.teleport(rot.add(new Pos(0, 0, -enemy.getTowerDefenseEnemyType().getMovementSpeed())));
-                        } else if (rot.yaw() == -90) {
-                            enemy.teleport(rot.add(new Pos(enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                        //Move enemies forward
+                        if (enemy.getInstance() != null) { //Prevent race condition
+                            if (rot.yaw() == 0) {
+                                enemy.teleport(rot.add(new Pos(0, 0, enemy.getTowerDefenseEnemyType().getMovementSpeed())));
+                            } else if (rot.yaw() == 90) {
+                                enemy.teleport(rot.add(new Pos(-enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                            } else if (rot.yaw() == -180) {
+                                enemy.teleport(rot.add(new Pos(0, 0, -enemy.getTowerDefenseEnemyType().getMovementSpeed())));
+                            } else if (rot.yaw() == -90) {
+                                enemy.teleport(rot.add(new Pos(enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                            }
                         }
 
                         Block block = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY(),rot.blockZ());
                         Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1,rot.blockZ());
                         Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2,rot.blockZ());
-
+                        //TODO: fixe entity being teleported while they are not present in the instance
                         if (block.name().equals("minecraft:magenta_glazed_terracotta") && rot.z() % 1 >= 0.5 && rot.x() % 1 >= 0.5) {
                             String facing = block.getProperty("facing");
                             switch (facing) {

@@ -1,6 +1,7 @@
 package me.wyndev.towerdefense.enemy;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
@@ -19,6 +20,8 @@ public class TowerDefenseEnemy extends EntityCreature {
 
     @Getter
     protected final TowerDefenseEnemyType towerDefenseEnemyType;
+    @Getter
+    private int tickAlive = 0;
 
     //TODO: link a mob to a gameInstance / team
     public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType) {
@@ -57,4 +60,7 @@ public class TowerDefenseEnemy extends EntityCreature {
         return nameText;
     }
 
+    public void incrementTickAlive() {
+        tickAlive++;
+    }
 }

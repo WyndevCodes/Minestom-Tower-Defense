@@ -5,6 +5,7 @@ import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapte
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
 import me.lucko.luckperms.minestom.context.defaults.GameModeContextProvider;
 import me.wyndev.towerdefense.files.config.Config;
+import me.wyndev.towerdefense.files.config.Towers;
 import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.GameInstance;
@@ -35,9 +36,7 @@ public class Main {
     public static HubSidebar hubSidebar;
 
     public static void main(String[] args) throws IOException {
-        Config.read();
-        Waves.read();
-        Maps.load();
+        loadConfig();
 
         MinecraftServer minecraftServer = MinecraftServer.init();
         MinecraftServer.getConnectionManager().setPlayerProvider((arg1, arg2, arg3) -> new TowerDefensePlayer(arg1, arg2, arg3, (byte) 1));
@@ -101,5 +100,16 @@ public class Main {
                 )).permissionSuggestions("test.permission", "test.other") // add permission suggestions for commands and the web editor
                 .dependencyManager(true) // automatically download and classload dependencies
                 .enable();
+    }
+
+    public static void loadConfig() {
+        Config.read();
+        log.info("Loaded config.yml");
+        Waves.read();
+        log.info("Registered {} waves entries", Waves.waveData.getWaves().length);
+        Towers.read();
+        log.info("Registered {} towers entries", Towers.towerData.getTowers().length);
+        Maps.load();
+        log.info("Registered {} maps", Maps.getMaps().size());
     }
 }
