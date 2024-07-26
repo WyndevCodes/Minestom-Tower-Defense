@@ -1,6 +1,5 @@
 package me.wyndev.towerdefense.sidebar;
 
-import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import net.kyori.adventure.text.Component;
@@ -15,7 +14,7 @@ public class GameSidebar extends AbstractSidebar {
      * Constructs a game sidebar for a player.
      */
     public GameSidebar(IngameTowerDefensePlayer viewer) {
-        super("Tower Defense");
+        super("<green><bold>Tower Defense");
         this.viewer = viewer;
         addViewer(viewer.getTowerDefensePlayer());
     }
@@ -32,8 +31,7 @@ public class GameSidebar extends AbstractSidebar {
     }
 
     private Component getGoldLineFormat(long gold) {
-        return Component.text("Gold: ").color(ChatColor.GRAY.toColor())
-                .append(Component.text(Utils.formatWithCommas(gold)).color(ChatColor.GOLD.toColor()));
+        return Utils.format("<gray>Gold: <gold>" + Utils.formatWithCommas(gold));
     }
 
     @Override

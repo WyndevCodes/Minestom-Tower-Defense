@@ -1,6 +1,6 @@
 package me.wyndev.towerdefense.sidebar;
 
-import net.kyori.adventure.text.Component;
+import me.wyndev.towerdefense.Utils;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 
@@ -11,10 +11,10 @@ public abstract class AbstractSidebar {
     /**
      * Constructs a sidebar with a name.
      * @param sidebarName The name of the sidebar
-     *                    using legacy text formatting
+     *                    using adventure text formatting
      */
     public AbstractSidebar(String sidebarName) {
-        sidebar = new Sidebar(Component.text(sidebarName));
+        sidebar = new Sidebar(Utils.format(sidebarName));
         createLines();
     }
 

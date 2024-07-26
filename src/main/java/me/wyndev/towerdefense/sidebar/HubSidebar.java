@@ -1,6 +1,5 @@
 package me.wyndev.towerdefense.sidebar;
 
-import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Utils;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.scoreboard.Sidebar;
@@ -8,7 +7,7 @@ import net.minestom.server.scoreboard.Sidebar;
 public class HubSidebar extends AbstractSidebar {
 
     public HubSidebar() {
-        super("Tower Defense"); //color subject to change
+        super("<green><bold>Tower Defense"); //color subject to change
     }
 
     @Override
@@ -23,7 +22,6 @@ public class HubSidebar extends AbstractSidebar {
     }
 
     private Component getPlayerLineFormat(int players) {
-        return Component.text("Online: ").color(ChatColor.GRAY.toColor())
-                .append(Component.text(Utils.formatWithCommas(players)).color(ChatColor.YELLOW.toColor()));
+        return Utils.format("<gray>Players: <yellow>" + Utils.formatWithCommas(players));
     }
 }
