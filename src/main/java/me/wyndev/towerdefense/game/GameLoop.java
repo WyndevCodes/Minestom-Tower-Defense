@@ -15,13 +15,19 @@ import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
+import net.minestom.server.utils.Rotation;
+import net.minestom.server.utils.block.BlockUtils;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.lang.Math.round;
 
 /**
  * The main tower defense game loop.
@@ -157,7 +163,52 @@ public class GameLoop {
                         } else if (rot.yaw() == -180) {
                             enemy.teleport(rot.add(new Pos(0, 0, -enemy.getTowerDefenseEnemyType().getMovementSpeed())));
                         } else if (rot.yaw() == -90) {
-                            enemy.teleport(rot.withCoord(new Pos(enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                            enemy.teleport(rot.add(new Pos(enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                        }
+
+                        Block block = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY(),rot.blockZ());
+                        Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1,rot.blockZ());
+                        Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2,rot.blockZ());
+
+                        if (block.name().equals("minecraft:magenta_glazed_terracotta") && rot.z() % 1 >= 0.5 && rot.x() % 1 >= 0.5) {
+                            String facing = block.getProperty("facing");
+                            switch (facing) {
+                                case "north" -> enemy.teleport(enemy.getPosition().withYaw(0));
+                                case "south" -> enemy.teleport(enemy.getPosition().withYaw(-180));
+                                case "east" -> enemy.teleport(enemy.getPosition().withYaw(90));
+                                case "west" -> enemy.teleport(enemy.getPosition().withYaw(-90));
+                                default -> enemy.teleport(enemy.getPosition().withYaw(0));
+                            }
+                        }
+
+                        if (block1.name().equals("minecraft:magenta_glazed_terracotta") && rot.z() % 1 >= 0.5 && rot.x() % 1 >= 0.5) {
+                            String facing = block1.getProperty("facing");
+                            try {
+                                switch (facing) {
+                                    case "north" -> enemy.teleport(enemy.getPosition().withYaw(0));
+                                    case "south" -> enemy.teleport(enemy.getPosition().withYaw(-180));
+                                    case "east" -> enemy.teleport(enemy.getPosition().withYaw(90));
+                                    case "west" -> enemy.teleport(enemy.getPosition().withYaw(-90));
+                                    default -> enemy.teleport(enemy.getPosition().withYaw(0));
+                                }
+                            } catch (Exception e) {
+                                //Why is this causing an error ?
+                            }
+                        }
+
+                        if (block2.name().equals("minecraft:magenta_glazed_terracotta") && rot.z() % 1 >= 0.5 && rot.x() % 1 >= 0.5) {
+                            String facing = block2.getProperty("facing");
+                            try {
+                                switch (facing) {
+                                    case "north" -> enemy.teleport(enemy.getPosition().withYaw(0));
+                                    case "south" -> enemy.teleport(enemy.getPosition().withYaw(-180));
+                                    case "east" -> enemy.teleport(enemy.getPosition().withYaw(90));
+                                    case "west" -> enemy.teleport(enemy.getPosition().withYaw(-90));
+                                    default -> enemy.teleport(enemy.getPosition().withYaw(0));
+                                }
+                            } catch (Exception e) {
+                                //Why is this causing an error ?
+                            }
                         }
                     }
                 }

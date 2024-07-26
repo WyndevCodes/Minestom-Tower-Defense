@@ -67,7 +67,7 @@ public class WavesManager {
                 if (i != 0) {
                     random.nextInt(0, i);
                 }
-                enemies.get(id).setInstance(instance.getInstance(), pos);
+                enemies.get(id).setInstance(instance.getInstance(), pos.add(new Pos(0.5, 0, 0.5)));
                 enemies.get(id).getEntityMeta().setHasNoGravity(true);
                 synchronized (instance.getEnemies()) {
                     instance.getEnemies().add(enemies.get(id));
