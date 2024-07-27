@@ -17,13 +17,8 @@ public class TowerObject {
     private String name;
     private String desc;
     private String entityType;
-    private Float[] price;
-    private Float[] attackDamage;
-    private Float[] attackSpeed;
-    private Integer[] attackRange;
-    private String[] armorSet;
+    private TowerLevel[] towerLevels;
     private boolean[] armorPieces;
-    private String[] itemInHand;
     private boolean isSplash;
     private int maxLevel;
     private int guiPos; //TODO: replace that with an array and add a button for each level, with the icon item's number increasing by one each time
@@ -35,7 +30,7 @@ public class TowerObject {
      * */
     public float getPriceFromLevel(int level) {
         level--;
-        return price[level];
+        return towerLevels[level].price;
     }
 
     /**
@@ -44,7 +39,7 @@ public class TowerObject {
      * */
     public float getAttackDamageFromLevel(int level) {
         level--;
-        return attackDamage[level];
+        return towerLevels[level].attackDamage;
     }
     /**
      * Get the attack speed of this tower object from a level
@@ -52,7 +47,7 @@ public class TowerObject {
      * */
     public float getAttackSpeedFromLevel(int level) {
         level--;
-        return attackSpeed[level];
+        return towerLevels[level].attackSpeed;
     }
     /**
      * Get the range of this tower object from a level
@@ -60,7 +55,7 @@ public class TowerObject {
      * */
     public int getAttackRangeFromLevel(int level) {
         level--;
-        return attackRange[level];
+        return towerLevels[level].attackRange;
     }
 
     /**
@@ -69,10 +64,10 @@ public class TowerObject {
      * */
     public String getArmorFromLevel(int level) {
         level--;
-        if (armorSet.length <= level) {
+        if (towerLevels.length <= level) {
             return "none";
         }
-        return armorSet[level];
+        return towerLevels[level].armorSet;
     }
 
     /**
@@ -80,10 +75,10 @@ public class TowerObject {
      * @param level the level of the tower
      * */
     public String getItemInHandFromLevel(int level) {
-        if (itemInHand.length <= level) {
+        if (towerLevels.length <= level) {
             return "minecraft:air";
         }
-        return itemInHand[level];
+        return towerLevels[level].itemInHand;
     }
     /**
      * Check if an armor peace should appear

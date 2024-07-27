@@ -142,7 +142,7 @@ public class Tower extends EntityCreature {
             return;
         }
 
-        float upgradeCost = type.getPrice()[towerLevel]; //Since level start at one and array start a 0, there is no need to add 1
+        float upgradeCost = type.getPriceFromLevel(towerLevel); //Since level start at one and array start a 0, there is no need to add 1
 
         // Check if player has enough money to upgrade
         if (playerWhoSpawned.getGold() < upgradeCost) {
@@ -174,7 +174,7 @@ public class Tower extends EntityCreature {
         this.remove();
 
         // Calculate gold return
-        double goldReturn = (type.getPrice()[towerLevel - 1] * 0.8);
+        double goldReturn = (type.getPriceFromLevel(towerLevel) * 0.8);
 
         // Send message and play sound (add more formatting later)
         playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("Sold tower for " + goldReturn + " gold!"));
