@@ -42,11 +42,8 @@ public class PlaceTurretMenu {
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
             e.setCancelled(true);
-            System.out.println(e.getSlot());
-            System.out.println(Towers.getFromUISlot(e.getSlot()) != null);
             if (Towers.getFromUISlot(e.getSlot()) != null) {
                 Tower tower = new Tower(Towers.getFromUISlot(e.getSlot()),  player, Towers.getLevelFromUISlot(e.getSlot()));
-                System.out.println(tower.getTowerLevel());
                 Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
 
                 tower.setInstance(e.getInstance(), spawnPos);
