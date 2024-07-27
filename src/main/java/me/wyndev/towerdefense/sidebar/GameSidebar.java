@@ -22,7 +22,8 @@ public class GameSidebar extends AbstractSidebar {
 
     @Override
     public void createLines() {
-        sidebar.createLine(new Sidebar.ScoreboardLine("space", Component.empty(), 2));
+        sidebar.createLine(new Sidebar.ScoreboardLine("space", Component.empty(), 3));
+        sidebar.createLine(new Sidebar.ScoreboardLine("health", getHealthLineFormat(50), 2));
         sidebar.createLine(new Sidebar.ScoreboardLine("gold", getGoldLineFormat(0), 1));
         sidebar.createLine(new Sidebar.ScoreboardLine("space1", Component.empty(), 0));
     }
@@ -34,6 +35,14 @@ public class GameSidebar extends AbstractSidebar {
     private Component getGoldLineFormat(double gold) {
         return Component.text("Gold: ").color(ChatColor.GRAY.toColor())
                 .append(Component.text(Utils.formatWithCommas(gold)).color(ChatColor.GOLD.toColor()));
+    }
+
+    public void updateHealthLine(int health) {
+        sidebar.updateLineContent("health", getHealthLineFormat(health));
+    }
+
+    private Component getHealthLineFormat(int health) {
+        return Utils.format("<gray>Health: <red>" + health + "❤");
     }
 
     @Override

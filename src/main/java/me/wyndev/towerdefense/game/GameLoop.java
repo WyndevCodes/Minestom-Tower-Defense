@@ -170,6 +170,8 @@ public class GameLoop {
                         Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1,rot.blockZ());
                         Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2,rot.blockZ());
 
+                        checkEnemyReachedEnd(enemy, rot, block);
+
                         changeEnemyDirection(enemy, rot, block);
                         changeEnemyDirection(enemy, rot, block1);
                         changeEnemyDirection(enemy, rot, block2);
@@ -204,6 +206,20 @@ public class GameLoop {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Checks if an enemy reached the end of a tower defense track.
+     * @param enemy The enemy to check
+     * @param pos The position of the enemy
+     * @param blockToCheck The block that should be checked to ensure
+     *                     the enemy is at the end of the track
+     */
+    private void checkEnemyReachedEnd(TowerDefenseEnemy enemy, Pos pos, Block blockToCheck) {
+        if (blockToCheck.name().equals("minecraft:end_gateway") && pos.z() % 1 >= 0.5 && pos.x() % 1 >= 0.5) {
+            //TODO: fetch the tower defense player who got damaged by this enemy
+            enemy.reachEnd(null);
         }
     }
 

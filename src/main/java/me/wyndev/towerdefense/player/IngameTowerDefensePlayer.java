@@ -17,7 +17,7 @@ import java.util.List;
 public class IngameTowerDefensePlayer {
 
     private @Getter TowerDefensePlayer towerDefensePlayer;
-    private @Setter int health = 100;
+    private int health = 100;
     private double gold = 8000000; //TODO: set back to 0 for production
     private @Setter int towersPlaced = 0;
     /**
@@ -53,5 +53,15 @@ public class IngameTowerDefensePlayer {
     public void setGold(double gold) {
         this.gold = gold;
         this.gameSidebar.updateGoldLine(gold);
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+        if (this.health > 50) this.health = 50;
+        if (this.health <= 0) {
+            this.health = 0;
+            //TODO: death logic
+        }
+        this.gameSidebar.updateHealthLine(health);
     }
 }

@@ -2,6 +2,7 @@ package me.wyndev.towerdefense.enemy;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
+import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import me.wyndev.towerdefense.Utils;
@@ -12,6 +13,7 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,12 +25,14 @@ import java.util.List;
 public class TowerDefenseEnemy extends EntityCreature {
 
     protected final TowerDefenseEnemyType towerDefenseEnemyType;
+    private final IngameTowerDefensePlayer spawner;
     private int tickAlive = 0;
 
-    //TODO: link a mob to a gameInstance / team
-    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType) {
+    //TODO: link a mob to a team if we do team support
+    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType, @Nullable IngameTowerDefensePlayer spawner) {
         super(towerDefenseEnemyType.getEntityType());
         this.towerDefenseEnemyType = towerDefenseEnemyType;
+        this.spawner = spawner; //player who spawned the tower defense enemy
 
         // Initialize entity attributes
         this.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(towerDefenseEnemyType.getMovementSpeed());
@@ -47,6 +51,19 @@ public class TowerDefenseEnemy extends EntityCreature {
     public void damage(Tower source, float damage) {
         this.damage(Damage.fromEntity(source, damage));
         this.setCustomName(getCustomNameText());
+    }
+
+    /**
+     * Actions this enemy takes when reaching the end of a tower defense track.
+     * @param player The player to damage (the player who owns the track)
+     */
+    public void reachEnd(IngameTowerDefensePlayer player) {
+        this.remove();
+        //TODO: double lifesteal for advanced
+        //TODO: logic on damaged player
+        spawner.setHealth(spawner.getHealth() + 1);
+        spawner.setIncome(spawner.getIncome() + (towerDefenseEnemyType.getCost() / 5));
+        //TODO: user feedback? Sound/message?
     }
 
     // I feel like this can be optimized or condensed. Any ideas?

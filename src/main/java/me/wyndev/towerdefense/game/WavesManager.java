@@ -57,7 +57,7 @@ public class WavesManager {
                     }
                     if (entityCount > wave.getPerWavesMaxCount()) entityCount = wave.getPerWavesMaxCount();
                     for (int i = 0; i < entityCount; i++) {
-                        enemies.add(new TowerDefenseEnemy(wave.getEnemyType()));
+                        enemies.add(new TowerDefenseEnemy(wave.getEnemyType(), null));
                     }
                 }
             }
