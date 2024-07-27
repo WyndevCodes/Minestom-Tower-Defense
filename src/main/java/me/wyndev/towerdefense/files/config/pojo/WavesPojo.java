@@ -12,7 +12,7 @@ public class WavesPojo {
             new WaveObject(TowerDefenseEnemyType.CHICKEN,
                     0,
                     -1,
-                    20,
+                    1,
                     4,
                     1,
                     20
@@ -21,7 +21,7 @@ public class WavesPojo {
                     TowerDefenseEnemyType.WOLF,
                     1,
                     -1,
-                    15,
+                    2,
                     2,
                     0.5,
                     20
@@ -30,7 +30,7 @@ public class WavesPojo {
                     TowerDefenseEnemyType.COW,
                     3,
                     -1,
-                    40,
+                    1,
                     1,
                     0.5,
                     10
@@ -39,7 +39,7 @@ public class WavesPojo {
                     TowerDefenseEnemyType.HORSE,
                     5,
                     -1,
-                    40,
+                    1,
                     1,
                     0.25,
                     10
@@ -48,7 +48,7 @@ public class WavesPojo {
                     TowerDefenseEnemyType.ZOMBIE,
                     8,
                     -1,
-                    10,
+                    1,
                     3,
                     0.1,
                     30
@@ -57,7 +57,7 @@ public class WavesPojo {
                     TowerDefenseEnemyType.MAD_COW,
                     10,
                     -1,
-                    60,
+                    1,
                     1,
                     0.5,
                     5
