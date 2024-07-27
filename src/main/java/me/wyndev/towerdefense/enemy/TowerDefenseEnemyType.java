@@ -10,7 +10,7 @@ import net.minestom.server.entity.EntityType;
  */
 @Getter
 public enum TowerDefenseEnemyType {
-
+    //TODO: move this to config
     CHICKEN(EntityType.CHICKEN, "Chicken", ChatColor.GREEN.toColor(), 10, 0, 20, 0.1, 10),
     WOLF(EntityType.WOLF, "Wolf", ChatColor.GRAY.toColor(), 20, 0, 30, 0.2, 11),
     COW(EntityType.COW, "Cow", ChatColor.WHITE.toColor(), 100, 0, 100, 0.2, 12),
