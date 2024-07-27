@@ -73,7 +73,7 @@ public class WavesManager {
                     instance.getEnemies().add(enemies.get(id));
                 }
                 enemies.remove(id);
-                Utils.sleep(100);
+                Utils.sleep(500);
             }
 
             waveID++;
