@@ -50,7 +50,7 @@ public class Tower extends EntityCreature {
                     Pos tower = getPosition();
                     Pos enemy = e.getPosition();
                     double d = Math.sqrt(Math.pow((tower.x() - enemy.x()), 2) + Math.pow((tower.y() - enemy.y()), 2));
-                    if (d <= type.getAttackRangeFromLevel(towerLevel)) {
+                    if (d <= type.getAttackRangeFromLevel(towerLevel) && ((TowerDefenseEnemy) e).getHealth() > 0) {
                         if (target.get() == null) {
                             target.set((TowerDefenseEnemy) e);
                         } else if (target.get().getTickAlive() * target.get().getTowerDefenseEnemyType().getMovementSpeed() < ((TowerDefenseEnemy) e).getTickAlive() * ((TowerDefenseEnemy) e).getTowerDefenseEnemyType().getMovementSpeed()) {
@@ -61,7 +61,7 @@ public class Tower extends EntityCreature {
             });
             if (target.get() != null) {
                 lookAt(target.get());
-                target.get().damage(this, 0.5f);
+                target.get().damage(this, type.getAttackDamageFromLevel(towerLevel));
             }
             //TODO: find all enemies in x radius function
             // then setup list accordingly if the type does splash damage or not
