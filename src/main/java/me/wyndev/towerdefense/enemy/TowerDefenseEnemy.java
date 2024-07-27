@@ -1,26 +1,28 @@
 package me.wyndev.towerdefense.enemy;
 
 import lombok.Getter;
-import lombok.Setter;
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import me.wyndev.towerdefense.Utils;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.Damage;
+import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Abstract framework for enemies that can be summoned by a player
  * and appear on enemy player tower defense tracks.
  */
+@Getter
 public class TowerDefenseEnemy extends EntityCreature {
 
-    @Getter
     protected final TowerDefenseEnemyType towerDefenseEnemyType;
-    @Getter
     private int tickAlive = 0;
 
     //TODO: link a mob to a gameInstance / team
@@ -60,7 +62,21 @@ public class TowerDefenseEnemy extends EntityCreature {
         return nameText;
     }
 
-    public void incrementTickAlive() {
+    /**
+     * Ticks this enemy, incrementing its ticks alive
+     * and sending animation packets to all players
+     * in the tower defense game.
+     * @param towerDefensePlayers The list of players
+     *                            whom the entity animation
+     *                            should be displayed to
+     */
+    public void tick(List<TowerDefensePlayer> towerDefensePlayers) {
         tickAlive++;
+        for (TowerDefensePlayer player : towerDefensePlayers) {
+            Vec dir = position.direction();
+            if (!dir.isZero()) dir = dir.normalize();
+            //TODO: modify based on enemy type speed
+            player.sendPacket(new EntityVelocityPacket(this.getEntityId(), (short) dir.x(), (short) dir.y(), (short) dir.z()));
+        }
     }
 }

@@ -15,7 +15,7 @@ public class GameSidebar extends AbstractSidebar {
      * Constructs a game sidebar for a player.
      */
     public GameSidebar(IngameTowerDefensePlayer viewer) {
-        super("Tower Defense");
+        super("<green><bold>Tower Defense");
         this.viewer = viewer;
         addViewer(viewer.getTowerDefensePlayer());
     }
@@ -27,11 +27,11 @@ public class GameSidebar extends AbstractSidebar {
         sidebar.createLine(new Sidebar.ScoreboardLine("space1", Component.empty(), 0));
     }
 
-    public void updateGoldLine(double newGold) {
+    public void updateGoldLine(long newGold) {
         sidebar.updateLineContent("gold", getGoldLineFormat(newGold));
     }
 
-    private Component getGoldLineFormat(double gold) {
+    private Component getGoldLineFormat(long gold) {
         return Component.text("Gold: ").color(ChatColor.GRAY.toColor())
                 .append(Component.text(Utils.formatWithCommas(gold)).color(ChatColor.GOLD.toColor()));
     }

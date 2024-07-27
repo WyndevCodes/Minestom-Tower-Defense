@@ -9,6 +9,7 @@ import me.wyndev.towerdefense.files.config.Towers;
 import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.GameInstance;
+import me.wyndev.towerdefense.game.GameManager;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.sidebar.HubSidebar;
 import net.luckperms.api.LuckPerms;
@@ -35,6 +36,8 @@ public class Main {
 
     public static HubSidebar hubSidebar;
 
+    public static GameManager gameManager;
+
     public static void main(String[] args) throws IOException {
         loadConfig();
 
@@ -50,6 +53,9 @@ public class Main {
 
         //Setup hub sidebar
         hubSidebar = new HubSidebar();
+
+        //Setup games
+        gameManager = new GameManager();
 
         //Handle player login
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, e -> {
@@ -78,8 +84,7 @@ public class Main {
             //TODO: change this to a command or an NPC that uses the GameManager class (supports queueing)
             if (e.getMessage().equals("start")) {
                 ArrayList<Player> players = new ArrayList<>(mainLobby.getPlayers());
-                me.wyndev.towerdefense.game.GameInstance gameInstance = new GameInstance(players);
-                gameInstance.setup();
+                players.forEach(player -> gameManager.addPlayerToGame((TowerDefensePlayer) player));
             }
         });
 

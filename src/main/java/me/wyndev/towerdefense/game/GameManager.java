@@ -1,8 +1,8 @@
 package me.wyndev.towerdefense.game;
 
+import me.wyndev.towerdefense.Main;
+import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class GameManager {
     public void addPlayerToGame(TowerDefensePlayer playerToAdd) {
         // Check if player is already in a game first
         if (playersWithGames.containsKey(playerToAdd.getUuid())) {
-            playerToAdd.sendMessage(Component.text("You are already in a game! You must leave your current game to join a new one!").color(TextColor.color(255, 0, 0)));
+            playerToAdd.sendMessage(Utils.format("<red>You are already in a game! You must leave your current game to join a new one!"));
             return;
         }
 
@@ -44,6 +44,7 @@ public class GameManager {
         }
         // Create a new game
         GameInstance newGame = new GameInstance();
+        newGame.setup();
         activeGames.add(newGame);
 
         // Add player to the new game
@@ -62,6 +63,11 @@ public class GameManager {
 
         GameInstance game = playersWithGames.get(playerToRemove.getUuid());
         game.removePlayer(playerToRemove);
+
+        //Remove player from game
+        playerToRemove.setInstance(Main.mainLobby);
+        Main.hubSidebar.addViewer(playerToRemove);
+
         //TODO: remove game from activeGames list when completed, empty, or after the ended state resolves
         playersWithGames.remove(playerToRemove.getUuid());
         return true;
