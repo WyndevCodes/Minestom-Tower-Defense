@@ -2,7 +2,6 @@ package me.wyndev.towerdefense.game.chestui;
 
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
-import me.wyndev.towerdefense.tower.base.SkeletonTower;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.coordinate.Pos;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModifyTurret {
+    //TODO: add the icon in the center of the screen and show all the stats change as lore
     List<EventListener> listeners = new ArrayList<>(); //I hate doing that, but I have no idea how to do this
 
     private final IngameTowerDefensePlayer player;

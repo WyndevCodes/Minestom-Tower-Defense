@@ -1,10 +1,13 @@
 package me.wyndev.towerdefense.game.chestui;
 
+import me.wyndev.towerdefense.files.config.Towers;
+import me.wyndev.towerdefense.files.config.object.TowerObject;
+import me.wyndev.towerdefense.files.config.pojo.TowersPojo;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
-import me.wyndev.towerdefense.tower.base.SkeletonTower;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
@@ -17,6 +20,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlaceTurretMenu {
@@ -38,10 +42,8 @@ public class PlaceTurretMenu {
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
             e.setCancelled(true);
-
-            //TODO: Replace this with a for loop of every TowerType to find which match
-            if (e.getSlot() == 10) {
-                Tower tower = new SkeletonTower(player, 1);
+            if (Towers.getFromUISlot(e.getSlot()) != null) {
+                Tower tower = new Tower(Towers.getFromUISlot(e.getSlot()),  player, 1);
                 Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
 
                 tower.setInstance(e.getInstance(), spawnPos);
@@ -72,7 +74,20 @@ public class PlaceTurretMenu {
     public Inventory getInventory() {
         //TODO: Generate tower items from TowerType.java values
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.text("Tower shop").color(TextColor.color(0, 181, 5)));
-        inventory.setItemStack(10, ItemStack.of(Material.STONE).withCustomName(Component.text("Skeleton tower").color(TextColor.color(123, 123, 123))));
+        List<TowerObject> towers = Arrays.asList(Towers.towerData.getTowers());
+        for (TowerObject tower : towers) {
+            Component desc = MiniMessage.miniMessage().deserialize(tower.getDesc());
+            Component line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Price:</u></color><white> " + tower.getPriceFromLevel(1));
+            Component line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getAttackDamageFromLevel(1));
+            Component line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getAttackRangeFromLevel(1) + " blocks");
+            Component line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getAttackSpeedFromLevel(1) / 1000);
+            Component line5 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.isSplash());
+            ItemStack stack = ItemStack.of(
+                    Material.fromNamespaceId(tower.getIconMaterials()))
+                    .withCustomName(MiniMessage.miniMessage().deserialize(tower.getName()))
+                    .withLore(desc, line1, line2, line3, line4, line5);
+            inventory.setItemStack(tower.getGuiPos(), stack);
+        }
         return inventory;
     }
 }

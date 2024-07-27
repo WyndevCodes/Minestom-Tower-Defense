@@ -2,6 +2,7 @@ package me.wyndev.towerdefense.tower;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
+import me.wyndev.towerdefense.files.config.object.TowerObject;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.attribute.MultiEntityTower;
 import net.kyori.adventure.key.Key;
@@ -10,6 +11,9 @@ import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,16 +24,16 @@ import java.util.concurrent.atomic.AtomicReference;
  * Abstract framework for towers that are placed to defend
  * a player's base during a tower defense game.
  */
-public abstract class Tower extends EntityCreature {
-    protected final TowerType type;
+public class Tower extends EntityCreature {
+    protected final TowerObject type;
     protected final @Getter IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
     protected int towerLevel;
     protected List<TowerDefenseEnemy> targets = new ArrayList<>();
 
     private long lastAttackTime = System.currentTimeMillis();
 
-    public Tower(@NotNull TowerType type, @NotNull IngameTowerDefensePlayer playerWhoSpawned, int towerLevel) {
-        super(type.getEntityType());
+    public Tower(@NotNull TowerObject type, @NotNull IngameTowerDefensePlayer playerWhoSpawned, int towerLevel) {
+        super(EntityType.fromNamespaceId(type.getEntityType()));
         this.type = type;
         this.playerWhoSpawned = playerWhoSpawned;
         this.towerLevel = towerLevel;
@@ -40,7 +44,7 @@ public abstract class Tower extends EntityCreature {
      * Ticks this tower.
      */
     public void tick() {
-        if (System.currentTimeMillis() - lastAttackTime > getAttackSpeed(towerLevel)) {
+        if (System.currentTimeMillis() - lastAttackTime > type.getAttackSpeedFromLevel(towerLevel)) {
             lastAttackTime = System.currentTimeMillis();
             targets.clear();
             //d=√((x2 – x1)² + (y2 – y1)²) <- distance between two 2d points
@@ -50,7 +54,7 @@ public abstract class Tower extends EntityCreature {
                     Pos tower = getPosition();
                     Pos enemy = e.getPosition();
                     double d = Math.sqrt(Math.pow((tower.x() - enemy.x()), 2) + Math.pow((tower.y() - enemy.y()), 2));
-                    if (d <= getAttackRange(towerLevel)) {
+                    if (d <= type.getAttackRangeFromLevel(towerLevel)) {
                         if (target.get() == null) {
                             target.set((TowerDefenseEnemy) e);
                         } else if (target.get().getTickAlive() * target.get().getTowerDefenseEnemyType().getMovementSpeed() < ((TowerDefenseEnemy) e).getTickAlive() * ((TowerDefenseEnemy) e).getTowerDefenseEnemyType().getMovementSpeed()) {
@@ -78,39 +82,76 @@ public abstract class Tower extends EntityCreature {
      * @param towerLevel The level of the tower to use
      *                   during initialization
      */
-    public abstract void initializeEntity(int towerLevel);
-
-    /**
-     * Gets the attack speed of this tower based on its level.
-     * @param towerLevel The current level of the tower
-     * @return The attack speed of the tower based on its
-     * level, in the time unit of milliseconds between attacks
-     */
-    public abstract long getAttackSpeed(int towerLevel);
-
-    /**
-     * Gets the attack range of this tower based on its level.
-     * @param towerLevel The current level of the tower
-     * @return The attack range of the tower based on its
-     * level, in blocks
-     */
-    public abstract int getAttackRange(int towerLevel);
+    public void initializeEntity(int towerLevel) {
+        setItemInMainHand(ItemStack.builder(Material.fromNamespaceId(type.getItemInHandFromLevel(towerLevel))).build());
+        String setName = type.getArmorFromLevel(towerLevel);
+        switch (setName) {
+            case "leather": {
+                if (type.getArmorPieceFromID(0)) setHelmet(ItemStack.builder(Material.LEATHER_HELMET).build());
+                if (type.getArmorPieceFromID(1)) setChestplate(ItemStack.builder(Material.LEATHER_CHESTPLATE).build());
+                if (type.getArmorPieceFromID(2)) setLeggings(ItemStack.builder(Material.LEATHER_LEGGINGS).build());
+                if (type.getArmorPieceFromID(3)) setBoots(ItemStack.builder(Material.LEATHER_BOOTS).build());
+                break;
+            }
+            case "chainmail": {
+                if (type.getArmorPieceFromID(0)) setHelmet(ItemStack.builder(Material.CHAINMAIL_HELMET).build());
+                if (type.getArmorPieceFromID(1)) setChestplate(ItemStack.builder(Material.CHAINMAIL_CHESTPLATE).build());
+                if (type.getArmorPieceFromID(2)) setLeggings(ItemStack.builder(Material.CHAINMAIL_LEGGINGS).build());
+                if (type.getArmorPieceFromID(3)) setBoots(ItemStack.builder(Material.CHAINMAIL_BOOTS).build());
+                break;
+            }
+            case "iron": {
+                if (type.getArmorPieceFromID(0)) setHelmet(ItemStack.builder(Material.IRON_HELMET).build());
+                if (type.getArmorPieceFromID(1)) setChestplate(ItemStack.builder(Material.IRON_CHESTPLATE).build());
+                if (type.getArmorPieceFromID(2)) setLeggings(ItemStack.builder(Material.IRON_LEGGINGS).build());
+                if (type.getArmorPieceFromID(3)) setBoots(ItemStack.builder(Material.IRON_BOOTS).build());
+                break;
+            }
+            case "gold": {
+                if (type.getArmorPieceFromID(0)) setHelmet(ItemStack.builder(Material.GOLDEN_HELMET).build());
+                if (type.getArmorPieceFromID(1)) setChestplate(ItemStack.builder(Material.GOLDEN_CHESTPLATE).build());
+                if (type.getArmorPieceFromID(2)) setLeggings(ItemStack.builder(Material.GOLDEN_LEGGINGS).build());
+                if (type.getArmorPieceFromID(3)) setBoots(ItemStack.builder(Material.GOLDEN_BOOTS).build());
+                break;
+            }
+            case "diamond": {
+                if (type.getArmorPieceFromID(0)) setHelmet(ItemStack.builder(Material.DIAMOND_HELMET).build());
+                if (type.getArmorPieceFromID(1)) setChestplate(ItemStack.builder(Material.DIAMOND_CHESTPLATE).build());
+                if (type.getArmorPieceFromID(2)) setLeggings(ItemStack.builder(Material.DIAMOND_LEGGINGS).build());
+                if (type.getArmorPieceFromID(3)) setBoots(ItemStack.builder(Material.DIAMOND_BOOTS).build());
+                break;
+            }
+            case "netherite": {
+                if (type.getArmorPieceFromID(0)) setHelmet(ItemStack.builder(Material.NETHERITE_HELMET).build());
+                if (type.getArmorPieceFromID(1)) setChestplate(ItemStack.builder(Material.NETHERITE_CHESTPLATE).build());
+                if (type.getArmorPieceFromID(2)) setLeggings(ItemStack.builder(Material.NETHERITE_LEGGINGS).build());
+                if (type.getArmorPieceFromID(3)) setBoots(ItemStack.builder(Material.NETHERITE_BOOTS).build());
+                break;
+            }
+            default: {
+                setHelmet(ItemStack.builder(Material.AIR).build());
+                setChestplate(ItemStack.builder(Material.AIR).build());
+                setLeggings(ItemStack.builder(Material.AIR).build());
+                setBoots(ItemStack.builder(Material.AIR).build());
+            }
+        }
+    }
 
     /**
      * Attempts to upgrade this tower.
      */
     public void upgrade() {
-        int upgradeCost = type.getGoldCost() * TowerUpgradeMultiplier.getMultiplierForLevel(towerLevel + 1);
+        // Check if tower can be upgraded
+        if (towerLevel == type.getMaxLevel()) {
+            playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("This tower is already max level!"));
+            return;
+        }
+
+        float upgradeCost = type.getPrice()[towerLevel]; //Since level start at one and array start a 0, there is no need to add 1
 
         // Check if player has enough money to upgrade
         if (playerWhoSpawned.getGold() < upgradeCost) {
             playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("You do not have enough gold to upgrade this tower!").color(TextColor.color(255, 0, 0)));
-            return;
-        }
-
-        // Check if tower can be upgraded
-        if (towerLevel == type.getMaxLevel()) {
-            playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("This tower is already max level!"));
             return;
         }
 
@@ -138,7 +179,7 @@ public abstract class Tower extends EntityCreature {
         this.remove();
 
         // Calculate gold return
-        int goldReturn = (int)(type.getGoldCost() * 0.2) * TowerUpgradeMultiplier.getMultiplierForLevel(towerLevel);
+        double goldReturn = (type.getPrice()[towerLevel - 1] * 0.8);
 
         // Send message and play sound (add more formatting later)
         playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("Sold tower for " + goldReturn + " gold!"));
