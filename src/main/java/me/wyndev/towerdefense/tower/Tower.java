@@ -43,32 +43,35 @@ public class Tower extends EntityCreature {
         if (System.currentTimeMillis() - lastAttackTime > type.getAttackSpeedFromLevel(towerLevel)) {
             lastAttackTime = System.currentTimeMillis();
             targets.clear();
-            //d=√((x2 – x1)² + (y2 – y1)²) <- distance between two 2d points
+
             AtomicReference<TowerDefenseEnemy> target = new AtomicReference<>();
             getInstance().getEntities().forEach(e -> {
-                if (e instanceof TowerDefenseEnemy) {
+                if (e instanceof TowerDefenseEnemy towerDefenseEnemy && towerDefenseEnemy.getHealth() > 0) {
                     Pos tower = getPosition();
                     Pos enemy = e.getPosition();
-                    double d = Math.sqrt(Math.pow((tower.x() - enemy.x()), 2) + Math.pow((tower.y() - enemy.y()), 2));
-                    if (d <= type.getAttackRangeFromLevel(towerLevel) && ((TowerDefenseEnemy) e).getHealth() > 0) {
+                    double d2 = Math.pow((tower.x() - enemy.x()), 2) + Math.pow((tower.y() - enemy.y()), 2); //2D distance squared
+                    double atk2 = (type.getAttackRangeFromLevel(towerLevel) * type.getAttackRangeFromLevel(towerLevel)); //attack range squared
+                    if (d2 <= atk2) {
                         if (target.get() == null) {
                             target.set((TowerDefenseEnemy) e);
-                        } else if (target.get().getTickAlive() * target.get().getTowerDefenseEnemyType().getMovementSpeed() < ((TowerDefenseEnemy) e).getTickAlive() * ((TowerDefenseEnemy) e).getTowerDefenseEnemyType().getMovementSpeed()) {
+                        } else if (target.get().getTickAlive() * target.get().getTowerDefenseEnemyType().getMovementSpeed() < towerDefenseEnemy.getTickAlive() * towerDefenseEnemy.getTowerDefenseEnemyType().getMovementSpeed()) {
                             target.set((TowerDefenseEnemy) e);
                         }
                     }
                 }
             });
-            if (target.get() != null) {
-                lookAt(target.get());
-                target.get().damage(this, type.getAttackDamageFromLevel(towerLevel));
-            }
-            //TODO: find all enemies in x radius function
-            // then setup list accordingly if the type does splash damage or not
-        }
 
-        if (!targets.isEmpty()) {
-            lookAt(targets.getFirst());
+            if (type.isSplash() && !targets.isEmpty()) {
+                //Splash damage
+                if (target.get() != null) lookAt(target.get()); else lookAt(targets.getFirst());
+                for (TowerDefenseEnemy t : targets) {
+                    t.damage(this, type.getAttackDamageFromLevel(towerLevel));
+                }
+            } else if (target.get() != null) {
+                //Single target
+                target.get().damage(this, type.getAttackDamageFromLevel(towerLevel));
+                lookAt(target.get());
+            }
         }
     }
 
