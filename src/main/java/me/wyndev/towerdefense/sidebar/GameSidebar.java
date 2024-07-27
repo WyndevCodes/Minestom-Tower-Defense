@@ -27,11 +27,11 @@ public class GameSidebar extends AbstractSidebar {
         sidebar.createLine(new Sidebar.ScoreboardLine("space1", Component.empty(), 0));
     }
 
-    public void updateGoldLine(long newGold) {
+    public void updateGoldLine(double newGold) {
         sidebar.updateLineContent("gold", getGoldLineFormat(newGold));
     }
 
-    private Component getGoldLineFormat(long gold) {
+    private Component getGoldLineFormat(double gold) {
         return Component.text("Gold: ").color(ChatColor.GRAY.toColor())
                 .append(Component.text(Utils.formatWithCommas(gold)).color(ChatColor.GOLD.toColor()));
     }
