@@ -2,6 +2,7 @@ package me.wyndev.towerdefense.files.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import me.wyndev.towerdefense.files.config.object.TowerLevel;
 import me.wyndev.towerdefense.files.config.object.TowerObject;
 import me.wyndev.towerdefense.files.config.pojo.TowersPojo;
 import me.wyndev.towerdefense.files.config.pojo.WavesPojo;
@@ -60,10 +61,23 @@ public class Towers {
 
     public static TowerObject getFromUISlot(int slot) {
         for (TowerObject tower : towerData.getTowers()) {
-            if (tower.getGuiPos() == slot) {
-                return tower;
+            for (int i = 1; i <= tower.getMaxLevel(); i++) {
+                if (tower.getGUIPosLevel(i) == slot) {
+                    return tower;
+                }
             }
         }
         return null;
+    }
+
+    public static int getLevelFromUISlot(int slot) {
+        for (TowerObject tower : towerData.getTowers()) {
+            for (int i = 1; i <= tower.getMaxLevel(); i++) {
+                if (tower.getGUIPosLevel(i) == slot) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 }

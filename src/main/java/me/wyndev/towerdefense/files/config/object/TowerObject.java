@@ -21,7 +21,6 @@ public class TowerObject {
     private boolean[] armorPieces;
     private boolean isSplash;
     private int maxLevel;
-    private int guiPos; //TODO: move that to TowerLevel.java add a button for each level, with the icon item's number increasing by one each time
     private String IconMaterials;
 
     /**
@@ -56,6 +55,15 @@ public class TowerObject {
     public int getAttackRangeFromLevel(int level) {
         level--;
         return towerLevels[level].attackRange;
+    }
+
+    /**
+     * Get the GUI position of this tower object from a level
+     * @param level the level of the tower
+     * */
+    public int getGUIPosLevel(int level) {
+        level--;
+        return towerLevels[level].guiPos;
     }
 
     /**

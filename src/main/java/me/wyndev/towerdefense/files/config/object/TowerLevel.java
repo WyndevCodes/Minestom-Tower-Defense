@@ -14,4 +14,5 @@ public class TowerLevel {
     int attackRange;
     String armorSet;
     String itemInHand;
+    int guiPos;
 }

@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Tower extends EntityCreature {
-    protected final TowerObject type;
-    protected final @Getter IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
-    protected int towerLevel;
+    @Getter protected final TowerObject type;
+    @Getter protected final IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
+    @Getter protected int towerLevel;
     protected List<TowerDefenseEnemy> targets = new ArrayList<>();
 
     private long lastAttackTime = System.currentTimeMillis();
@@ -81,7 +81,7 @@ public class Tower extends EntityCreature {
      *                   during initialization
      */
     public void initializeEntity(int towerLevel) {
-        setItemInMainHand(ItemStack.builder(Material.fromNamespaceId(type.getItemInHandFromLevel(towerLevel))).build());
+        setItemInMainHand(ItemStack.builder(Material.fromNamespaceId(type.getItemInHandFromLevel(towerLevel -1))).build());
         String setName = type.getArmorFromLevel(towerLevel);
         switch (setName) {
             case "leather": {
@@ -145,7 +145,7 @@ public class Tower extends EntityCreature {
             return;
         }
 
-        float upgradeCost = type.getPriceFromLevel(towerLevel); //Since level start at one and array start a 0, there is no need to add 1
+        float upgradeCost = type.getPriceFromLevel(towerLevel + 1); //Since level start at one and array start a 0, there is no need to add 1
 
         // Check if player has enough money to upgrade
         if (playerWhoSpawned.getGold() < upgradeCost) {

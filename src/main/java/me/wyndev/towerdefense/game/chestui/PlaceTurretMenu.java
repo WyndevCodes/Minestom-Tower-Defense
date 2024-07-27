@@ -42,8 +42,11 @@ public class PlaceTurretMenu {
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
             e.setCancelled(true);
+            System.out.println(e.getSlot());
+            System.out.println(Towers.getFromUISlot(e.getSlot()) != null);
             if (Towers.getFromUISlot(e.getSlot()) != null) {
-                Tower tower = new Tower(Towers.getFromUISlot(e.getSlot()),  player, 1);
+                Tower tower = new Tower(Towers.getFromUISlot(e.getSlot()),  player, Towers.getLevelFromUISlot(e.getSlot()));
+                System.out.println(tower.getTowerLevel());
                 Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
 
                 tower.setInstance(e.getInstance(), spawnPos);
@@ -76,18 +79,28 @@ public class PlaceTurretMenu {
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.text("Tower shop").color(TextColor.color(0, 181, 5)));
         List<TowerObject> towers = Arrays.asList(Towers.towerData.getTowers());
         for (TowerObject tower : towers) {
-            Component desc = MiniMessage.miniMessage().deserialize(tower.getDesc());
-            Component line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Price:</u></color><white> " + tower.getPriceFromLevel(1));
-            Component line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getAttackDamageFromLevel(1));
-            Component line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getAttackRangeFromLevel(1) + " blocks");
-            Component line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getAttackSpeedFromLevel(1) / 1000);
-            Component line5 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.isSplash());
-            ItemStack stack = ItemStack.of(
-                    Material.fromNamespaceId(tower.getIconMaterials()))
-                    .withCustomName(MiniMessage.miniMessage().deserialize(tower.getName()))
-                    .withLore(desc, line1, line2, line3, line4, line5);
-            inventory.setItemStack(tower.getGuiPos(), stack);
+            for (int i = 1; i <= tower.getMaxLevel(); i++) {
+                Component desc = MiniMessage.miniMessage().deserialize(tower.getDesc());
+                Component line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Price:</u></color><white> " + tower.getPriceFromLevel(i));
+                Component line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getAttackDamageFromLevel(i));
+                Component line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getAttackRangeFromLevel(i) + " blocks");
+                Component line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getAttackSpeedFromLevel(i) / 1000 + "s");
+                Component line5 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.isSplash());
+                ItemStack stack = ItemStack.of(
+                                Material.fromNamespaceId(tower.getIconMaterials()))
+                        .withCustomName(MiniMessage.miniMessage().deserialize(tower.getName()))
+                        .withLore(desc, line1, line2, line3, line4, line5)
+                        .withMaxStackSize(128).withAmount(i);
+                inventory.setItemStack(tower.getGUIPosLevel(i), stack);
+            }
         }
+
+        for (int i = 0; i < UICommon.ChestBorder.length; i++) {
+            if (UICommon.ChestBorder[i] == 1) {
+                inventory.setItemStack(i, UICommon.border);
+            }
+        }
+
         return inventory;
     }
 }

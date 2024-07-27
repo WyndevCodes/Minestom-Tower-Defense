@@ -1,9 +1,12 @@
 package me.wyndev.towerdefense.game.chestui;
 
+import lombok.Getter;
+import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.event.EventListener;
@@ -32,7 +35,7 @@ public class ModifyTurret {
     }
 
     public void open(Pos pos, Instance instance) {
-        Inventory inventory = getInventory();
+        Inventory inventory = getInventory(tower);
         player.getTowerDefensePlayer().openInventory(inventory);
 
         EventNode child = EventNode.all("EditMenuEventNode");
@@ -73,11 +76,49 @@ public class ModifyTurret {
         });
     }
 
-    public Inventory getInventory() {
+    public Inventory getInventory(Tower tower) {
         //TODO: Generate tower items from TowerType.java values
-        Inventory inventory = new Inventory(InventoryType.HOPPER, Component.text("Tower shop").color(TextColor.color(0, 181, 5)));
-        inventory.setItemStack(0, ItemStack.of(Material.REDSTONE_BLOCK).withCustomName(Component.text("Sell tower").color(TextColor.color(255, 0, 0))));
-        inventory.setItemStack(4, ItemStack.of(Material.EMERALD_BLOCK).withCustomName(Component.text("Upgrade tower").color(TextColor.color(255, 0, 0))));
+        Inventory inventory = new Inventory(InventoryType.HOPPER, Component.text("Tower editor").color(TextColor.color(172, 179, 0)));
+
+        //Sell lore
+        Component sellLore = MiniMessage.miniMessage().deserialize("<color:#828282><u>Refund:</u></color><white> " + tower.getType().getPriceFromLevel(tower.getTowerLevel()) * 0.8);
+
+        //Upgrade lore
+        Component upgradeLore;
+        if (tower.getType().getMaxLevel() != tower.getTowerLevel()) {
+            upgradeLore = MiniMessage.miniMessage().deserialize("<color:#828282><u>Cost:</u></color><white> " + tower.getType().getPriceFromLevel(tower.getTowerLevel() + 1));
+        } else {
+            upgradeLore = MiniMessage.miniMessage().deserialize("<red>Max level !");
+        }
+
+        //Tower component
+        Component line1;
+        Component line2;
+        Component line3;
+        Component line4;
+
+        if (tower.getType().getMaxLevel() != tower.getTowerLevel()) {
+            line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel()) + "<dark_gray> -> <white>" + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel() + 1));
+            line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel()) + " blocks<dark_gray> -> <white>" + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel() + 1) + " blocks");
+            line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel()) / 1000 + "s <dark_gray> -> <white>" + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel() + 1) / 1000 + "s");
+            line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.getType().isSplash());
+        } else {
+            line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel()));
+            line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel()) + " blocks");
+            line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel()) / 1000);
+            line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.getType().isSplash());
+
+        }
+
+        inventory.setItemStack(0, ItemStack.of(Material.REDSTONE_BLOCK).withCustomName(Component.text("Sell tower").color(TextColor.color(255, 0, 0))).withLore(sellLore));
+        inventory.setItemStack(4, ItemStack.of(Material.EMERALD_BLOCK).withCustomName(Component.text("Upgrade tower").color(TextColor.color(0, 255, 27))).withLore(upgradeLore));
+        inventory.setItemStack(2, ItemStack.of(Material.fromNamespaceId(tower.getType().getIconMaterials())).withCustomName(Utils.format(tower.getType().getName())).withAmount(tower.getTowerLevel()).withMaxStackSize(128).withLore(line1, line2, line3, line4));
+
+        for (int i = 0; i < UICommon.HopperDelimiter.length; i++) {
+            if (UICommon.HopperDelimiter[i] == 1) {
+                inventory.setItemStack(i, UICommon.delimiter);
+            }
+        }
         return inventory;
     }
 }

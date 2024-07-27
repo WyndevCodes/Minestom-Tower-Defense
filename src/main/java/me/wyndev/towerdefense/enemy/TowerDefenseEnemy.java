@@ -52,7 +52,6 @@ public class TowerDefenseEnemy extends EntityCreature {
         this.damage(Damage.fromEntity(source, damage));
         this.setCustomName(getCustomNameText());
         if (this.getHealth() <= 0) {
-            //died
             source.getPlayerWhoSpawned().setGold(source.getPlayerWhoSpawned().getGold() + (towerDefenseEnemyType.getCost() / 10));
         }
     }
