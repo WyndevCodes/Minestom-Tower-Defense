@@ -5,7 +5,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 public class UICommon {
-    public static final ItemStack border = ItemStack.of(Material.BLUE_STAINED_GLASS_PANE).withCustomName(Component.empty());
+    public static final ItemStack border = ItemStack.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).withCustomName(Component.empty());
     public static final ItemStack delimiter = ItemStack.of(Material.GRAY_STAINED_GLASS_PANE).withCustomName(Component.empty());
 
     public static final int[] ChestBorder = new int[]{
