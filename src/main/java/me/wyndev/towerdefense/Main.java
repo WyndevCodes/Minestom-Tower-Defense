@@ -2,13 +2,12 @@ package me.wyndev.towerdefense;
 
 import me.lucko.luckperms.common.config.generic.adapter.EnvironmentVariableConfigAdapter;
 import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapter;
+import me.lucko.luckperms.minestom.CommandRegistry;
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
-import me.lucko.luckperms.minestom.context.defaults.GameModeContextProvider;
 import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.files.config.Towers;
 import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.maps.Maps;
-import me.wyndev.towerdefense.game.GameInstance;
 import me.wyndev.towerdefense.game.GameManager;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.sidebar.HubSidebar;
@@ -33,6 +32,7 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     public static Instance mainLobby;
     public static SchedulerManager scheduler;
+    public static LuckPerms luckPerms;
 
     public static HubSidebar hubSidebar;
 
@@ -44,7 +44,10 @@ public class Main {
         MinecraftServer minecraftServer = MinecraftServer.init();
         MinecraftServer.getConnectionManager().setPlayerProvider((arg1, arg2, arg3) -> new TowerDefensePlayer(arg1, arg2, arg3, (byte) 1));
 
-        // Register Events
+        //Dependency loading
+        setupLuckPerms();
+
+        //Register Events
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
 
         //Generate a new minestom instance
@@ -95,11 +98,10 @@ public class Main {
         log.info("Server started on address {} with port {}", Config.configData.getHostname(), Config.configData.getPort());
     }
 
-    private void setupLuckPerms() {
+    private static void setupLuckPerms() {
         Path directory = Path.of("luckperms");
-        LuckPerms luckPerms = LuckPermsMinestom.builder(directory)
-                .commands(true) // enables registration of LuckPerms commands
-                .contextProvider(new GameModeContextProvider()) // provide additional custom contexts
+        luckPerms = LuckPermsMinestom.builder(directory)
+                .commandRegistry(CommandRegistry.minestom()) // enables registration of LuckPerms commands
                 .configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin, // define the configuration
                         new EnvironmentVariableConfigAdapter(plugin) // use MultiConfigurationAdapter to load from multiple sources, in order
                 )).permissionSuggestions("test.permission", "test.other") // add permission suggestions for commands and the web editor
