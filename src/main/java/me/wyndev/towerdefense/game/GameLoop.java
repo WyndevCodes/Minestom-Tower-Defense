@@ -169,7 +169,7 @@ public class GameLoop {
                         Block block = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY(),rot.blockZ());
                         Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1,rot.blockZ());
                         Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2,rot.blockZ());
-                        //TODO: fixe entity being teleported while they are not present in the instance
+
                         changeEnemyDirection(enemy, rot, block);
                         changeEnemyDirection(enemy, rot, block1);
                         changeEnemyDirection(enemy, rot, block2);
@@ -196,7 +196,6 @@ public class GameLoop {
             String facing = blockWithProperty.getProperty("facing");
             try {
                 switch (facing) {
-                    case "north" -> enemy.teleport(enemy.getPosition().withYaw(0));
                     case "south" -> enemy.teleport(enemy.getPosition().withYaw(-180));
                     case "east" -> enemy.teleport(enemy.getPosition().withYaw(90));
                     case "west" -> enemy.teleport(enemy.getPosition().withYaw(-90));
