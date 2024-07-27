@@ -42,7 +42,7 @@ public class GameSidebar extends AbstractSidebar {
     }
 
     private Component getHealthLineFormat(int health) {
-        return Utils.format("<gray>Health: <red>" + health + "❤");
+        return Utils.format("<gray>Health: <red>" + health);
     }
 
     @Override

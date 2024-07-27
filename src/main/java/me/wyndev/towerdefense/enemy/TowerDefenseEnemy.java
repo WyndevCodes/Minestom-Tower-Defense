@@ -61,9 +61,11 @@ public class TowerDefenseEnemy extends EntityCreature {
         this.remove();
         //TODO: double lifesteal for advanced
         //TODO: logic on damaged player
-        spawner.setHealth(spawner.getHealth() + 1);
-        spawner.setIncome(spawner.getIncome() + (towerDefenseEnemyType.getCost() / 5));
-        //TODO: user feedback? Sound/message?
+        if (spawner != null) {
+            spawner.setHealth(spawner.getHealth() + 1);
+            spawner.setIncome(spawner.getIncome() + (towerDefenseEnemyType.getCost() / 5));
+            //TODO: user feedback? Sound/message?
+        }
     }
 
     // I feel like this can be optimized or condensed. Any ideas?
