@@ -21,12 +21,14 @@ import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.utils.mojang.MojangUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -79,8 +81,14 @@ public class Main {
 
         // Skin handling for players that join (using Mojang auth for now)
         globalEventHandler.addListener(PlayerSkinInitEvent.class, event -> {
-            PlayerSkin skin = PlayerSkin.fromUuid(event.getPlayer().getUuid().toString());
-            event.setSkin(skin);
+            try {
+                UUID mojangUUID = MojangUtils.getUUID(event.getPlayer().getUsername());
+                PlayerSkin skin = PlayerSkin.fromUuid(mojangUUID.toString());
+                event.setSkin(skin);
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.warn("Player {}'s skin failed to load!", event.getPlayer().getUsername());
+            }
         });
 
         globalEventHandler.addListener(PlayerChatEvent.class, e -> {
@@ -93,7 +101,6 @@ public class Main {
 
         scheduler = MinecraftServer.getSchedulerManager();
 
-        MojangAuth.init();
         minecraftServer.start(Config.configData.getHostname(), Config.configData.getPort());
         log.info("Server started on address {} with port {}", Config.configData.getHostname(), Config.configData.getPort());
     }
