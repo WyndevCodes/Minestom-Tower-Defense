@@ -36,7 +36,7 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      run: ./gradlew tasks shadowJar --scan
+      run: ./gradlew shadowJar --scan
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.3.3
