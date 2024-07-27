@@ -7,6 +7,8 @@ import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import me.wyndev.towerdefense.Utils;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.attribute.Attribute;
@@ -16,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Abstract framework for enemies that can be summoned by a player
@@ -27,12 +30,17 @@ public class TowerDefenseEnemy extends EntityCreature {
     protected final TowerDefenseEnemyType towerDefenseEnemyType;
     private final IngameTowerDefensePlayer spawner;
     private int tickAlive = 0;
+    @Getter private Pos shift;
 
     //TODO: link a mob to a team if we do team support
     public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType, @Nullable IngameTowerDefensePlayer spawner) {
         super(towerDefenseEnemyType.getEntityType());
         this.towerDefenseEnemyType = towerDefenseEnemyType;
         this.spawner = spawner; //player who spawned the tower defense enemy
+
+        double maxShift = 1.3; //Add this to the config when enemies are ported to configs
+        Random random = new Random();
+        shift = new Pos(random.nextDouble(-maxShift, maxShift), 0, random.nextDouble(-maxShift, maxShift));
 
         // Initialize entity attributes
         this.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(towerDefenseEnemyType.getMovementSpeed());

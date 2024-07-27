@@ -166,9 +166,11 @@ public class GameLoop {
                             enemy.teleport(rot.add(new Pos(enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
                         }
 
-                        Block block = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY(),rot.blockZ());
-                        Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1,rot.blockZ());
-                        Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2,rot.blockZ());
+                        rot = rot.sub(enemy.getShift());
+
+                        Block block = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY(), rot.blockZ());
+                        Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1, rot.blockZ());
+                        Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2, rot.blockZ());
 
                         checkEnemyReachedEnd(enemy, rot, block);
 
