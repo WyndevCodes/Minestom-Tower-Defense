@@ -65,7 +65,7 @@ public class WavesManager {
                 Random random = new Random();
                 int id = 0;
                 if (i != 0) {
-                    random.nextInt(0, i);
+                    id = random.nextInt(0, i);
                 }
                 enemies.get(id).setInstance(instance.getInstance(), pos.add(new Pos(0.5, 0, 0.5).add(enemies.get(id).getShift())));
                 enemies.get(id).getEntityMeta().setHasNoGravity(true);
