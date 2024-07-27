@@ -37,10 +37,6 @@ public class TowerDefenseEnemy extends EntityCreature {
 
         this.setCustomNameVisible(true);
         this.setCustomName(getCustomNameText());
-
-        //TODO: Setup entity pathfinding
-
-        // I had planned to do a set of points as well. We'd have to do some sort of algorithm, or we could just save the turns in a config file
     }
 
     /**
@@ -75,8 +71,9 @@ public class TowerDefenseEnemy extends EntityCreature {
         for (TowerDefensePlayer player : towerDefensePlayers) {
             Vec dir = position.direction();
             if (!dir.isZero()) dir = dir.normalize();
-            //TODO: modify based on enemy type speed
-            player.sendPacket(new EntityVelocityPacket(this.getEntityId(), (short) dir.x(), (short) dir.y(), (short) dir.z()));
+
+            Vec walk = dir.mul(5 * towerDefenseEnemyType.getMovementSpeed());
+            player.sendPacket(new EntityVelocityPacket(this.getEntityId(), (short) walk.x(), (short) walk.y(), (short) walk.z()));
         }
     }
 }
