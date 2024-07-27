@@ -20,10 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Abstract framework for towers that are placed to defend
- * a player's base during a tower defense game.
- */
 public class Tower extends EntityCreature {
     protected final TowerObject type;
     protected final @Getter IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
