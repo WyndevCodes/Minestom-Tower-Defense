@@ -1,15 +1,9 @@
 package me.wyndev.towerdefense.files.config.pojo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemyType;
 import me.wyndev.towerdefense.files.config.object.WaveObject;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +12,7 @@ public class WavesPojo {
             new WaveObject(TowerDefenseEnemyType.CHICKEN,
                     0,
                     -1,
-                    1,
+                    20,
                     4,
                     1,
                     20
@@ -27,10 +21,46 @@ public class WavesPojo {
                     TowerDefenseEnemyType.WOLF,
                     1,
                     -1,
-                    2,
+                    15,
                     2,
                     0.5,
                     20
-            )
+            ),
+            new WaveObject(
+                    TowerDefenseEnemyType.COW,
+                    3,
+                    -1,
+                    40,
+                    1,
+                    0.5,
+                    10
+            ),
+            new WaveObject(
+                    TowerDefenseEnemyType.HORSE,
+                    5,
+                    -1,
+                    40,
+                    1,
+                    0.25,
+                    10
+            ),
+            new WaveObject(
+                    TowerDefenseEnemyType.ZOMBIE,
+                    8,
+                    -1,
+                    10,
+                    3,
+                    0.1,
+                    30
+            ),
+            new WaveObject(
+                    TowerDefenseEnemyType.MAD_COW,
+                    10,
+                    -1,
+                    60,
+                    1,
+                    0.5,
+                    5
+            ),
     };
 }
