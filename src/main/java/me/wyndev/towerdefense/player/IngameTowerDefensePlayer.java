@@ -18,7 +18,7 @@ public class IngameTowerDefensePlayer {
 
     private @Getter TowerDefensePlayer towerDefensePlayer;
     private int health = 100;
-    private double gold = 8000000; //TODO: set back to 0 for production
+    private long gold = 8000000; //TODO: set back to 0 for production
     private @Setter int towersPlaced = 0;
     /**
      * Gold income of the player every 10 seconds.
@@ -50,7 +50,7 @@ public class IngameTowerDefensePlayer {
         currentPlacedTowers.clear();
     }
 
-    public void setGold(double gold) {
+    public void setGold(long gold) {
         this.gold = gold;
         this.gameSidebar.updateGoldLine(gold);
     }

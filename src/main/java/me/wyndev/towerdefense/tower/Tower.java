@@ -155,7 +155,7 @@ public class Tower extends EntityCreature {
 
         // Remove gold
         //TODO: action bar with remove gold and upgraded tower message
-        playerWhoSpawned.setGold(playerWhoSpawned.getGold() - upgradeCost);
+        playerWhoSpawned.setGold(playerWhoSpawned.getGold() - Math.round(upgradeCost));
 
         // Upgrade tower
         towerLevel += 1;
@@ -182,7 +182,7 @@ public class Tower extends EntityCreature {
         // Send message and play sound (add more formatting later)
         playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("Sold tower for " + goldReturn + " gold!"));
         playerWhoSpawned.getTowerDefensePlayer().playPlayerSound(Key.key("entity.silverfish.death"));
-        playerWhoSpawned.setGold(playerWhoSpawned.getGold() + goldReturn);
+        playerWhoSpawned.setGold(playerWhoSpawned.getGold() + Math.round(goldReturn));
         playerWhoSpawned.getCurrentPlacedTowers().remove(this);
     }
 }
