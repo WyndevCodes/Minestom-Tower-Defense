@@ -67,7 +67,6 @@ public class Tower extends EntityCreature {
                 lookAt(target.get());
                 target.get().damage(this, 0.5f);
             }
-            //target search and then attack
             //TODO: find all enemies in x radius function
             // then setup list accordingly if the type does splash damage or not
         }
@@ -186,44 +185,6 @@ public class Tower extends EntityCreature {
         playerWhoSpawned.getTowerDefensePlayer().playPlayerSound(Key.key("entity.silverfish.death"));
         playerWhoSpawned.setGold(playerWhoSpawned.getGold() + goldReturn);
         playerWhoSpawned.getCurrentPlacedTowers().remove(this);
-    }
-
-    /**
-     * Tower upgrade cost multipliers.
-     */
-    private enum TowerUpgradeMultiplier {
-        LEVEL_1(1, 1),
-        LEVEL_2(2, 20),
-        LEVEL_3(3, 100),
-        LEVEL_4(4, 250);
-
-        /**
-         * The level of the tower to apply this multiplier to
-         */
-        private final int level;
-        /**
-         * The multiplier that should be used when calculating the cost
-         * to upgrade to its associated level
-         */
-        private final int multiplier;
-
-        TowerUpgradeMultiplier(int level, int multiplier) {
-            this.level = level;
-            this.multiplier = multiplier;
-        }
-
-        /**
-         * Gets the upgrade cost multiplier for an upgrade level.
-         * @param level The level to get the upgrade cost multiplier for
-         * @return The upgrade cost multiplier for the level, if found,
-         * otherwise the upgrade cost for {@link TowerUpgradeMultiplier#LEVEL_4}
-         */
-        public static int getMultiplierForLevel(int level) {
-            for (TowerUpgradeMultiplier m : values()) {
-                if (m.level == level) return m.multiplier;
-            }
-            return LEVEL_4.multiplier; //DEFAULT
-        }
     }
 }
 
