@@ -2,7 +2,6 @@ package me.wyndev.towerdefense.game.chestui;
 
 import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
-import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.tower.Tower;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

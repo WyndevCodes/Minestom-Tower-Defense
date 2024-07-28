@@ -2,10 +2,6 @@ package me.wyndev.towerdefense.files.config.object;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

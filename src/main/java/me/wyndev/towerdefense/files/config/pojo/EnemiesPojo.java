@@ -3,8 +3,6 @@ package me.wyndev.towerdefense.files.config.pojo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.wyndev.towerdefense.files.config.object.EnemieObject;
-import me.wyndev.towerdefense.files.config.object.TowerLevel;
-import me.wyndev.towerdefense.files.config.object.TowerObject;
 
 @Data
 @NoArgsConstructor

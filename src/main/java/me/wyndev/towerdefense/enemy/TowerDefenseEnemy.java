@@ -2,12 +2,11 @@ package me.wyndev.towerdefense.enemy;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
+import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.files.config.object.EnemieObject;
-import me.wyndev.towerdefense.files.config.object.TowerObject;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.tower.Tower;
-import me.wyndev.towerdefense.Utils;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;

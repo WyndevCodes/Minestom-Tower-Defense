@@ -2,10 +2,8 @@ package me.wyndev.towerdefense.files.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import me.wyndev.towerdefense.files.config.object.TowerLevel;
 import me.wyndev.towerdefense.files.config.object.TowerObject;
 import me.wyndev.towerdefense.files.config.pojo.TowersPojo;
-import me.wyndev.towerdefense.files.config.pojo.WavesPojo;
 
 import java.io.File;
 import java.io.FileWriter;

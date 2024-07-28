@@ -3,9 +3,7 @@ package me.wyndev.towerdefense.files.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import me.wyndev.towerdefense.files.config.object.EnemieObject;
-import me.wyndev.towerdefense.files.config.object.TowerObject;
 import me.wyndev.towerdefense.files.config.pojo.EnemiesPojo;
-import me.wyndev.towerdefense.files.config.pojo.TowersPojo;
 
 import java.io.File;
 import java.io.FileWriter;

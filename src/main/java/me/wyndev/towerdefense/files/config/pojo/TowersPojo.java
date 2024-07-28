@@ -2,12 +2,8 @@ package me.wyndev.towerdefense.files.config.pojo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.wyndev.towerdefense.enemy.TowerDefenseEnemyType;
 import me.wyndev.towerdefense.files.config.object.TowerLevel;
 import me.wyndev.towerdefense.files.config.object.TowerObject;
-import me.wyndev.towerdefense.files.config.object.WaveObject;
-
-import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
