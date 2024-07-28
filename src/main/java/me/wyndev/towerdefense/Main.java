@@ -139,7 +139,7 @@ public class Main {
         Towers.read();
         log.info("Registered {} towers entries", Towers.towerData.getTowers().length);
         Enemies.read();
-        log.info("Registered {} enemy entries", Enemies.enemiesData.getTowers().length);
+        log.info("Registered {} enemy entries", Enemies.enemiesData.getEnemies().length);
         Maps.load();
         log.info("Registered {} maps", Maps.getMaps().size());
     }

@@ -58,7 +58,7 @@ public class Enemies {
 
 
     public static EnemieObject getFromUISlot(int slot) {
-        for (EnemieObject enemieObject : enemiesData.getTowers()) {
+        for (EnemieObject enemieObject : enemiesData.getEnemies()) {
             if (enemieObject.getGUIpos() == slot) {
                 return enemieObject;
             }
@@ -67,7 +67,7 @@ public class Enemies {
     }
 
     public static EnemieObject getFromName(String name) {
-        for (EnemieObject enemieObject : enemiesData.getTowers()) {
+        for (EnemieObject enemieObject : enemiesData.getEnemies()) {
             if (enemieObject.getName().equalsIgnoreCase(name)) {
                 return enemieObject;
             }
