@@ -21,6 +21,7 @@ public class TowersPojo {
                     new boolean[]{false, true, true, true},
                     false,
                     4,
-                    "minecraft:bow")
+                    "minecraft:bow"
+            )
     };
 }

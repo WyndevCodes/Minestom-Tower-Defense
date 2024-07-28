@@ -7,7 +7,7 @@ import me.wyndev.towerdefense.files.config.object.EnemieObject;
 @Data
 @NoArgsConstructor
 public class EnemiesPojo {
-    EnemieObject[] towers = new EnemieObject[] {
+    EnemieObject[] enemies = new EnemieObject[] {
             new EnemieObject("Chicken",
                     false,
                     "minecraft:chicken",
