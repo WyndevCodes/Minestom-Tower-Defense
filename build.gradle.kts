@@ -14,6 +14,7 @@ repositories {
     mavenCentral()
     maven("https://repo.hypera.dev/snapshots")
     maven("https://reposilite.worldseed.online/public")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -49,7 +50,8 @@ dependencies {
     implementation("net.worldseed.multipart:WorldSeedEntityEngine:10.7.0")
     implementation("net.worldseed.particleemitter:ParticleEmitter:1.4.0")
     implementation("ca.atlasengine:atlas-projectiles:1.0.1")
-
+    implementation("net.worldseed.particleemitter:ParticleEmitter:1.4.0")
+    implementation("ca.atlasengine:atlas-projectiles:1.0.1")
 }
 
 
