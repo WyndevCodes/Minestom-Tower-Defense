@@ -13,7 +13,6 @@ import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
-import net.hollowcube.schem.SchematicBuilder;
 import net.hollowcube.schem.SchematicReader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -22,6 +21,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
@@ -31,7 +31,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +41,7 @@ import java.util.function.UnaryOperator;
 /**
  * Class that represents an active tower defense game.
  */
+@SuppressWarnings("UnstableApiUsage")
 public class GameInstance {
 
     private final int MAX_PLAYERS = 6; //TODO: support for per-map based player counts?
@@ -134,6 +134,9 @@ public class GameInstance {
             this.gameState = GameState.COUNTDOWN;
             gameLoop.startCountdown(); //default 30 seconds for now
         });
+
+        //Remove player on quit
+        instance.eventNode().addListener(PlayerDisconnectEvent.class, event -> Main.gameManager.removePlayerFromGame((TowerDefensePlayer) event.getPlayer(), true));
     }
 
     /**

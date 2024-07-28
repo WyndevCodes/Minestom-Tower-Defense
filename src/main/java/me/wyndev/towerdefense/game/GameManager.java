@@ -59,14 +59,29 @@ public class GameManager {
      * if the player was not in a game during this attempted removal
      */
     public boolean removePlayerFromGame(TowerDefensePlayer playerToRemove) {
+        return removePlayerFromGame(playerToRemove, false);
+    }
+
+    /**
+     * Removes a player from their current game, if they have one.
+     * @param playerToRemove The player to remove from their game
+     * @param isQuitting If the player is disconnecting, meaning
+     *                   they should not be teleported to the
+     *                   main lobby or added to the lobby sidebar
+     * @return True if the player was removed from a game, false
+     * if the player was not in a game during this attempted removal
+     */
+    public boolean removePlayerFromGame(TowerDefensePlayer playerToRemove, boolean isQuitting) {
         if (!playersWithGames.containsKey(playerToRemove.getUuid())) return false;
 
         GameInstance game = playersWithGames.get(playerToRemove.getUuid());
         game.removePlayer(playerToRemove);
 
-        //Remove player from game
-        playerToRemove.setInstance(Main.mainLobby);
-        Main.hubSidebar.addViewer(playerToRemove);
+        //Teleport to hub
+        if (!isQuitting) {
+            playerToRemove.setInstance(Main.mainLobby);
+            Main.hubSidebar.addViewer(playerToRemove);
+        }
 
         //TODO: remove game from activeGames list when completed, empty, or after the ended state resolves
         playersWithGames.remove(playerToRemove.getUuid());
