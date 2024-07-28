@@ -5,7 +5,7 @@ import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.files.config.Config;
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import net.kyori.adventure.key.Key;
@@ -132,15 +132,15 @@ public class GameLoop {
                 return;
             }
 
-            for (IngameTowerDefensePlayer player : gameInstance.getIngamePlayers().values()) {
+            for (TowerDefenseTeam team : gameInstance.getIngamePlayers().values()) {
                 // Give players income every 10 seconds
                 if (currentTick == 0) {
-                    player.setGold(player.getGold() + player.getIncome());
-                    player.getTowerDefensePlayer().sendActionBar(incomeMessage(player.getIncome()));
+                    team.setGold(team.getGold() + team.getIncome());
+                    team.getTowerDefensePlayers().forEach(p -> p.sendActionBar(incomeMessage(team.getIncome())));
                 }
 
                 // Tick towers
-                for (Tower tower : player.getCurrentPlacedTowers()) {
+                for (Tower tower : team.getCurrentPlacedTowers()) {
                     if (tower != null) tower.tick();
                 }
 

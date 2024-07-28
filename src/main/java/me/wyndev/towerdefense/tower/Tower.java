@@ -3,7 +3,8 @@ package me.wyndev.towerdefense.tower;
 import lombok.Getter;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.files.config.object.TowerObject;
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.tower.attribute.MultiEntityTower;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -22,16 +23,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Tower extends EntityCreature {
     @Getter protected final TowerObject type;
-    @Getter protected final IngameTowerDefensePlayer playerWhoSpawned; //TODO: change to Team later, in case we support multiple teams
+    @Getter protected final TowerDefenseTeam teamWhoSpawned;
     @Getter protected int towerLevel;
     protected List<TowerDefenseEnemy> targets = new ArrayList<>();
 
     private long lastAttackTime = System.currentTimeMillis();
 
-    public Tower(@NotNull TowerObject type, @NotNull IngameTowerDefensePlayer playerWhoSpawned, int towerLevel) {
+    public Tower(@NotNull TowerObject type, @NotNull TowerDefenseTeam teamWhoSpawned, int towerLevel) {
         super(EntityType.fromNamespaceId(type.getEntityType()));
         this.type = type;
-        this.playerWhoSpawned = playerWhoSpawned;
+        this.teamWhoSpawned = teamWhoSpawned;
         this.towerLevel = towerLevel;
         initializeEntity(towerLevel);
     }
@@ -138,36 +139,36 @@ public class Tower extends EntityCreature {
     /**
      * Attempts to upgrade this tower.
      */
-    public void upgrade() {
+    public void upgrade(TowerDefensePlayer playerWhoUpgraded) {
         // Check if tower can be upgraded
         if (towerLevel == type.getMaxLevel()) {
-            playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("This tower is already max level!"));
+            playerWhoUpgraded.sendMessage(Component.text("This tower is already max level!"));
             return;
         }
 
         float upgradeCost = type.getPriceFromLevel(towerLevel + 1); //Since level start at one and array start a 0, there is no need to add 1
 
         // Check if player has enough money to upgrade
-        if (playerWhoSpawned.getGold() < upgradeCost) {
-            playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("You do not have enough gold to upgrade this tower!").color(TextColor.color(255, 0, 0)));
+        if (teamWhoSpawned.getGold() < upgradeCost) {
+            playerWhoUpgraded.sendMessage(Component.text("You do not have enough gold to upgrade this tower!").color(TextColor.color(255, 0, 0)));
             return;
         }
 
         // Remove gold
         //TODO: action bar with remove gold and upgraded tower message
-        playerWhoSpawned.setGold(playerWhoSpawned.getGold() - Math.round(upgradeCost));
+        teamWhoSpawned.setGold(teamWhoSpawned.getGold() - Math.round(upgradeCost));
 
         // Upgrade tower
         towerLevel += 1;
         initializeEntity(towerLevel);
         //TODO: more text formatting, maybe add name of tower? Or move this to action bar
-        playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("Upgraded tower to level " + towerLevel + " !"));
+        playerWhoUpgraded.sendMessage(Component.text("Upgraded tower to level " + towerLevel + " !"));
     }
 
     /**
      * Sells this tower.
      */
-    public void sell() {
+    public void sell(TowerDefensePlayer playerWhoSold) {
         // Remove the entities in-game
         if (this instanceof MultiEntityTower multiEntityTower) {
             for (Entity entity : multiEntityTower.getTowerEntities()) {
@@ -180,10 +181,10 @@ public class Tower extends EntityCreature {
         double goldReturn = (type.getPriceFromLevel(towerLevel) * 0.8);
 
         // Send message and play sound (add more formatting later)
-        playerWhoSpawned.getTowerDefensePlayer().sendMessage(Component.text("Sold tower for " + goldReturn + " gold!"));
-        playerWhoSpawned.getTowerDefensePlayer().playPlayerSound(Key.key("entity.silverfish.death"));
-        playerWhoSpawned.setGold(playerWhoSpawned.getGold() + Math.round(goldReturn));
-        playerWhoSpawned.getCurrentPlacedTowers().remove(this);
+        playerWhoSold.sendMessage(Component.text("Sold tower for " + goldReturn + " gold!"));
+        playerWhoSold.playPlayerSound(Key.key("entity.silverfish.death"));
+        teamWhoSpawned.setGold(teamWhoSpawned.getGold() + Math.round(goldReturn));
+        teamWhoSpawned.getCurrentPlacedTowers().remove(this);
     }
 }
 

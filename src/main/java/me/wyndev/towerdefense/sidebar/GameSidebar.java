@@ -2,22 +2,25 @@ package me.wyndev.towerdefense.sidebar;
 
 import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Utils;
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 
 public class GameSidebar extends AbstractSidebar {
 
-    private final IngameTowerDefensePlayer viewer;
+    private final TowerDefenseTeam viewers;
 
     /**
-     * Constructs a game sidebar for a player.
+     * Constructs a game sidebar for a team.
      */
-    public GameSidebar(IngameTowerDefensePlayer viewer) {
+    public GameSidebar(TowerDefenseTeam team) {
         super("<green><bold>Tower Defense");
-        this.viewer = viewer;
-        addViewer(viewer.getTowerDefensePlayer());
+        this.viewers = team;
+        for (TowerDefensePlayer towerDefensePlayer : team.getTowerDefensePlayers()) {
+            addViewer(towerDefensePlayer);
+        }
     }
 
     @Override
@@ -47,13 +50,13 @@ public class GameSidebar extends AbstractSidebar {
 
     @Override
     public void addViewer(Player player) {
-        if (!player.equals(viewer.getTowerDefensePlayer())) return;
+        if (!(player instanceof TowerDefensePlayer towerDefensePlayer) || !viewers.getTowerDefensePlayers().contains(towerDefensePlayer)) return;
         sidebar.addViewer(player);
     }
 
     @Override
     public void removeViewer(Player player) {
-        if (!player.equals(viewer.getTowerDefensePlayer())) return;
+        if (!(player instanceof TowerDefensePlayer towerDefensePlayer) || !viewers.getTowerDefensePlayers().contains(towerDefensePlayer)) return;
         sidebar.removeViewer(player);
     }
 }
