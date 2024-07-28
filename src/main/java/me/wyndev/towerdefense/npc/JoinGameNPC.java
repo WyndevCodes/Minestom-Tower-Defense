@@ -1,0 +1,16 @@
+package me.wyndev.towerdefense.npc;
+
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
+
+public class JoinGameNPC extends PlayerNPC {
+
+    public JoinGameNPC() {
+        super("join_game", "ewogICJ0aW1lc3RhbXAiIDogMTcwMDQwNTg0NjQ3NSwKICAicHJvZmlsZUlkIiA6ICIzZmM3ZmRmOTM5NjM0YzQxOTExOTliYTNmN2NjM2ZlZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJZZWxlaGEiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmU4YjlmZDE0MGNmMzRkOGRhOWJmNDMwYmNjZjc0NmU5NmU5NWFiMWFiZmJkNWVhNjMwNTY0OTM0MTdhYzdjZCIKICAgIH0KICB9Cn0=", "aalQFRPUNuhNizZKSQDeRCagM6rcGCLC7Age5xEyNweYCc3ApChSR2LIX79CiiDyP5zNmwKf8jhVNGSHq7UVZEXUoF6iIQwmVgJcP2HwS7lG6cQ9f/0+nkBihsxqqYyIV3cEtwiBrfFix386QrcBL8gPr/pqktIHHHPbfdqz/LSYglHco2tpSym8mYcdGZdZiFngLJ64mylOjfVpHBpi/AOjMxaRntmTPXZEhl5WrTx8esn/oCIDwLdKlY+Qf3K8X+xWXRmX0EqP5d8+b29Z5Xv0QgzgiMsOZfSu9vZsVT23fuW9nzOfkpqdLT+keSkhz49GgSPWToosDubGeyPxXMD6sV50j2PdUakXQuAa8QcZfk54petxtqXZjkS13maNzzptqIJ9y45IiCx6TfLx3liySPX99DNg9jNGsRqy4GErXIsq2Ok+VkD8WHTI7P8m3WLHYtLqBBpCA/QXGTOaYSvILn+lF5Eq2fpw/yNLSLXkLr9iIn3Tu6HXeOmhNEaQRtldE/bJ4JoE/j4dVmvJCrCwJCsI/8q7an4le3IIpn/cO3Nzdv7jTepXPKwx4teL1/nh9uUfcwa6kzdM8Q9pmMMxDMAVCChgkPbsPxdm6g/c8fS8ShEmDsULXIb/dCwylTTD3UyMALLH79zMrPCK1SgA/GZHs7oXM6Z+ylj+Nl0=");
+    }
+
+    @Override
+    public void onClick(Player player) {
+        MinecraftServer.getCommandManager().execute(player, "play");
+    }
+}

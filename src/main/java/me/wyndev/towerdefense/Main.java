@@ -4,20 +4,24 @@ import me.lucko.luckperms.common.config.generic.adapter.EnvironmentVariableConfi
 import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapter;
 import me.lucko.luckperms.minestom.CommandRegistry;
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
+import me.wyndev.towerdefense.command.LobbyCommand;
+import me.wyndev.towerdefense.command.PlayCommand;
 import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.files.config.Towers;
 import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.GameManager;
+import me.wyndev.towerdefense.npc.JoinGameNPC;
+import me.wyndev.towerdefense.npc.NPCManager;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.sidebar.HubSidebar;
 import net.luckperms.api.LuckPerms;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.*;
-import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.timer.SchedulerManager;
@@ -40,7 +44,9 @@ public class Main {
 
     public static GameManager gameManager;
 
-    public static void main(String[] args) throws IOException {
+    public static NPCManager npcManager;
+
+    public static void main(String[] args) {
         loadConfig();
 
         MinecraftServer minecraftServer = MinecraftServer.init();
@@ -61,6 +67,14 @@ public class Main {
 
         //Setup games
         gameManager = new GameManager();
+
+        //NPCs
+        npcManager = new NPCManager();
+        npcManager.spawnNPC(new JoinGameNPC(), mainLobby, new Pos(0, -5, 1));
+
+        //Setup commands
+        MinecraftServer.getCommandManager().register(new PlayCommand());
+        MinecraftServer.getCommandManager().register(new LobbyCommand());
 
         //Handle player login
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, e -> {
