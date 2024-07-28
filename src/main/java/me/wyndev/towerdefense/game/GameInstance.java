@@ -8,7 +8,7 @@ import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.chestui.ModifyTurret;
 import me.wyndev.towerdefense.game.chestui.PlaceTurretMenu;
 import me.wyndev.towerdefense.game.customentity.Cursor;
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import net.hollowcube.schem.Rotation;
@@ -69,10 +69,10 @@ public class GameInstance {
      */
     private final @Getter List<TowerDefensePlayer> players;
     /**
-     * A map of all {@link IngameTowerDefensePlayer}s associated with
+     * A map of all {@link TowerDefenseTeam}s associated with
      * players currently in this game.
      */
-    private final @Getter Map<UUID, IngameTowerDefensePlayer> ingamePlayers;
+    private final @Getter Map<UUID, TowerDefenseTeam> ingamePlayers;
 
     /**
      * Creates a new GameInstance with no default players.
@@ -171,7 +171,7 @@ public class GameInstance {
         this.gameState = GameState.RUNNING;
 
         for (TowerDefensePlayer player : players) {
-            ingamePlayers.put(player.getUuid(), new IngameTowerDefensePlayer(player));
+            ingamePlayers.put(player.getUuid(), new TowerDefenseTeam(player));
 
             //TODO: Replace this item with a "Tower manager" item that also allow for deleting and upgrading turret
             player.setItemInMainHand(ItemStack.of(Material.ENDER_EYE)
@@ -195,8 +195,8 @@ public class GameInstance {
                     entity.setInstance(instance, new Pos(block.x() -0.05, block.y() -0.05, block.blockZ() -0.05));
                 }
 
-                IngameTowerDefensePlayer towerDefensePlayer = ingamePlayers.get(event.getPlayer().getUuid());
-                if (towerDefensePlayer == null) return;
+                TowerDefenseTeam towerDefenseTeam = ingamePlayers.get(event.getPlayer().getUuid());
+                if (towerDefenseTeam == null) return;
 
                 // Check if player has a turret placed, and if so, change block type because tower space is not available
                 if (towerAt(Pos.fromPoint(block)) != null) {
@@ -218,17 +218,17 @@ public class GameInstance {
             Point block = event.getPlayer().getTargetBlockPosition(10);
             if (block == null) return;
             if (event.getItemStack().material().equals(Material.ENDER_EYE) && instance.getBlock(block).name().equals("minecraft:grass_block")) {
-                IngameTowerDefensePlayer towerDefensePlayer = ingamePlayers.get(event.getPlayer().getUuid());
-                if (towerDefensePlayer == null) throw new IllegalStateException("A player in the tower defense game does not have an associated tower defense player wrapper!");
+                TowerDefenseTeam team = ingamePlayers.get(event.getPlayer().getUuid());
+                if (team == null) throw new IllegalStateException("A player in the tower defense game does not have an associated tower defense team!");
                 Tower tower = towerAt(Pos.fromPoint(block));
                 if (tower != null) {
-                    if (tower.getPlayerWhoSpawned().equals(towerDefensePlayer)) {
-                        new ModifyTurret(towerDefensePlayer, tower).open(Pos.fromPoint(block), instance);
+                    if (tower.getTeamWhoSpawned().equals(tower)) {
+                        new ModifyTurret((TowerDefensePlayer) event.getPlayer(), tower).open(Pos.fromPoint(block), instance);
                     } else {
                         //Player cannot open another player's tower menu
                     }
                 } else {
-                    new PlaceTurretMenu(towerDefensePlayer).open(new Pos(block.x(), block.y(), block.z()), event.getInstance());
+                    new PlaceTurretMenu(team).open((TowerDefensePlayer) event.getPlayer(), new Pos(block.x(), block.y(), block.z()), event.getInstance());
                 }
             }
         });
@@ -308,7 +308,7 @@ public class GameInstance {
         gameLoop.stopMainLoop();
         gameLoop.cancelCountdown(); //just in case
 
-        ingamePlayers.forEach((uuid, towerPlayer) -> towerPlayer.shutdown());
+        ingamePlayers.forEach((uuid, team) -> team.shutdown());
         players.forEach(p -> Main.gameManager.removePlayerFromGame(p));
 
         MinecraftServer.getInstanceManager().unregisterInstance(instance);
@@ -324,8 +324,8 @@ public class GameInstance {
      */
     public @Nullable Tower towerAt(Pos pos) {
         List<Tower> towers = new ArrayList<>();
-        for (IngameTowerDefensePlayer player1 : ingamePlayers.values()) {
-            towers.addAll(player1.getCurrentPlacedTowers());
+        for (TowerDefenseTeam towerDefenseTeam : ingamePlayers.values()) {
+            towers.addAll(towerDefenseTeam.getCurrentPlacedTowers());
         }
 
         // Check if there is a turret at the position

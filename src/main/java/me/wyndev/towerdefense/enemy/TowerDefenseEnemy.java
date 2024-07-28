@@ -2,12 +2,11 @@ package me.wyndev.towerdefense.enemy;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import me.wyndev.towerdefense.Utils;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
@@ -28,15 +27,15 @@ import java.util.Random;
 public class TowerDefenseEnemy extends EntityCreature {
 
     protected final TowerDefenseEnemyType towerDefenseEnemyType;
-    private final IngameTowerDefensePlayer spawner;
+    private final TowerDefenseTeam spawner;
     private int tickAlive = 0;
     @Getter private Pos shift;
 
     //TODO: link a mob to a team if we do team support
-    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType, @Nullable IngameTowerDefensePlayer spawner) {
+    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType, @Nullable TowerDefenseTeam spawner) {
         super(towerDefenseEnemyType.getEntityType());
         this.towerDefenseEnemyType = towerDefenseEnemyType;
-        this.spawner = spawner; //player who spawned the tower defense enemy
+        this.spawner = spawner; //team that spawned the tower defense enemy
 
         double maxShift = 1.3; //Add this to the config when enemies are ported to configs
         Random random = new Random();
@@ -60,15 +59,15 @@ public class TowerDefenseEnemy extends EntityCreature {
         this.damage(Damage.fromEntity(source, damage));
         this.setCustomName(getCustomNameText());
         if (this.getHealth() <= 0) {
-            source.getPlayerWhoSpawned().setGold(source.getPlayerWhoSpawned().getGold() + (towerDefenseEnemyType.getCost() / 10));
+            source.getTeamWhoSpawned().setGold(source.getTeamWhoSpawned().getGold() + (towerDefenseEnemyType.getCost() / 10));
         }
     }
 
     /**
      * Actions this enemy takes when reaching the end of a tower defense track.
-     * @param player The player to damage (the player who owns the track)
+     * @param damaged The team to damage (the player who owns the track)
      */
-    public void reachEnd(IngameTowerDefensePlayer player) {
+    public void reachEnd(TowerDefenseTeam damaged) {
         this.remove();
         //TODO: double lifesteal for advanced
         //TODO: logic on damaged player

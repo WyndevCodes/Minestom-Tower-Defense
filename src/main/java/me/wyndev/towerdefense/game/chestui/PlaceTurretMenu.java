@@ -3,7 +3,8 @@ package me.wyndev.towerdefense.game.chestui;
 import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.files.config.Towers;
 import me.wyndev.towerdefense.files.config.object.TowerObject;
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.tower.Tower;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -27,15 +28,15 @@ public class PlaceTurretMenu {
 
     List<EventListener> listeners = new ArrayList<>(); //I hate doing that, but I have no idea how to do this
 
-    private final IngameTowerDefensePlayer player;
+    private final TowerDefenseTeam team;
 
-    public PlaceTurretMenu(IngameTowerDefensePlayer player) {
-        this.player = player;
+    public PlaceTurretMenu(TowerDefenseTeam team) {
+        this.team = team;
     }
 
-    public void open(Pos pos, Instance instance) {
+    public void open(TowerDefensePlayer player, Pos pos, Instance instance) {
         Inventory inventory = getInventory();
-        player.getTowerDefensePlayer().openInventory(inventory);
+        player.openInventory(inventory);
 
         EventNode child = EventNode.all("BuyMenuEventNode");
         instance.eventNode().addChild(child);
@@ -47,22 +48,22 @@ public class PlaceTurretMenu {
                 //pay cost
                 int level = Towers.getLevelFromUISlot(e.getSlot());
                 float price = towerObj.getPriceFromLevel(level);
-                if (player.getGold() < price) {
-                    player.getTowerDefensePlayer().sendMessage(Utils.format("<red>Not enough gold to purchase this!"));
-                    player.getTowerDefensePlayer().playPlayerSound(Key.key("entity.villager.no"));
+                if (team.getGold() < price) {
+                    player.sendMessage(Utils.format("<red>Not enough gold to purchase this!"));
+                    player.playPlayerSound(Key.key("entity.villager.no"));
                     return;
                 }
 
-                player.setGold(player.getGold() - Math.round(price));
-                player.getTowerDefensePlayer().sendActionBar(Utils.format("<gray>Purchased a level " + level + " " + towerObj.getName() +
+                team.setGold(team.getGold() - Math.round(price));
+                player.sendActionBar(Utils.format("<gray>Purchased a level " + level + " " + towerObj.getName() +
                         " <gray> tower for <gold>" + Math.round(price) + " <gray>gold!"));
-                player.getTowerDefensePlayer().playPlayerSound(Key.key("entity.experience_orb.pickup"));
+                player.playPlayerSound(Key.key("entity.experience_orb.pickup"));
 
-                Tower tower = new Tower(towerObj,  player, level);
+                Tower tower = new Tower(towerObj, team, level);
                 Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
 
                 tower.setInstance(e.getInstance(), spawnPos);
-                player.getCurrentPlacedTowers().add(tower);
+                team.getCurrentPlacedTowers().add(tower);
 
                 e.getPlayer().closeInventory();
                 deleteChild(child);

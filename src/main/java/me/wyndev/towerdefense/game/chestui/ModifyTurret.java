@@ -1,14 +1,13 @@
 package me.wyndev.towerdefense.game.chestui;
 
-import lombok.Getter;
 import me.wyndev.towerdefense.Utils;
-import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.tower.Tower;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
@@ -26,17 +25,17 @@ public class ModifyTurret {
     //TODO: add the icon in the center of the screen and show all the stats change as lore
     List<EventListener> listeners = new ArrayList<>(); //I hate doing that, but I have no idea how to do this
 
-    private final IngameTowerDefensePlayer player;
+    private final TowerDefensePlayer player;
     private final Tower tower;
 
-    public ModifyTurret(IngameTowerDefensePlayer player, Tower tower) {
+    public ModifyTurret(TowerDefensePlayer player, Tower tower) {
         this.player = player;
         this.tower = tower;
     }
 
     public void open(Pos pos, Instance instance) {
         Inventory inventory = getInventory(tower);
-        player.getTowerDefensePlayer().openInventory(inventory);
+        player.openInventory(inventory);
 
         EventNode child = EventNode.all("EditMenuEventNode");
         instance.eventNode().addChild(child);
@@ -45,14 +44,14 @@ public class ModifyTurret {
             e.setCancelled(true);
 
             if (e.getSlot() == 0) {
-                tower.sell();
+                tower.sell(player);
 
                 e.getPlayer().closeInventory();
                 deleteChild(child);
             }
 
             if (e.getSlot() == 4) {
-                tower.upgrade();
+                tower.upgrade(player);
 
                 e.getPlayer().closeInventory();
                 deleteChild(child);
