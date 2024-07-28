@@ -1,13 +1,13 @@
 package me.wyndev.towerdefense.game.chestui;
 
+import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.files.config.Towers;
 import me.wyndev.towerdefense.files.config.object.TowerObject;
-import me.wyndev.towerdefense.files.config.pojo.TowersPojo;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
@@ -42,8 +42,23 @@ public class PlaceTurretMenu {
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
             e.setCancelled(true);
-            if (Towers.getFromUISlot(e.getSlot()) != null) {
-                Tower tower = new Tower(Towers.getFromUISlot(e.getSlot()),  player, Towers.getLevelFromUISlot(e.getSlot()));
+            TowerObject towerObj = Towers.getFromUISlot(e.getSlot());
+            if (towerObj != null) {
+                //pay cost
+                int level = Towers.getLevelFromUISlot(e.getSlot());
+                float price = towerObj.getPriceFromLevel(level);
+                if (player.getGold() < price) {
+                    player.getTowerDefensePlayer().sendMessage(Utils.format("<red>Not enough gold to purchase this!"));
+                    player.getTowerDefensePlayer().playPlayerSound(Key.key("entity.villager.no"));
+                    return;
+                }
+
+                player.setGold(player.getGold() - Math.round(price));
+                player.getTowerDefensePlayer().sendActionBar(Utils.format("<gray>Purchased a level " + level + " " + towerObj.getName() +
+                        " <gray> tower for <gold>" + Math.round(price) + " <gray>gold!"));
+                player.getTowerDefensePlayer().playPlayerSound(Key.key("entity.experience_orb.pickup"));
+
+                Tower tower = new Tower(towerObj,  player, level);
                 Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
 
                 tower.setInstance(e.getInstance(), spawnPos);
@@ -77,16 +92,18 @@ public class PlaceTurretMenu {
         List<TowerObject> towers = Arrays.asList(Towers.towerData.getTowers());
         for (TowerObject tower : towers) {
             for (int i = 1; i <= tower.getMaxLevel(); i++) {
-                Component desc = MiniMessage.miniMessage().deserialize(tower.getDesc());
-                Component line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Price:</u></color><white> " + tower.getPriceFromLevel(i));
-                Component line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getAttackDamageFromLevel(i));
-                Component line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getAttackRangeFromLevel(i) + " blocks");
-                Component line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getAttackSpeedFromLevel(i) / 1000 + "s");
-                Component line5 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.isSplash());
+                Component desc = Utils.formatWithoutItalics(tower.getDesc());
+                Component blank = Component.empty();
+                Component type = Utils.formatWithoutItalics("<color:#828282><u>Type:</u></color> " + (tower.isSplash() ? "<yellow><bold>Single Target" : "<red><bold>Splash"));
+                Component line1 = Utils.formatWithoutItalics("<color:#828282><u>Price:</u></color><gold> " + Utils.formatWithCommas(tower.getPriceFromLevel(i)) + " Gold");
+                Component line2 = Utils.formatWithoutItalics("<color:#828282><u>Damage:</u></color><white> " + tower.getAttackDamageFromLevel(i));
+                Component line3 = Utils.formatWithoutItalics("<color:#828282><u>Range:</u></color><white> " + tower.getAttackRangeFromLevel(i) + " blocks");
+                Component line4 = Utils.formatWithoutItalics("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getAttackSpeedFromLevel(i) / 1000 + "s/attack");
+                Component line5 = Utils.formatWithoutItalics("<color:#828282><u>Splash:</u></color><white> " + tower.isSplash());
                 ItemStack stack = ItemStack.of(
                                 Material.fromNamespaceId(tower.getIconMaterials()))
-                        .withCustomName(MiniMessage.miniMessage().deserialize(tower.getName()))
-                        .withLore(desc, line1, line2, line3, line4, line5)
+                        .withCustomName(Utils.formatWithoutItalics(tower.getName() + " <dark_gray>(Lvl. " + i + ")"))
+                        .withLore(desc, blank, type, line1, line2, line3, line4, line5)
                         .withMaxStackSize(128).withAmount(i);
                 inventory.setItemStack(tower.getGUIPosLevel(i), stack);
             }
