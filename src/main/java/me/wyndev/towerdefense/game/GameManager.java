@@ -77,6 +77,8 @@ public class GameManager {
         GameInstance game = playersWithGames.get(playerToRemove.getUuid());
         game.removePlayer(playerToRemove);
 
+        playersWithGames.remove(playerToRemove.getUuid());
+
         //Teleport to hub
         if (!isQuitting) {
             playerToRemove.setInstance(Main.mainLobby);
@@ -84,7 +86,6 @@ public class GameManager {
         }
 
         //TODO: remove game from activeGames list when completed, empty, or after the ended state resolves
-        playersWithGames.remove(playerToRemove.getUuid());
         return true;
     }
 
