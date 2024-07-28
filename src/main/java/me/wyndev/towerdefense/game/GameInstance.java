@@ -21,6 +21,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
@@ -137,6 +138,12 @@ public class GameInstance {
 
         //Remove player on quit
         instance.eventNode().addListener(PlayerDisconnectEvent.class, event -> Main.gameManager.removePlayerFromGame((TowerDefensePlayer) event.getPlayer(), true));
+        //Remove player on world change
+        instance.eventNode().addListener(RemoveEntityFromInstanceEvent.class, event -> {
+            if (event.getEntity() instanceof TowerDefensePlayer player && players.contains(player) && event.getInstance().equals(instance)) {
+                Main.gameManager.removePlayerFromGame(player);
+            }
+        });
     }
 
     /**
