@@ -13,6 +13,8 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://repo.hypera.dev/snapshots")
+    maven("https://reposilite.worldseed.online/public")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -45,7 +47,9 @@ dependencies {
     implementation("net.minestom:minestom-snapshots:99ca16e263") //Minestom
     implementation("dev.hollowcube:schem:1.2.0") //Schematic loader
     implementation("net.kyori:adventure-text-minimessage:4.17.0") //Minecraft component generation: see https://docs.advntr.dev/minimessage/index.html
-
+    implementation("net.worldseed.multipart:WorldSeedEntityEngine:10.7.0")
+    implementation("net.worldseed.particleemitter:ParticleEmitter:1.4.0")
+    implementation("ca.atlasengine:atlas-projectiles:1.0.1")
 }
 
 
