@@ -2,15 +2,17 @@ package me.wyndev.towerdefense.enemy;
 
 import lombok.Getter;
 import me.wyndev.towerdefense.ChatColor;
+import me.wyndev.towerdefense.files.config.object.EnemieObject;
+import me.wyndev.towerdefense.files.config.object.TowerObject;
 import me.wyndev.towerdefense.player.IngameTowerDefensePlayer;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
 import me.wyndev.towerdefense.tower.Tower;
 import me.wyndev.towerdefense.Utils;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
@@ -27,25 +29,25 @@ import java.util.Random;
 @Getter
 public class TowerDefenseEnemy extends EntityCreature {
 
-    protected final TowerDefenseEnemyType towerDefenseEnemyType;
+    protected final EnemieObject enemieObject;
     private final IngameTowerDefensePlayer spawner;
     private int tickAlive = 0;
     @Getter private Pos shift;
 
     //TODO: link a mob to a team if we do team support
-    public TowerDefenseEnemy(@NotNull TowerDefenseEnemyType towerDefenseEnemyType, @Nullable IngameTowerDefensePlayer spawner) {
-        super(towerDefenseEnemyType.getEntityType());
-        this.towerDefenseEnemyType = towerDefenseEnemyType;
+    public TowerDefenseEnemy(@NotNull EnemieObject enemieObject, @Nullable IngameTowerDefensePlayer spawner) {
+        super(EntityType.fromNamespaceId(enemieObject.getModelName()));
+        this.enemieObject = enemieObject;
         this.spawner = spawner; //player who spawned the tower defense enemy
 
-        double maxShift = 1.3; //Add this to the config when enemies are ported to configs
+        double maxShift = enemieObject.getMaxShift(); //Add this to the config when enemies are ported to configs
         Random random = new Random();
         shift = new Pos(random.nextDouble(-maxShift, maxShift), 0, random.nextDouble(-maxShift, maxShift));
 
         // Initialize entity attributes
-        this.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(towerDefenseEnemyType.getMovementSpeed());
-        this.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(towerDefenseEnemyType.getHealth());
-        this.setHealth(towerDefenseEnemyType.getHealth());
+        this.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(enemieObject.getSpeed());
+        this.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(enemieObject.getMaxHealth());
+        this.setHealth((float) enemieObject.getMaxHealth());
 
         this.setCustomNameVisible(true);
         this.setCustomName(getCustomNameText());
@@ -60,7 +62,8 @@ public class TowerDefenseEnemy extends EntityCreature {
         this.damage(Damage.fromEntity(source, damage));
         this.setCustomName(getCustomNameText());
         if (this.getHealth() <= 0) {
-            source.getPlayerWhoSpawned().setGold(source.getPlayerWhoSpawned().getGold() + (towerDefenseEnemyType.getCost() / 10));
+            source.getPlayerWhoSpawned().setGold(source.getPlayerWhoSpawned().getGold() + (enemieObject.getCost() / 10));
+            //TODO: we really need to move the money system to doubles
         }
     }
 
@@ -74,17 +77,17 @@ public class TowerDefenseEnemy extends EntityCreature {
         //TODO: logic on damaged player
         if (spawner != null) {
             spawner.setHealth(spawner.getHealth() + 1);
-            spawner.setIncome(spawner.getIncome() + (towerDefenseEnemyType.getCost() / 5));
+            spawner.setIncome(spawner.getIncome() + (enemieObject.getCost() / 5));
             //TODO: user feedback? Sound/message?
         }
     }
 
     // I feel like this can be optimized or condensed. Any ideas?
     private Component getCustomNameText() {
-        Component nameText = Component.text(towerDefenseEnemyType.getNameComponentText() + " ", towerDefenseEnemyType.getNameColor());
+        Component nameText = Utils.format("<green>" + enemieObject.getName());
         nameText = nameText.append(Component.text(Utils.formatWithCommas(getHealth()), ChatColor.RED.toColor()));
         nameText = nameText.append(Component.text("/", ChatColor.GRAY.toColor()));
-        nameText = nameText.append(Component.text(Utils.formatWithCommas(towerDefenseEnemyType.getHealth()), ChatColor.RED.toColor()));
+        nameText = nameText.append(Component.text(Utils.formatWithCommas(enemieObject.getMaxHealth()), ChatColor.RED.toColor()));
         return nameText;
     }
 
@@ -102,7 +105,7 @@ public class TowerDefenseEnemy extends EntityCreature {
             Vec dir = position.direction();
             if (!dir.isZero()) dir = dir.normalize();
 
-            Vec walk = dir.mul(5 * towerDefenseEnemyType.getMovementSpeed());
+            Vec walk = dir.mul(5 * enemieObject.getSpeed());
             player.sendPacket(new EntityVelocityPacket(this.getEntityId(), (short) walk.x(), (short) walk.y(), (short) walk.z()));
         }
     }

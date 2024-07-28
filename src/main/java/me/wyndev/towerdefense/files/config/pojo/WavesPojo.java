@@ -2,14 +2,13 @@ package me.wyndev.towerdefense.files.config.pojo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.wyndev.towerdefense.enemy.TowerDefenseEnemyType;
 import me.wyndev.towerdefense.files.config.object.WaveObject;
 
 @Data
 @NoArgsConstructor
 public class WavesPojo {
     WaveObject[] waves = new WaveObject[] {
-            new WaveObject(TowerDefenseEnemyType.CHICKEN,
+            new WaveObject("chicken",
                     0,
                     -1,
                     1,
@@ -18,8 +17,8 @@ public class WavesPojo {
                     20
             ),
             new WaveObject(
-                    TowerDefenseEnemyType.WOLF,
-                    1,
+                    "wolf",
+                    5,
                     -1,
                     2,
                     2,
@@ -27,8 +26,8 @@ public class WavesPojo {
                     20
             ),
             new WaveObject(
-                    TowerDefenseEnemyType.COW,
-                    3,
+                    "cow",
+                    10,
                     -1,
                     1,
                     1,
@@ -36,8 +35,8 @@ public class WavesPojo {
                     10
             ),
             new WaveObject(
-                    TowerDefenseEnemyType.HORSE,
-                    5,
+                    "horse",
+                    20,
                     -1,
                     1,
                     1,
@@ -45,8 +44,8 @@ public class WavesPojo {
                     10
             ),
             new WaveObject(
-                    TowerDefenseEnemyType.ZOMBIE,
-                    8,
+                    "zombie",
+                    30,
                     -1,
                     1,
                     3,
@@ -54,8 +53,8 @@ public class WavesPojo {
                     30
             ),
             new WaveObject(
-                    TowerDefenseEnemyType.MAD_COW,
-                    10,
+                    "mad cow",
+                    50,
                     -1,
                     1,
                     1,

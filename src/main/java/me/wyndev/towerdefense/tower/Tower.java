@@ -54,7 +54,7 @@ public class Tower extends EntityCreature {
                     if (d2 <= atk2) {
                         if (target.get() == null) {
                             target.set((TowerDefenseEnemy) e);
-                        } else if (target.get().getTickAlive() * target.get().getTowerDefenseEnemyType().getMovementSpeed() < towerDefenseEnemy.getTickAlive() * towerDefenseEnemy.getTowerDefenseEnemyType().getMovementSpeed()) {
+                        } else if (target.get().getTickAlive() * target.get().getEnemieObject().getSpeed() < towerDefenseEnemy.getTickAlive() * towerDefenseEnemy.getEnemieObject().getSpeed()) {
                             target.set((TowerDefenseEnemy) e);
                         }
                     }

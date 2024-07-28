@@ -3,6 +3,7 @@ package me.wyndev.towerdefense.game;
 import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.files.config.Config;
+import me.wyndev.towerdefense.files.config.Enemies;
 import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.config.object.WaveObject;
 import net.kyori.adventure.text.Component;
@@ -57,7 +58,7 @@ public class WavesManager {
                     }
                     if (entityCount > wave.getPerWavesMaxCount()) entityCount = wave.getPerWavesMaxCount();
                     for (int i = 0; i < entityCount; i++) {
-                        enemies.add(new TowerDefenseEnemy(wave.getEnemyType(), null));
+                        enemies.add(new TowerDefenseEnemy(Enemies.getFromName(wave.getEnemyType()), null));
                     }
                 }
             }

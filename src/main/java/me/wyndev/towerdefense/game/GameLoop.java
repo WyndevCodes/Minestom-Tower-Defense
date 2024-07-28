@@ -157,13 +157,13 @@ public class GameLoop {
 
                         //Move enemies forward
                         if (rot.yaw() == 0) {
-                            enemy.teleport(rot.add(new Pos(0, 0, enemy.getTowerDefenseEnemyType().getMovementSpeed())));
+                            enemy.teleport(rot.add(new Pos(0, 0, enemy.getEnemieObject().getSpeed())));
                         } else if (rot.yaw() == 90) {
-                            enemy.teleport(rot.add(new Pos(-enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                            enemy.teleport(rot.add(new Pos(-enemy.getEnemieObject().getSpeed(), 0, 0)));
                         } else if (rot.yaw() == -180) {
-                            enemy.teleport(rot.add(new Pos(0, 0, -enemy.getTowerDefenseEnemyType().getMovementSpeed())));
+                            enemy.teleport(rot.add(new Pos(0, 0, -enemy.getEnemieObject().getSpeed())));
                         } else if (rot.yaw() == -90) {
-                            enemy.teleport(rot.add(new Pos(enemy.getTowerDefenseEnemyType().getMovementSpeed(), 0, 0)));
+                            enemy.teleport(rot.add(new Pos(enemy.getEnemieObject().getSpeed(), 0, 0)));
                         }
 
                         rot = rot.sub(enemy.getShift());
@@ -232,7 +232,7 @@ public class GameLoop {
         if (mainLoopTask != null) mainLoopTask.cancel();
     }
 
-    private Component incomeMessage(long income) {
+    private Component incomeMessage(double income) {
         return Component.text("+" + Utils.formatWithCommas(income) + " Gold (Income)").color(ChatColor.GOLD.toColor());
     }
 
