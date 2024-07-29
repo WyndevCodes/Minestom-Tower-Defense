@@ -6,10 +6,7 @@ import me.lucko.luckperms.minestom.CommandRegistry;
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
 import me.wyndev.towerdefense.command.LobbyCommand;
 import me.wyndev.towerdefense.command.PlayCommand;
-import me.wyndev.towerdefense.files.config.Config;
-import me.wyndev.towerdefense.files.config.Enemies;
-import me.wyndev.towerdefense.files.config.Towers;
-import me.wyndev.towerdefense.files.config.Waves;
+import me.wyndev.towerdefense.files.config.*;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.GameManager;
 import me.wyndev.towerdefense.npc.JoinGameNPC;
@@ -140,6 +137,8 @@ public class Main {
         log.info("Registered {} towers entries", Towers.towerData.getTowers().length);
         Enemies.read();
         log.info("Registered {} enemy entries", Enemies.enemiesData.getEnemies().length);
+        Teams.read();
+        log.info("Registered {} team entries", Teams.teamsData.getTeams().length);
         Maps.load();
         log.info("Registered {} maps", Maps.getMaps().size());
     }
