@@ -6,6 +6,7 @@ import me.wyndev.towerdefense.files.config.Config;
 import me.wyndev.towerdefense.files.config.Enemies;
 import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.config.object.WaveObject;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
@@ -20,8 +21,8 @@ import java.util.Random;
 public class WavesManager {
     private static final Logger log = LoggerFactory.getLogger(WavesManager.class);
 
-    public void startWave(GameInstance instance, Pos pos) {
-        Thread thread = new Thread(new WaveTask(0, instance, pos));
+    public void startWave(GameInstance instance, Pos pos, TowerDefenseTeam target) {
+        Thread thread = new Thread(new WaveTask(0, instance, pos, target));
         thread.start();
     }
 
@@ -29,11 +30,13 @@ public class WavesManager {
         int waveID;
         GameInstance instance;
         Pos pos;
+        TowerDefenseTeam target;
 
-        public WaveTask(int waveID, GameInstance gameInstance, Pos pos) {
+        public WaveTask(int waveID, GameInstance gameInstance, Pos pos, TowerDefenseTeam target) {
             this.waveID = waveID;
             this.instance = gameInstance;
             this.pos = pos;
+            this.target = target;
         }
 
         @Override
@@ -52,7 +55,7 @@ public class WavesManager {
                     }
                     if (entityCount > wave.getPerWavesMaxCount()) entityCount = wave.getPerWavesMaxCount();
                     for (int i = 0; i < entityCount; i++) {
-                        enemies.add(new TowerDefenseEnemy(Enemies.getFromName(wave.getEnemyType()), null));
+                        enemies.add(new TowerDefenseEnemy(Enemies.getFromName(wave.getEnemyType()), null, target));
                     }
                 }
             }
@@ -72,7 +75,7 @@ public class WavesManager {
             }
 
             waveID++;
-            Thread thread = new Thread(new WaveTask(waveID, instance, pos));
+            Thread thread = new Thread(new WaveTask(waveID, instance, pos, target));
             thread.start();
         }
     }

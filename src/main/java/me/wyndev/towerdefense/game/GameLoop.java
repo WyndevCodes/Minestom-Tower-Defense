@@ -221,7 +221,7 @@ public class GameLoop {
     private void checkEnemyReachedEnd(TowerDefenseEnemy enemy, Pos pos, Block blockToCheck) {
         if (blockToCheck.name().equals("minecraft:end_gateway") && pos.z() % 1 >= 0.5 && pos.x() % 1 >= 0.5) {
             //TODO: fetch the tower defense player who got damaged by this enemy
-            enemy.reachEnd(null);
+            enemy.reachEnd();
         }
     }
 

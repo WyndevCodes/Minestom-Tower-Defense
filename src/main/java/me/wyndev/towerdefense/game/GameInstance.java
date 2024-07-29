@@ -46,6 +46,7 @@ import java.util.function.UnaryOperator;
 public class GameInstance {
 
     private final int MAX_PLAYERS = 6; //TODO: support for per-map based player counts?
+    private final int PLAYER_PER_TEAM = 1; //TODO: add that in the constructor to allow for bigger game
     private static final Logger log = LoggerFactory.getLogger(GameInstance.class);
 
     // Game information
@@ -62,6 +63,7 @@ public class GameInstance {
     @Getter private final List<TowerDefenseEnemy> enemies = Collections.synchronizedList(new ArrayList<>());
     @Getter private Pos schemSpawnTranslation;
     @Getter private Point schemSize;
+    private List<TowerDefenseTeam> teams = new ArrayList<>();
 
     // Player information
     /**
@@ -72,7 +74,7 @@ public class GameInstance {
      * A map of all {@link TowerDefenseTeam}s associated with
      * players currently in this game.
      */
-    private final @Getter Map<UUID, TowerDefenseTeam> ingamePlayers;
+    private final @Getter Map<UUID, TowerDefenseTeam> ingamePlayers;//TODO: change that with the teams
 
     /**
      * Creates a new GameInstance with no default players.
@@ -110,17 +112,33 @@ public class GameInstance {
      * */
     public void setup() {
         //Load chunk to spawn schematic
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < 20; x++) {
+            for (int y = 0; y < 20; y++) {
                 instance.loadChunk(x, y);
             }
         }
         SchematicReader reader = new SchematicReader();
         Schematic map = reader.read(Maps.getRandomMap());
-        map.build(Rotation.NONE, UnaryOperator.identity()).apply(instance, () -> {
-            log.info("Schematic built");
-        });
-        schemSize = map.size();
+        int z = 0;
+        int x = 0;
+        int sizeX = map.size().blockX() + 5;
+        int sizeZ = map.size().blockZ() + 5;
+        for (int i = 0; i < MAX_PLAYERS; i++) { //TODO: replace that with max team
+            map.build(Rotation.NONE, true).apply(instance, new Pos(x * sizeX, 0, z * sizeZ), () -> {
+                log.info("Schematic built");
+            });
+            x++;
+            if (x >= 3) {
+                z++;
+                x = 0;
+            }
+        }
+
+        schemSize = map.size().add(5, 0, 5);
+
+        for (int i = 0; i < players.size(); i++) {
+
+        }
 
         //Execute on player join
         instance.eventNode().addListener(PlayerSpawnEvent.class, event -> {
@@ -164,9 +182,24 @@ public class GameInstance {
             }
             if (this.schemSpawnTranslation != null) break;
         }
-
-
-        new WavesManager().startWave(this, schemSpawnTranslation);
+        int z = 0;
+        int x = 0;
+        int sizeX = schemSize.blockX();
+        int sizeZ = schemSize.blockZ();
+        for (int i = 0; i < MAX_PLAYERS; i++) { //TODO: replace that with max team
+            Pos mapPos = new Pos(x * sizeX, 0, z * sizeZ);
+            if (players.size() > i) {
+                TowerDefenseTeam team = new TowerDefenseTeam(players.get(i));
+                teams.add(team);
+                players.get(i).teleport(mapPos.add(schemSpawnTranslation));
+                new WavesManager().startWave(this, mapPos.add(schemSpawnTranslation), team); //TODO: assign a team to waveManager to allow for life drain
+            }
+            x++;
+            if (x >= 3) {
+                z++;
+                x = 0;
+            }
+        }
 
         this.gameState = GameState.RUNNING;
 
