@@ -269,7 +269,7 @@ public class GameInstance {
                 if (team == null) throw new IllegalStateException("A player in the tower defense game does not have an associated tower defense team!");
                 Tower tower = towerAt(Pos.fromPoint(block));
                 if (tower != null) {
-                    if (tower.getTeamWhoSpawned().equals(tower)) {
+                    if (tower.getTeamWhoSpawned().equals(teamFromPlayer((TowerDefensePlayer) event.getPlayer()))) {
                         new ModifyTurret((TowerDefensePlayer) event.getPlayer(), tower).open(Pos.fromPoint(block), instance);
                     } else {
                         //Player cannot open another player's tower menu
