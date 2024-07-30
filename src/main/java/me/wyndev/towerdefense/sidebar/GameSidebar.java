@@ -18,9 +18,10 @@ public class GameSidebar extends AbstractSidebar {
     public GameSidebar(TowerDefenseTeam team) {
         super("<green><bold>Tower Defense");
         this.viewers = team;
-        for (TowerDefensePlayer towerDefensePlayer : team.getTowerDefensePlayers()) {
-            addViewer(towerDefensePlayer);
-        }
+    }
+
+    public void addPlayer(TowerDefensePlayer plr) {
+        addViewer(plr);
     }
 
     @Override
