@@ -42,6 +42,11 @@ public class TowerDefenseTeam {
         this.gameSidebar = new GameSidebar(this);
     }
 
+    public void addPlayer(TowerDefensePlayer plr) {
+        towerDefensePlayers.add(plr);
+        gameSidebar.addPlayer(plr);
+    }
+
     /**
      * Shuts down this IngameTowerDefensePlayer, removing
      * any references it has to UUIDs or online players.

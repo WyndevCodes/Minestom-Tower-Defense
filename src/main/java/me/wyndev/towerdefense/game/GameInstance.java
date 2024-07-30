@@ -159,7 +159,7 @@ public class GameInstance {
 
             for (TowerDefenseTeam t : teams) {
                 if (!(t.getTowerDefensePlayers().size() >= PLAYER_PER_TEAM)) { //Don't replace that, idea is stupid
-                    t.getTowerDefensePlayers().add((TowerDefensePlayer) event.getPlayer());
+                    t.addPlayer((TowerDefensePlayer) event.getPlayer());
                     event.getPlayer().sendMessage(Component.text("You joined the " + t.getTeamObject().displayName + " team").color(TextColor.color(t.getTeamObject().color.toTextColor())));
                     break;
                 }
