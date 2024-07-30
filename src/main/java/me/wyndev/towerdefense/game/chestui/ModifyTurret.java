@@ -93,24 +93,22 @@ public class ModifyTurret {
         Component line1;
         Component line2;
         Component line3;
-        Component line4;
+        Component type = Utils.formatWithoutItalics("<color:#828282><u>Type:</u></color> " + (tower.getType().isSplash() ? "<red><bold>Splash" : "<yellow><bold>Single Target"));
 
         if (tower.getType().getMaxLevel() != tower.getTowerLevel()) {
-            line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel()) + "<dark_gray> -> <white>" + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel() + 1));
-            line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel()) + " blocks<dark_gray> -> <white>" + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel() + 1) + " blocks");
-            line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel()) / 1000 + "s <dark_gray> -> <white>" + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel() + 1) / 1000 + "s");
-            line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.getType().isSplash());
+            line1 = Utils.formatWithoutItalics("<color:#828282><u>Damage:</u></color><white> " + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel()) + "<dark_gray> -> <white>" + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel() + 1));
+            line2 = Utils.formatWithoutItalics("<color:#828282><u>Range:</u></color><white> " + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel()) + " blocks<dark_gray> -> <white>" + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel() + 1) + " blocks");
+            line3 = Utils.formatWithoutItalics("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel()) / 1000 + "s <dark_gray> -> <white>" + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel() + 1) / 1000 + "s");
         } else {
-            line1 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Damage:</u></color><white> " + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel()));
-            line2 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Range:</u></color><white> " + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel()) + " blocks");
-            line3 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel()) / 1000);
-            line4 = MiniMessage.miniMessage().deserialize("<color:#828282><u>Splash:</u></color><white> " + tower.getType().isSplash());
+            line1 = Utils.formatWithoutItalics("<color:#828282><u>Damage:</u></color><white> " + tower.getType().getAttackDamageFromLevel(tower.getTowerLevel()));
+            line2 = Utils.formatWithoutItalics("<color:#828282><u>Range:</u></color><white> " + tower.getType().getAttackRangeFromLevel(tower.getTowerLevel()) + " blocks");
+            line3 = Utils.formatWithoutItalics("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getType().getAttackSpeedFromLevel(tower.getTowerLevel()) / 1000 + "s");
 
         }
 
         inventory.setItemStack(0, ItemStack.of(Material.REDSTONE_BLOCK).withCustomName(Component.text("Sell tower").color(TextColor.color(255, 0, 0))).withLore(sellLore));
         inventory.setItemStack(4, ItemStack.of(Material.EMERALD_BLOCK).withCustomName(Component.text("Upgrade tower").color(TextColor.color(0, 255, 27))).withLore(upgradeLore));
-        inventory.setItemStack(2, ItemStack.of(Material.fromNamespaceId(tower.getType().getIconMaterials())).withCustomName(Utils.format(tower.getType().getName())).withAmount(tower.getTowerLevel()).withMaxStackSize(128).withLore(line1, line2, line3, line4));
+        inventory.setItemStack(2, ItemStack.of(Material.fromNamespaceId(tower.getType().getIconMaterials())).withCustomName(Utils.format(tower.getType().getName())).withAmount(tower.getTowerLevel()).withMaxStackSize(128).withLore(type, line1, line2, line3));
 
         for (int i = 0; i < UICommon.HopperDelimiter.length; i++) {
             if (UICommon.HopperDelimiter[i] == 1) {

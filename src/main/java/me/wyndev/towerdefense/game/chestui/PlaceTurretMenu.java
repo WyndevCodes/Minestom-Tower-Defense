@@ -95,16 +95,15 @@ public class PlaceTurretMenu {
             for (int i = 1; i <= tower.getMaxLevel(); i++) {
                 Component desc = Utils.formatWithoutItalics(tower.getDesc());
                 Component blank = Component.empty();
-                Component type = Utils.formatWithoutItalics("<color:#828282><u>Type:</u></color> " + (tower.isSplash() ? "<yellow><bold>Single Target" : "<red><bold>Splash"));
+                Component type = Utils.formatWithoutItalics("<color:#828282><u>Type:</u></color> " + (tower.isSplash() ? "<red><bold>Splash" : "<yellow><bold>Single Target"));
                 Component line1 = Utils.formatWithoutItalics("<color:#828282><u>Price:</u></color><gold> " + Utils.formatWithCommas(tower.getPriceFromLevel(i)) + " Gold");
                 Component line2 = Utils.formatWithoutItalics("<color:#828282><u>Damage:</u></color><white> " + tower.getAttackDamageFromLevel(i));
                 Component line3 = Utils.formatWithoutItalics("<color:#828282><u>Range:</u></color><white> " + tower.getAttackRangeFromLevel(i) + " blocks");
                 Component line4 = Utils.formatWithoutItalics("<color:#828282><u>Attack cooldown:</u></color><white> " + tower.getAttackSpeedFromLevel(i) / 1000 + "s/attack");
-                Component line5 = Utils.formatWithoutItalics("<color:#828282><u>Splash:</u></color><white> " + tower.isSplash());
                 ItemStack stack = ItemStack.of(
                                 Material.fromNamespaceId(tower.getIconMaterials()))
                         .withCustomName(Utils.formatWithoutItalics(tower.getName() + " <dark_gray>(Lvl. " + i + ")"))
-                        .withLore(desc, blank, type, line1, line2, line3, line4, line5)
+                        .withLore(desc, blank, type, line1, line2, line3, line4)
                         .withMaxStackSize(128).withAmount(i);
                 inventory.setItemStack(tower.getGUIPosLevel(i), stack);
             }
