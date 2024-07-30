@@ -30,14 +30,16 @@ public class TowerDefenseEnemy extends EntityCreature {
 
     protected final EnemieObject enemieObject;
     private final TowerDefenseTeam spawner;
+    private final TowerDefenseTeam targetTeam;
     private int tickAlive = 0;
     @Getter private Pos shift;
 
     //TODO: link a mob to a team if we do team support
-    public TowerDefenseEnemy(@NotNull EnemieObject enemieObject, @Nullable TowerDefenseTeam spawner) {
+    public TowerDefenseEnemy(@NotNull EnemieObject enemieObject, @Nullable TowerDefenseTeam spawner, TowerDefenseTeam targetTeam) {
         super(EntityType.fromNamespaceId(enemieObject.getModelName()));
         this.enemieObject = enemieObject;
         this.spawner = spawner; //team who spawned the tower defense enemy
+        this.targetTeam = targetTeam;
 
         double maxShift = enemieObject.getMaxShift(); //Add this to the config when enemies are ported to configs
         Random random = new Random();
@@ -68,17 +70,20 @@ public class TowerDefenseEnemy extends EntityCreature {
 
     /**
      * Actions this enemy takes when reaching the end of a tower defense track.
-     * @param team The team to damage (the team who owns the track)
      */
-    public void reachEnd(TowerDefenseTeam team) {
+    public void reachEnd() {
         this.remove();
         //TODO: double lifesteal for advanced
         //TODO: logic on damaged player
         if (spawner != null) {
             spawner.setHealth(spawner.getHealth() + 1);
             spawner.setIncome(spawner.getIncome() + (enemieObject.getCost() / 5));
+            spawner.getGameSidebar().updateHealthLine(spawner.getHealth());
             //TODO: user feedback? Sound/message?
         }
+        targetTeam.setHealth(targetTeam.getHealth() - 1); //TODO: save that in the config
+        targetTeam.getGameSidebar().updateHealthLine(targetTeam.getHealth());
+
     }
 
     // I feel like this can be optimized or condensed. Any ideas?

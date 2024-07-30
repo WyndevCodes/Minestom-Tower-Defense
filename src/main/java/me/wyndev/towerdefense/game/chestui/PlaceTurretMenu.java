@@ -42,36 +42,40 @@ public class PlaceTurretMenu {
         instance.eventNode().addChild(child);
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
-            e.setCancelled(true);
-            TowerObject towerObj = Towers.getFromUISlot(e.getSlot());
-            if (towerObj != null) {
-                //pay cost
-                int level = Towers.getLevelFromUISlot(e.getSlot());
-                float price = towerObj.getPriceFromLevel(level);
-                if (team.getGold() < price) {
-                    player.sendMessage(Utils.format("<red>Not enough gold to purchase this!"));
-                    player.playPlayerSound(Key.key("entity.villager.no"));
-                    return;
+            if (e.getPlayer() == player) {
+                e.setCancelled(true);
+                TowerObject towerObj = Towers.getFromUISlot(e.getSlot());
+                if (towerObj != null) {
+                    //pay cost
+                    int level = Towers.getLevelFromUISlot(e.getSlot());
+                    float price = towerObj.getPriceFromLevel(level);
+                    if (team.getGold() < price) {
+                        player.sendMessage(Utils.format("<red>Not enough gold to purchase this!"));
+                        player.playPlayerSound(Key.key("entity.villager.no"));
+                        return;
+                    }
+
+                    team.setGold(team.getGold() - Math.round(price));
+                    player.sendActionBar(Utils.format("<gray>Purchased a level " + level + " " + towerObj.getName() +
+                            " <gray> tower for <gold>" + Math.round(price) + " <gray>gold!"));
+                    player.playPlayerSound(Key.key("entity.experience_orb.pickup"));
+
+                    Tower tower = new Tower(towerObj, team, level);
+                    Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
+
+                    tower.setInstance(e.getInstance(), spawnPos);
+                    team.getCurrentPlacedTowers().add(tower);
+
+                    e.getPlayer().closeInventory();
+                    deleteChild(child);
                 }
-
-                team.setGold(team.getGold() - Math.round(price));
-                player.sendActionBar(Utils.format("<gray>Purchased a level " + level + " " + towerObj.getName() +
-                        " <gray> tower for <gold>" + Math.round(price) + " <gray>gold!"));
-                player.playPlayerSound(Key.key("entity.experience_orb.pickup"));
-
-                Tower tower = new Tower(towerObj, team, level);
-                Pos spawnPos = pos.add(new Pos(0.5, 1, 0.5));
-
-                tower.setInstance(e.getInstance(), spawnPos);
-                team.getCurrentPlacedTowers().add(tower);
-
-                e.getPlayer().closeInventory();
-                deleteChild(child);
             }
         });
 
         EventListener<InventoryCloseEvent> closeMenuListener = EventListener.of(InventoryCloseEvent.class, e -> {
-            deleteChild(child);
+            if (e.getPlayer() == player) {
+                deleteChild(child);
+            }
         });
 
         listeners.add(clickListener);

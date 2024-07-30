@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
@@ -40,25 +41,29 @@ public class ModifyTurret {
         instance.eventNode().addChild(child);
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
-            e.setCancelled(true);
+            if (e.getPlayer() == player) {
+                e.setCancelled(true);
 
-            if (e.getSlot() == 0) {
-                tower.sell(player);
+                if (e.getSlot() == 0) {
+                    tower.sell(player);
 
-                e.getPlayer().closeInventory();
-                deleteChild(child);
-            }
+                    e.getPlayer().closeInventory();
+                    deleteChild(child);
+                }
 
-            if (e.getSlot() == 4) {
-                tower.upgrade(player);
+                if (e.getSlot() == 4) {
+                    tower.upgrade(player);
 
-                e.getPlayer().closeInventory();
-                deleteChild(child);
+                    e.getPlayer().closeInventory();
+                    deleteChild(child);
+                }
             }
         });
 
         EventListener<InventoryCloseEvent> closeMenuListener = EventListener.of(InventoryCloseEvent.class, e -> {
-            deleteChild(child);
+            if (e.getPlayer() == player) {
+                deleteChild(child);
+            }
         });
 
         listeners.add(clickListener);
