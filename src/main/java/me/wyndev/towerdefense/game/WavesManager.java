@@ -42,8 +42,8 @@ public class WavesManager {
         @Override
         public void run() {
             Utils.sleep(Config.configData.getTimeBetweenWaves() * 1000);
-            instance.getIngamePlayers().forEach((k, v) -> {
-                v.getTowerDefensePlayers().forEach(p -> p.showTitle(Title.title(Component.empty(), Component.text("Wave " + waveID).color(TextColor.color(255, 0, 0)))));
+            instance.getTeams().forEach(t -> {
+                t.getTowerDefensePlayers().forEach(p -> p.showTitle(Title.title(Component.empty(), Component.text("Wave " + waveID).color(TextColor.color(255, 0, 0)))));
             });
             List<TowerDefenseEnemy> enemies = new ArrayList<>();
             WaveObject[] waves = Waves.waveData.getWaves();

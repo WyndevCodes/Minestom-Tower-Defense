@@ -132,7 +132,7 @@ public class GameLoop {
                 return;
             }
 
-            for (TowerDefenseTeam team : gameInstance.getIngamePlayers().values()) {
+            for (TowerDefenseTeam team : gameInstance.getTeams()) {
                 // Give players income every 10 seconds
                 if (currentTick == 0) {
                     team.setGold(team.getGold() + team.getIncome());
@@ -143,41 +143,41 @@ public class GameLoop {
                 for (Tower tower : team.getCurrentPlacedTowers()) {
                     if (tower != null) tower.tick();
                 }
+            }
 
-                synchronized (gameInstance.getEnemies()) {
-                    //Run every tick for every enemy
-                    for (TowerDefenseEnemy enemy : gameInstance.getEnemies()) {
-                        enemy.tick(gameInstance.getPlayers());
+            synchronized (gameInstance.getEnemies()) {
+                //Run every tick for every enemy
+                for (TowerDefenseEnemy enemy : gameInstance.getEnemies()) {
+                    enemy.tick(gameInstance.getPlayers());
 
-                        Pos rot = enemy.getPosition();
+                    Pos rot = enemy.getPosition();
 
-                        //Check if enemy can be moved (if it exists in an instance)
-                        //There are cases where the enemy ticks before it is created, so we cannot teleport it without an error
-                        if (enemy.getInstance() == null) continue;
+                    //Check if enemy can be moved (if it exists in an instance)
+                    //There are cases where the enemy ticks before it is created, so we cannot teleport it without an error
+                    if (enemy.getInstance() == null) continue;
 
-                        //Move enemies forward
-                        if (rot.yaw() == 0) {
-                            enemy.teleport(rot.add(new Pos(0, 0, enemy.getEnemieObject().getSpeed())));
-                        } else if (rot.yaw() == 90) {
-                            enemy.teleport(rot.add(new Pos(-enemy.getEnemieObject().getSpeed(), 0, 0)));
-                        } else if (rot.yaw() == -180) {
-                            enemy.teleport(rot.add(new Pos(0, 0, -enemy.getEnemieObject().getSpeed())));
-                        } else if (rot.yaw() == -90) {
-                            enemy.teleport(rot.add(new Pos(enemy.getEnemieObject().getSpeed(), 0, 0)));
-                        }
-
-                        rot = rot.sub(enemy.getShift());
-
-                        Block block = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY(), rot.blockZ());
-                        Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1, rot.blockZ());
-                        Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2, rot.blockZ());
-
-                        checkEnemyReachedEnd(enemy, rot, block);
-
-                        changeEnemyDirection(enemy, rot, block);
-                        changeEnemyDirection(enemy, rot, block1);
-                        changeEnemyDirection(enemy, rot, block2);
+                    //Move enemies forward
+                    if (rot.yaw() == 0) {
+                        enemy.teleport(rot.add(new Pos(0, 0, enemy.getEnemieObject().getSpeed())));
+                    } else if (rot.yaw() == 90) {
+                        enemy.teleport(rot.add(new Pos(-enemy.getEnemieObject().getSpeed(), 0, 0)));
+                    } else if (rot.yaw() == -180) {
+                        enemy.teleport(rot.add(new Pos(0, 0, -enemy.getEnemieObject().getSpeed())));
+                    } else if (rot.yaw() == -90) {
+                        enemy.teleport(rot.add(new Pos(enemy.getEnemieObject().getSpeed(), 0, 0)));
                     }
+
+                    rot = rot.sub(enemy.getShift());
+
+                    Block block = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY(), rot.blockZ());
+                    Block block1 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()+1, rot.blockZ());
+                    Block block2 = gameInstance.getInstance().getBlock(rot.blockX(), rot.blockY()-2, rot.blockZ());
+
+                    checkEnemyReachedEnd(enemy, rot, block);
+
+                    changeEnemyDirection(enemy, rot, block);
+                    changeEnemyDirection(enemy, rot, block1);
+                    changeEnemyDirection(enemy, rot, block2);
                 }
             }
 

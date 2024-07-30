@@ -2,12 +2,12 @@ package me.wyndev.towerdefense.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.wyndev.towerdefense.files.config.object.TeamObject;
 import me.wyndev.towerdefense.sidebar.GameSidebar;
 import me.wyndev.towerdefense.tower.Tower;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.coordinate.Pos;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,27 +17,28 @@ import java.util.List;
 @Getter
 public class TowerDefenseTeam {
 
-    private final @Getter List<TowerDefensePlayer> towerDefensePlayers;
+    @Getter private final List<TowerDefensePlayer> towerDefensePlayers = new ArrayList<>();
     private int health = 100;
     private double gold = 100; //TODO: set back to 100 for production
-    private @Setter int towersPlaced = 0;
+    @Setter private int towersPlaced = 0;
     /**
      * Gold income of the team every 10 seconds.
      */
-    private @Setter double income = 10;
+    @Getter @Setter private double income = 10;
     /**
      * A list of all towers placed by this team in a game
      */
-    private final List<Tower> currentPlacedTowers = new ArrayList<>();
+    @Getter private final List<Tower> currentPlacedTowers = new ArrayList<>();
+    private final TeamObject teamObject;
     private final GameSidebar gameSidebar;
 
     /**
      * Initializes a TowerDefenseTeam.
      *
-     * @param towerDefensePlayers All players to be a part of this team
+     * @param teamObject ALl the settings for the teams
      */
-    public TowerDefenseTeam(@NotNull TowerDefensePlayer... towerDefensePlayers) {
-        this.towerDefensePlayers = new ArrayList<>(Arrays.stream(towerDefensePlayers).toList());
+    public TowerDefenseTeam(TeamObject teamObject) {
+        this.teamObject = teamObject;
         this.gameSidebar = new GameSidebar(this);
     }
 
@@ -45,7 +46,7 @@ public class TowerDefenseTeam {
      * Shuts down this IngameTowerDefensePlayer, removing
      * any references it has to UUIDs or online players.
      */
-    public void shutdown() {
+    public void dispose() {
         for (TowerDefensePlayer towerDefensePlayer : towerDefensePlayers) {
             gameSidebar.removeViewer(towerDefensePlayer);
         }
@@ -65,5 +66,11 @@ public class TowerDefenseTeam {
             //TODO: death logic
         }
         this.gameSidebar.updateHealthLine(health);
+    }
+
+    public void teleport(Pos pos) {
+        for (TowerDefensePlayer plr : towerDefensePlayers) {
+            plr.teleport(pos);
+        }
     }
 }
