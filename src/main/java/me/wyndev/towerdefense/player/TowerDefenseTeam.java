@@ -19,12 +19,12 @@ public class TowerDefenseTeam {
 
     private final @Getter List<TowerDefensePlayer> towerDefensePlayers;
     private int health = 100;
-    private long gold = 8000000; //TODO: set back to 0 for production
+    private double gold = 100; //TODO: set back to 100 for production
     private @Setter int towersPlaced = 0;
     /**
      * Gold income of the team every 10 seconds.
      */
-    private @Setter long income = 10;
+    private @Setter double income = 10;
     /**
      * A list of all towers placed by this team in a game
      */
@@ -52,7 +52,7 @@ public class TowerDefenseTeam {
         currentPlacedTowers.clear();
     }
 
-    public void setGold(long gold) {
+    public void setGold(double gold) {
         this.gold = gold;
         this.gameSidebar.updateGoldLine(gold);
     }

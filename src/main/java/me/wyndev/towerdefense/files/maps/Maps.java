@@ -1,11 +1,10 @@
 package me.wyndev.towerdefense.files.maps;
 
 import lombok.Getter;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;

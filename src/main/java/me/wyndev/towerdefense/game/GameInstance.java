@@ -8,8 +8,8 @@ import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.chestui.ModifyTurret;
 import me.wyndev.towerdefense.game.chestui.PlaceTurretMenu;
 import me.wyndev.towerdefense.game.customentity.Cursor;
-import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.player.TowerDefensePlayer;
+import me.wyndev.towerdefense.player.TowerDefenseTeam;
 import me.wyndev.towerdefense.tower.Tower;
 import net.hollowcube.schem.Rotation;
 import net.hollowcube.schem.Schematic;
@@ -129,7 +129,7 @@ public class GameInstance {
 
             // Clear inventory (just in case)
             event.getPlayer().getInventory().clear();
-            event.getPlayer().addEffect(new Potion(PotionEffect.NIGHT_VISION, (byte) 1, -1));
+            event.getPlayer().addEffect(new Potion(PotionEffect.NIGHT_VISION, (byte) 1, -1, Potion.BLEND_FLAG));
 
             //TODO: remove this, this is for testing purposes only
             this.gameState = GameState.COUNTDOWN;

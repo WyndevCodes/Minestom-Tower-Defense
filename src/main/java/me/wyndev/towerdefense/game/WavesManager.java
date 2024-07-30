@@ -3,24 +3,19 @@ package me.wyndev.towerdefense.game;
 import me.wyndev.towerdefense.Utils;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.files.config.Config;
+import me.wyndev.towerdefense.files.config.Enemies;
 import me.wyndev.towerdefense.files.config.Waves;
 import me.wyndev.towerdefense.files.config.object.WaveObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
-import net.kyori.adventure.title.TitlePart;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.TaskSchedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Supplier;
 
 public class WavesManager {
     private static final Logger log = LoggerFactory.getLogger(WavesManager.class);
@@ -57,7 +52,7 @@ public class WavesManager {
                     }
                     if (entityCount > wave.getPerWavesMaxCount()) entityCount = wave.getPerWavesMaxCount();
                     for (int i = 0; i < entityCount; i++) {
-                        enemies.add(new TowerDefenseEnemy(wave.getEnemyType(), null));
+                        enemies.add(new TowerDefenseEnemy(Enemies.getFromName(wave.getEnemyType()), null));
                     }
                 }
             }
