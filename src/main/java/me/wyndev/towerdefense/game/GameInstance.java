@@ -356,7 +356,7 @@ public class GameInstance {
         gameLoop.cancelCountdown(); //just in case
 
         teams.forEach(TowerDefenseTeam::dispose);
-        players.forEach(p -> Main.gameManager.removePlayerFromGame(p));
+        players.forEach(p -> Main.gameManager.removePlayerFromGame(p)); //TODO: this causes issues (ConcurrentModificationException)
 
         MinecraftServer.getInstanceManager().unregisterInstance(instance);
 
