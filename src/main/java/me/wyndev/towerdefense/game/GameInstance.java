@@ -153,10 +153,6 @@ public class GameInstance {
             event.getPlayer().getInventory().clear();
             event.getPlayer().addEffect(new Potion(PotionEffect.NIGHT_VISION, (byte) 1, -1, Potion.BLEND_FLAG));
 
-            //TODO: remove this, this is for testing purposes only
-            this.gameState = GameState.COUNTDOWN;
-            gameLoop.startCountdown(); //default 30 seconds for now
-
             for (TowerDefenseTeam t : teams) {
                 if (!(t.getTowerDefensePlayers().size() >= PLAYER_PER_TEAM)) { //Don't replace that, idea is stupid
                     t.addPlayer((TowerDefensePlayer) event.getPlayer());
@@ -309,8 +305,8 @@ public class GameInstance {
             playerInGame.sendMessage(Component.text(player.getUsername() + " joined! (" + players.size() + "/" + MAX_PLAYERS + ")"));
         }
 
-        // Check for start threshold
-        if (players.size() >= (MAX_PLAYERS * 0.8)) {
+        // Check for start threshold TODO: set to (MAX_PLAYERS * 0.8) for production
+        if (players.size() >= 2 && gameState == GameState.WAITING_FOR_PLAYERS) {
             // Start game countdown
             this.gameState = GameState.COUNTDOWN;
             gameLoop.startCountdown(); //default 30 seconds for now

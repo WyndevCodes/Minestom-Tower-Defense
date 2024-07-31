@@ -40,6 +40,7 @@ public class GameLoop {
      */
     public GameLoop(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
+        //TODO: remove line below for production phase
         gameInstance.getInstance().eventNode().addListener(PlayerChatEvent.class, e -> {
             if (e.getMessage().equals("fs")) {
                 countdownTask.cancel();
@@ -63,6 +64,7 @@ public class GameLoop {
      * @param seconds Number of seconds that the countdown lasts for
      */
     public void startCountdown(int seconds) {
+        if (countdownTask != null && countdownTask.isAlive()) return;
         AtomicInteger timeLeft = new AtomicInteger(seconds);
         countdownTask = Main.scheduler.scheduleTask(() -> {
 
