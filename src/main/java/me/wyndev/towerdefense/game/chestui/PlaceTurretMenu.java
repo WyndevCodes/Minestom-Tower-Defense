@@ -42,8 +42,8 @@ public class PlaceTurretMenu {
         instance.eventNode().addChild(child);
 
         EventListener<InventoryPreClickEvent> clickListener = EventListener.of(InventoryPreClickEvent.class, e -> {
-            if (e.getPlayer() == player) {
-                e.setCancelled(true);
+            e.setCancelled(true);
+            if (e.getPlayer().equals(player)) {
                 TowerObject towerObj = Towers.getFromUISlot(e.getSlot());
                 if (towerObj != null) {
                     //pay cost
