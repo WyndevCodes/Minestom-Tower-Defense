@@ -50,7 +50,7 @@ public class Tower extends EntityCreature {
                 if (e instanceof TowerDefenseEnemy towerDefenseEnemy && towerDefenseEnemy.getHealth() > 0) {
                     Pos tower = getPosition();
                     Pos enemy = e.getPosition();
-                    double d2 = Math.pow((tower.x() - enemy.x()), 2) + Math.pow((tower.y() - enemy.y()), 2); //2D distance squared
+                    double d2 = Math.pow((tower.x() - enemy.x()), 2) + Math.pow((tower.z() - enemy.z()), 2); //2D distance squared
                     double atk2 = (type.getAttackRangeFromLevel(towerLevel) * type.getAttackRangeFromLevel(towerLevel)); //attack range squared
                     if (d2 <= atk2) {
                         if (target.get() == null) {
