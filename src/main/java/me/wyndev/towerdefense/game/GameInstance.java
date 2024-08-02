@@ -5,6 +5,7 @@ import me.wyndev.towerdefense.ChatColor;
 import me.wyndev.towerdefense.Main;
 import me.wyndev.towerdefense.enemy.TowerDefenseEnemy;
 import me.wyndev.towerdefense.files.config.Teams;
+import me.wyndev.towerdefense.files.config.object.MapObject;
 import me.wyndev.towerdefense.files.maps.Maps;
 import me.wyndev.towerdefense.game.chestui.ModifyTurret;
 import me.wyndev.towerdefense.game.chestui.PlaceTurretMenu;
@@ -37,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -113,7 +115,8 @@ public class GameInstance {
 
         //Load the map
         SchematicReader reader = new SchematicReader();
-        Schematic map = reader.read(Maps.getRandomMap());
+        Map.Entry<File, MapObject> randomMap = Maps.getRandomMap();
+        Schematic map = reader.read(randomMap.getKey().toPath());
         int z = 0;
         int x = 0;
         int sizeX = map.size().blockX() + 5;
